@@ -176,47 +176,74 @@ function initGalleryLightbox() {
 initGalleryLightbox();
 
 // Mobile menu
+let teardownMobileMenu = null;
 function createMobileMenu() {
+  const navContainer = document.querySelector('.nav-container');
+  const navMenu = document.querySelector('.nav-menu');
+  if (!navContainer || !navMenu) return;
+
+  // Teardown previous bindings when switching breakpoints
+  if (teardownMobileMenu) { teardownMobileMenu(); teardownMobileMenu = null; }
+
   if (window.innerWidth <= 768) {
-    const navContainer = document.querySelector('.nav-container');
-    const navMenu = document.querySelector('.nav-menu');
-    if (!navContainer || !navMenu) return;
     let menuToggle = document.querySelector('.menu-toggle');
     if (!menuToggle) {
       menuToggle = document.createElement('button');
       menuToggle.className = 'menu-toggle';
+      menuToggle.setAttribute('aria-label', 'Mở menu');
+      menuToggle.setAttribute('aria-expanded', 'false');
       menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-      menuToggle.style.cssText = 'display:block;background:none;border:none;color:var(--gold);font-size:1.5rem;cursor:pointer;padding:10px;border-radius:5px;transition:all .3s ease;';
       navContainer.appendChild(menuToggle);
-      menuToggle.addEventListener('click', () => {
-        const isOpen = navMenu.style.display === 'flex';
-        navMenu.style.display = isOpen ? 'none' : 'flex';
-        if (!isOpen) {
-          navMenu.style.position = 'absolute';
-          navMenu.style.top = '100%';
-          navMenu.style.left = '0';
-          navMenu.style.right = '0';
-          navMenu.style.background = 'rgba(255,255,255,0.98)';
-          navMenu.style.flexDirection = 'column';
-          navMenu.style.padding = '2rem';
-          navMenu.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
-          navMenu.style.backdropFilter = 'blur(20px)';
-        }
-        menuToggle.innerHTML = isOpen ? '<i class="fas fa-bars"></i>' : '<i class="fas fa-times"></i>';
-      });
     }
+
+    const handleToggle = () => {
+      const isOpen = navMenu.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', String(isOpen));
+      menuToggle.innerHTML = isOpen ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+      document.body.classList.toggle('no-scroll', isOpen);
+    };
+    menuToggle.addEventListener('click', handleToggle);
+
+    // Close menu when a link is clicked
+    const handleLink = (e) => {
+      if (e.target.matches('.nav-menu .nav-link')) {
+        navMenu.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+        document.body.classList.remove('no-scroll');
+      }
+    };
+    navMenu.addEventListener('click', handleLink);
+
+    teardownMobileMenu = () => {
+      menuToggle.removeEventListener('click', handleToggle);
+      navMenu.removeEventListener('click', handleLink);
+      navMenu.classList.remove('open');
+      document.body.classList.remove('no-scroll');
+      // Keep the button for next mobile render; remove on desktop
+    };
+  } else {
+    // Desktop: ensure menu visible and remove toggle if exists
+    navMenu.classList.remove('open');
+    const menuToggle = document.querySelector('.menu-toggle');
+    if (menuToggle && menuToggle.parentElement) menuToggle.parentElement.removeChild(menuToggle);
   }
 }
 createMobileMenu();
 window.addEventListener('resize', createMobileMenu);
 
 // Parallax hero
-window.addEventListener('scroll', () => {
+// Parallax hero (disabled for reduced motion and small screens)
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function parallaxHandler(){
+  if (prefersReduced || window.innerWidth <= 1024) return; // skip on small screens
   const scrolled = window.pageYOffset;
   const parallax = document.querySelector('.hero');
   const speed = scrolled * 0.3;
   if (parallax && scrolled < window.innerHeight) parallax.style.backgroundPositionY = speed + 'px';
-});
+}
+window.addEventListener('scroll', parallaxHandler, { passive: true });
+window.addEventListener('resize', parallaxHandler);
 
 // GSAP scroll animations (progressive enhancement)
 if(window.gsap){

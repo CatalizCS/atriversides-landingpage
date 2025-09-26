@@ -682,9 +682,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7mGzM0RKZ77N8BINU3CFAaj6MqFmoVoeAQMtk0iA0WIMRqjYOEoTP0TO+GfY+3CX6XcncxZV8oPZxC25fRTf6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-os3wNmDCwcx6pQb0Gwe35Sc1i1Zq9FwP0tZqeaNCAIu6XqG0u1oqQ9PcRvUhqQjaySOndDCkUe4tLCnintDe3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
-            // Count-up logic for hero stats
                     function animateCounters() {
-                        const counters = document.querySelectorAll('.stat-value[data-counter]');
+                        const counters = document.querySelectorAll('.metric-value[data-counter]');
                         counters.forEach(el => {
                             const target = +el.getAttribute('data-counter');
                             const suffix = el.getAttribute('data-suffix') || '';
