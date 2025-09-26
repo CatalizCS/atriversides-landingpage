@@ -213,6 +213,51 @@ if(window.gsap){
   ScrollTrigger && ScrollTrigger.refresh();
 }
 
+function initDecorativeInteractions() {
+  const floatingDecorative = document.querySelector('.floating-decoratives');
+  if (floatingDecorative) {
+    document.addEventListener('mousemove', (e) => {
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+      
+      const moveX = (mouseX - 0.5) * 20;
+      const moveY = (mouseY - 0.5) * 20;
+      
+      floatingDecorative.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    });
+  }
+
+  const sectionDecoratives = document.querySelectorAll('.section-decorative');
+  const decorativeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform += ' scale(1)';
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sectionDecoratives.forEach(decorative => {
+    decorative.style.opacity = '0';
+    decorative.style.transform += ' scale(0.8)';
+    decorative.style.transition = 'all 1.2s cubic-bezier(0.4, 0, 0.2, 1)';
+    decorativeObserver.observe(decorative);
+  });
+
+  const accentLines = document.querySelectorAll('.accent-line');
+  window.addEventListener('scroll', () => {
+    const scrollProgress = window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight);
+    const brightness = 0.2 + (scrollProgress * 0.4);
+    
+    accentLines.forEach(line => {
+      line.style.opacity = Math.min(brightness, 0.6);
+    });
+  });
+}
+
+// Initialize enhanced interactions
+initDecorativeInteractions();
+
 // Console branding
 console.log('%cA&T Saigon Riverside - Premium Website', 'color: #DAA520; font-size: 20px; font-weight: bold;');
 console.log('%cWebsite được thiết kế với công nghệ hiện đại nhất', 'color: #1e293b; font-size: 14px;');
