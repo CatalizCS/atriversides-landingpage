@@ -48,52 +48,39 @@
                     <div class="pill gradient mb-sm">Dự án cao cấp bậc nhất Thuận An</div>
                     <h1 class="hero-title display-1" data-animate style="animation-delay:.05s">A&T Saigon Riverside</h1>
                     <p class="hero-subtitle text-lead" data-animate style="animation-delay:.1s">Chuẩn sống thượng lưu ven sông – hòa quyện thiên nhiên xanh và nhịp phát triển năng động, kiến tạo giá trị bền vững cho tương lai.</p>
-                    <div class="cluster mt-lg" data-animate style="animation-delay:.15s">
-                        <a href="#contact" class="btn">
-                            <i class="fas fa-calendar-alt"></i>
-                            Đăng ký tham quan
-                        </a>
-                        <a href="#gallery" class="btn btn-outline">
-                            <i class="fas fa-images"></i>
-                            Xem hình ảnh
-                        </a>
-                        <a href="#pricing" class="btn btn-text">
-                            Bảng giá
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="hero-col hero-panel-wrapper" data-animate style="animation-delay:.2s">
-                    <div class="panel hero-stats glass">
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-value" data-counter="30"><span class="counter-number">30</span><span class="stat-unit"> tầng</span></div>
-                                <div class="stat-label">2 block cao cấp</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value" data-counter="850" data-suffix="+"><span class="counter-number">850+</span></div>
-                                <div class="stat-label">Căn hộ đa dạng</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value" data-counter="65" data-suffix="%"><span class="counter-number">65%</span></div>
-                                <div class="stat-label">Diện tích tiện ích</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value" data-counter="2026"><span class="counter-number">2026</span></div>
-                                <div class="stat-label">Dự kiến bàn giao</div>
-                            </div>
-                        </div>
-                        <div class="divider mt-xl"></div>
-                        <ul class="hero-benefits">
-                            <li><i class="fas fa-crown"></i> Nội thất tiêu chuẩn luxury</li>
-                            <li><i class="fas fa-water"></i> View sông & mảng xanh lớn</li>
-                            <li><i class="fas fa-shield-alt"></i> An ninh đa lớp 24/7</li>
-                            <li><i class="fas fa-percentage"></i> Chính sách ưu đãi giai đoạn sớm</li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </section>
+
+                <!-- Key Metrics Section (moved out from hero) -->
+                <section class="key-metrics" id="key-metrics" data-section="metrics">
+                    <div class="container" data-animate>
+                        <div class="metrics-bar">
+                            <div class="metric-item">
+                                <div class="metric-value" data-counter="30"><span class="counter-number">30</span><span class="metric-unit"> tầng</span></div>
+                                <div class="metric-label">2 block cao cấp</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value" data-counter="850" data-suffix="+"><span class="counter-number">850+</span></div>
+                                <div class="metric-label">Căn hộ đa dạng</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value" data-counter="65" data-suffix="%"><span class="counter-number">65%</span></div>
+                                <div class="metric-label">Diện tích tiện ích</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-value" data-counter="2026"><span class="counter-number">2026</span></div>
+                                <div class="metric-label">Dự kiến bàn giao</div>
+                            </div>
+                        </div>
+                        <ul class="metrics-benefits">
+                            <li><i class="fas fa-crown"></i> Nội thất luxury tinh chọn</li>
+                            <li><i class="fas fa-water"></i> View sông & mảng xanh lớn</li>
+                            <li><i class="fas fa-shield-alt"></i> An ninh đa lớp 24/7</li>
+                            <li><i class="fas fa-percentage"></i> Ưu đãi giai đoạn sớm</li>
+                        </ul>
+                    </div>
+                </section>
 
     <!-- Project Information Section -->
     <section class="project-info" id="project-info" data-section="project-info">
@@ -709,15 +696,21 @@
                 if (window.gsap) {
                     gsap.registerPlugin(ScrollTrigger);
                     const tl = gsap.timeline({ delay: 0.2 });
-                    tl.from('.hero-textual .pill', { y: 30, opacity: 0, duration: 0.6, ease: 'power3.out' })
-                        .from('.hero-title', { y: 50, opacity: 0, duration: 0.8, ease: 'power4.out' }, '-=0.2')
-                        .from('.hero-subtitle', { y: 40, opacity: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3')
-                        .from('.hero-textual .cluster a', { y: 30, opacity: 0, duration: 0.5, stagger: 0.12, ease: 'power3.out' }, '-=0.3')
-                        .from('.hero-stats', { scale: 0.92, opacity: 0, filter: 'blur(6px)', duration: 0.8, ease: 'power3.out' }, '-=0.4')
-                        .from('.stats-grid .stat-item', { y: 25, opacity: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out', onComplete: animateCounters }, '-=0.5')
-                        .from('.hero-benefits li', { y: 22, opacity: 0, duration: 0.45, stagger: 0.07, ease: 'power2.out' }, '-=0.5');
+                                tl.from('.hero-textual .pill', { y: 30, opacity: 0, duration: 0.6, ease: 'power3.out' })
+                                    .from('.hero-title', { y: 50, opacity: 0, duration: 0.8, ease: 'power4.out' }, '-=0.2')
+                                    .from('.hero-subtitle', { y: 40, opacity: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3')
+                                    .from('.hero-textual .cluster a', { y: 30, opacity: 0, duration: 0.5, stagger: 0.12, ease: 'power3.out' }, '-=0.3');
+                                // Metrics section animation
+                                gsap.from('.metrics-bar .metric-item', {
+                                    scrollTrigger: { trigger: '.metrics-bar', start: 'top 80%' },
+                                    opacity: 0, y: 40, duration: 0.6, stagger: 0.08, ease: 'power2.out', onComplete: animateCounters
+                                });
+                                gsap.from('.metrics-benefits li', {
+                                    scrollTrigger: { trigger: '.metrics-benefits', start: 'top 82%' },
+                                    opacity: 0, y: 28, duration: 0.5, stagger: 0.07, ease: 'power2.out'
+                                });
                     // Subtle parallax on scroll for hero stats panel
-                    gsap.to('.hero-stats', { y: 40, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.4 } });
+                      // Removed hero-stats parallax since stats moved out
                 } else {
                     // Fallback: animate counters once visible
                     animateCounters();
