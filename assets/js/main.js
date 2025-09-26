@@ -34,26 +34,75 @@ function initLenis(){
 }
 initLenis();
 
-// Contact form submission
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
+  const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLScmIpZcewi8w0oeyWUOKPprybM9pLMoq5IZbHt1hiSAu56_ow/formResponse';
+  const ENTRY_MAP = {
+    name: 'entry.223043346',     // Họ và tên
+    phone: 'entry.1607246013',    // Số điện thoại
+    email: 'entry.1947902975',    // Email (optional)
+    apartment: 'entry.707847209',// Loại căn hộ quan tâm
+    message: 'entry.641513450'   // Ghi chú
+  };
+
   contactForm.addEventListener('submit', function (e) {
     e.preventDefault();
     const name = document.getElementById('name').value.trim();
     const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const apartment = document.getElementById('apartment').value;
+    const message = document.getElementById('message').value.trim();
+
     if (!name || !phone) { alert('Vui lòng điền đầy đủ thông tin bắt buộc!'); return; }
     const phoneRegex = /^[0-9]{10,11}$/;
     if (!phoneRegex.test(phone)) { alert('Vui lòng nhập số điện thoại hợp lệ (10-11 số)!'); return; }
+
     const button = this.querySelector('button[type="submit"]');
     const originalText = button.innerHTML;
     button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
     button.disabled = true;
-    setTimeout(() => {
-      alert('Cảm ơn bạn đã quan tâm đến dự án A&T Saigon Riverside!\nChúng tôi sẽ liên hệ lại trong thời gian sớm nhất.');
-      this.reset();
+
+    // Guard configuration
+    if (!/\/formResponse$/.test(GOOGLE_FORM_ACTION)) {
+      console.error('GOOGLE_FORM_ACTION must point to the public formResponse endpoint.');
+      alert('Form chưa được cấu hình đúng. Vui lòng liên hệ quản trị viên.');
       button.innerHTML = originalText;
       button.disabled = false;
-    }, 2000);
+      return;
+    }
+
+    // Always submit via hidden iframe to avoid CORS/403
+    const tempForm = document.createElement('form');
+    tempForm.method = 'POST';
+    tempForm.action = GOOGLE_FORM_ACTION;
+    tempForm.target = 'hidden_gf_iframe';
+    tempForm.style.display = 'none';
+
+    const appendField = (name, value) => {
+      if (!value) return;
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = name;
+      input.value = value;
+      tempForm.appendChild(input);
+    };
+    appendField(ENTRY_MAP.name, name);
+    appendField(ENTRY_MAP.phone, phone);
+    appendField(ENTRY_MAP.email, email);
+    appendField(ENTRY_MAP.apartment, apartment);
+    appendField(ENTRY_MAP.message, message);
+
+    document.body.appendChild(tempForm);
+    tempForm.submit();
+
+    // UX completion (assume success)
+    setTimeout(() => {
+      alert('Cảm ơn bạn đã quan tâm đến dự án A&T Saigon Riverside!\nChúng tôi sẽ liên hệ lại trong thời gian sớm nhất.');
+      contactForm.reset();
+      button.innerHTML = originalText;
+      button.disabled = false;
+      if (document.body.contains(tempForm)) document.body.removeChild(tempForm);
+    }, 1200);
   });
 }
 
