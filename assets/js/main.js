@@ -197,7 +197,7 @@ if (contactForm) {
     // Honeypot anti-bot
     const hp = (document.getElementById("hp") || { value: "" }).value.trim();
     if (hp) {
-      return; 
+      return;
     }
 
     if (!name || !phone) {
@@ -226,7 +226,6 @@ if (contactForm) {
       return;
     }
 
-    // Always submit via hidden iframe to avoid CORS/403
     const tempForm = document.createElement("form");
     tempForm.method = "POST";
     tempForm.action = GOOGLE_FORM_ACTION;

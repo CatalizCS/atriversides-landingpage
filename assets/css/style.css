@@ -2615,6 +2615,49 @@ body {
   }
 }
 
+/* Selection highlight */
+::selection {
+  background: rgba(218,165,32,.25);
+  color: #0f172a;
+}
+::-moz-selection {
+  background: rgba(218,165,32,.25);
+  color: #0f172a;
+}
+
+/* Inputs and buttons focus animation */
+input:focus, select:focus, textarea:focus, .btn:focus-visible, button:focus-visible {
+  transition: box-shadow .25s ease, transform .15s ease;
+}
+input:focus, select:focus, textarea:focus {
+  box-shadow: 0 0 0 4px rgba(218,165,32,.12);
+  transform: translateZ(0);
+}
+.btn:focus-visible, button:focus-visible {
+  transform: translateY(-1px);
+}
+
+/* Card focus-within: emulate hover when interacting via keyboard */
+.card:focus-within, .horizontal-card:focus-within, .news-card:focus-within {
+  box-shadow: var(--elev-card-xl);
+  transform: translateY(-4px);
+  border-color: var(--gold);
+}
+
+/* Projects Swiper: animate active slide a bit */
+.projects .swiper-slide {
+  transition: transform .35s ease, filter .35s ease;
+}
+.projects .swiper-slide-active {
+  transform: translateY(-6px);
+}
+.projects .swiper-slide .project-card__img {
+  transition: transform .35s ease;
+}
+.projects .swiper-slide-active .project-card__img {
+  transform: scale(1.03);
+}
+
 .aos-disabled [data-aos] {
   opacity: 1 !important;
   transform: none !important;
