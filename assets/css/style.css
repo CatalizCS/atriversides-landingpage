@@ -94,12 +94,7 @@
 /* Luxury accent lines */
 .accent-line {
   position: absolute;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(218, 165, 32, 0.2),
-    transparent
-  );
+  background: var(--grad-line-gold-20);
   height: 1px;
   pointer-events: none;
 }
@@ -269,6 +264,19 @@
     rgba(15, 23, 42, 0.6),
     rgba(15, 23, 42, 0.9)
   );
+  --grad-ink-text: linear-gradient(135deg, #1e293b 0%, #334155 50%, #0f172a 100%);
+  --grad-hero-overlay: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.7),
+    rgba(30, 41, 59, 0.42)
+  );
+  --grad-hero-cta: linear-gradient(115deg, #b8860b 0%, #daa520 55%, #f4e99b 100%);
+  --grad-line-gold-20: linear-gradient(90deg, transparent, rgba(218,165,32,0.2), transparent);
+  --grad-line-gold-35: linear-gradient(90deg, transparent, rgba(218,165,32,0.35), transparent);
+  --elev-card: 0 15px 40px rgba(0, 0, 0, 0.08);
+  --elev-card-xl: 0 25px 50px rgba(0, 0, 0, 0.15);
+  --elev-hero-strong: 0 10px 40px -8px rgba(0, 0, 0, 0.5);
+  --glass-border-color: rgba(255, 255, 255, 0.35);
   --color-bg-alt: #f8fafc;
   --color-border: rgba(218, 165, 32, 0.15);
   --color-border-strong: rgba(218, 165, 32, 0.4);
@@ -497,7 +505,7 @@
   font-size: clamp(2.2rem, 4vw, 3.2rem);
   font-weight: 800;
   line-height: 1.08;
-  background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #0f172a 100%);
+  background: var(--grad-ink-text);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -525,7 +533,7 @@
   color: #333;
   border-radius: 25px;
   overflow: hidden;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--elev-card-xl);
   transition: all 0.4s ease;
   border: 3px solid transparent;
   position: relative;
@@ -567,7 +575,7 @@
 .glass {
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid var(--glass-border-color);
 }
 
 /* Button variants */
@@ -734,13 +742,8 @@
 }
 /* Dominant color variant (no blur) */
 .hero-cta-bar {
-  background: linear-gradient(
-    115deg,
-    #b8860b 0%,
-    #daa520 55%,
-    #f4e99b 100%
-  ) !important;
-  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  background: var(--grad-hero-cta) !important;
+  border: 1px solid var(--glass-border-color) !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   box-shadow: 0 14px 46px -12px rgba(0, 0, 0, 0.55),
@@ -861,12 +864,7 @@ button:focus-visible {
 /* Luxury divider */
 .divider {
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(218, 165, 32, 0.35),
-    transparent
-  );
+  background: var(--grad-line-gold-35);
   margin: var(--space-2xl) auto;
   max-width: 960px;
 }
@@ -1117,11 +1115,7 @@ body {
 }
 .hero {
   height: 100vh;
-  background: linear-gradient(
-      135deg,
-      rgba(15, 23, 42, 0.7),
-      rgba(30, 41, 59, 0.42)
-    ),
+  background: var(--grad-hero-overlay),
     url("https://atsaigonriverside.com/wp-content/uploads/2025/08/tong-the-phoi-canh-at-saigon-riverside.jpg");
   background-size: cover;
   background-position: center;
@@ -1132,11 +1126,15 @@ body {
   color: #fff;
   position: relative;
   overflow: hidden;
+  contain: paint;
 }
 /* Reduce jank on touch devices and tablets */
 @media (max-width: 1024px), (pointer: coarse) {
   .hero {
     background-attachment: scroll;
+  }
+  .hero::before {
+    animation-duration: 40s;
   }
 }
 
@@ -1145,6 +1143,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
+  will-change: transform, opacity;
   background-image: radial-gradient(
       circle at 25% 25%,
       rgba(218, 165, 32, 0.1) 0%,
@@ -1206,6 +1205,7 @@ body {
   height: 300px;
   border: 1px solid rgba(218, 165, 32, 0.15);
   border-radius: 50%;
+  will-change: transform, opacity;
   animation: heroFloatSlow 25s ease-in-out infinite;
 }
 
@@ -1219,6 +1219,7 @@ body {
   border: 2px solid rgba(218, 165, 32, 0.2);
   border-radius: 20px;
   transform: rotate(45deg);
+  will-change: transform, opacity;
   animation: heroRotateFloat 30s linear infinite;
 }
 
@@ -1238,6 +1239,7 @@ body {
   height: 4px;
   background: rgba(218, 165, 32, 0.6);
   border-radius: 50%;
+  will-change: transform, opacity;
   box-shadow: 200px 300px 0 rgba(218, 165, 32, 0.4),
     400px 150px 0 rgba(218, 165, 32, 0.3), 600px 400px 0 rgba(218, 165, 32, 0.5),
     800px 200px 0 rgba(218, 165, 32, 0.2), 150px 500px 0 rgba(218, 165, 32, 0.4),
@@ -1325,11 +1327,15 @@ body {
   background-clip: text;
   color: transparent;
   text-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 .hero-subtitle {
   max-width: 640px;
   color: #f1f5f9;
   text-wrap: balance;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 .hero-stats {
   background: linear-gradient(
@@ -1337,8 +1343,8 @@ body {
     rgba(255, 255, 255, 0.15),
     rgba(255, 255, 255, 0.05)
   );
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow: 0 10px 40px -8px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--glass-border-color);
+  box-shadow: var(--elev-hero-strong);
 }
 .stats-grid {
   display: grid;
@@ -1856,7 +1862,7 @@ body {
   background: #fff;
   padding: 3rem;
   border-radius: 25px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--elev-card);
   border: 1px solid rgba(218, 165, 32, 0.1);
 }
 .project-details h3 {
@@ -2048,7 +2054,7 @@ body {
   background: #fff;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--elev-card);
   transition: all 0.3s ease;
   border: 2px solid transparent;
 }
@@ -2069,7 +2075,8 @@ body {
   transition: transform 0.3s ease;
 }
 .horizontal-card:hover .card-image img {
-  transform: scale(1.1);
+  transform: scale(1.1) translateZ(0);
+  backface-visibility: hidden;
 }
 .card-content {
   padding: 2rem;
@@ -2238,7 +2245,8 @@ body {
   box-shadow: 0 20px 40px rgba(218, 165, 32, 0.2);
 }
 .gallery-item:hover img {
-  transform: scale(1.1);
+  transform: scale(1.1) translateZ(0);
+  backface-visibility: hidden;
 }
 .gallery-item:hover::before {
   opacity: 0.8;
@@ -2265,7 +2273,7 @@ body {
   color: #333;
   border-radius: 25px;
   overflow: hidden;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--elev-card-xl);
   transition: all 0.3s ease;
   border: 3px solid transparent;
 }
@@ -2607,6 +2615,84 @@ body {
   }
 }
 
+.aos-disabled [data-aos] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Lead capture modal */
+.lead-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+.lead-modal-overlay.is-open { display: flex; }
+.lead-modal {
+  width: min(92vw, 520px);
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: var(--elev-card-xl);
+  border: 1px solid var(--color-border);
+  padding: 1.25rem;
+}
+.lead-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-bottom: .75rem;
+}
+.lead-modal__title {
+  font-family: var(--font-serif-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--deep-blue);
+}
+.lead-modal__close {
+  appearance: none;
+  border: none;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--gradient);
+  color: #fff;
+  display: grid; place-items: center;
+  cursor: pointer;
+}
+.lead-modal__body { padding: .5rem 0 0; }
+.lead-form .form-row { display: grid; gap: .75rem; margin-bottom: .9rem; }
+.lead-form .form-row.half { grid-template-columns: 1fr 1fr; }
+@media (max-width: 560px) { .lead-form .form-row.half { grid-template-columns: 1fr; } }
+.lead-form input,
+.lead-form select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: #fafafa;
+}
+.lead-form input:focus, .lead-form select:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(218,165,32,.1);
+  background: #fff;
+}
+.lead-form .submit {
+  width: 100%;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: .5rem;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: none;
+  background: var(--gradient);
+  color: #fff; font-weight: 700;
+  cursor: pointer;
+}
+
 /* === Utility Extensions & Variants (added for inline cleanup) === */
 .mt-3rem {
   margin-top: 3rem !important;
@@ -2631,7 +2717,7 @@ body {
 }
 .shadow-card {
   background: #fff;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--elev-card);
   border-radius: 20px;
 }
 .contact-grid {

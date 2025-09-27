@@ -53,6 +53,127 @@ function initLenis() {
 initLenis();
 setTimeout(unlockScroll, 500);
 
+// Lead capture modal logic
+(function leadModalInit() {
+  const modal = document.getElementById("leadModal");
+  if (!modal) return;
+  const closeBtn = modal.querySelector("[data-close-lead]");
+  const form = document.getElementById("leadForm");
+
+  function openModal(force = false) {
+    if (!force && sessionStorage.getItem("lead_shown") === "1") return;
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("no-scroll");
+    sessionStorage.setItem("lead_shown", "1");
+    // focus first input
+    const first = modal.querySelector("input, select, button");
+    first && first.focus && first.focus();
+  }
+  function closeModal() {
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("no-scroll");
+  }
+  window.addEventListener("load", () => {
+    try {
+      const url = new URL(window.location.href);
+      if (url.hash === "#lead" || url.searchParams.get("lead") === "1") {
+        openModal(true);
+      }
+    } catch (e) {}
+    setTimeout(() => {
+      if (!sessionStorage.getItem("lead_shown")) openModal();
+    }, 1);
+    setTimeout(() => {
+      if (!sessionStorage.getItem("lead_shown")) openModal();
+    }, 1);
+  });
+  // interactions
+  closeBtn && closeBtn.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("is-open")) closeModal();
+  });
+  window.openLeadModal = () => openModal(true);
+  document.addEventListener("click", (e) => {
+    const trigger = e.target.closest(
+      '[data-open-lead], .open-lead, a[href="#lead"]'
+    );
+    if (!trigger) return;
+    e.preventDefault();
+    openModal(true);
+  });
+
+  if (form) {
+    const GOOGLE_FORM_ACTION =
+      "https://docs.google.com/forms/u/0/d/e/1FAIpQLScmIpZcewi8w0oeyWUOKPprybM9pLMoq5IZbHt1hiSAu56_ow/formResponse";
+    const ENTRY_MAP = {
+      name: "entry.223043346",
+      phone: "entry.1607246013",
+      email: "entry.1947902975",
+      apartment: "entry.707847209",
+      message: "entry.641513450",
+    };
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = document.getElementById("lead_name").value.trim();
+      const phone = document.getElementById("lead_phone").value.trim();
+      const email = document.getElementById("lead_email").value.trim();
+      const apartment = document.getElementById("lead_apartment").value;
+      const hp = (
+        document.getElementById("lead_hp") || { value: "" }
+      ).value.trim();
+      if (hp) return;
+      if (!name || !phone) {
+        alert("Vui lòng nhập họ tên và số điện thoại!");
+        return;
+      }
+      const phoneRegex = /^[0-9]{10,11}$/;
+      if (!phoneRegex.test(phone)) {
+        alert("Số điện thoại không hợp lệ (10-11 số)!");
+        return;
+      }
+
+      const btn = form.querySelector('button[type="submit"]');
+      const original = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
+      btn.disabled = true;
+
+      const tempForm = document.createElement("form");
+      tempForm.method = "POST";
+      tempForm.action = GOOGLE_FORM_ACTION;
+      tempForm.target = "hidden_gf_iframe";
+      tempForm.style.display = "none";
+      const appendField = (n, v) => {
+        if (!v) return;
+        const i = document.createElement("input");
+        i.type = "hidden";
+        i.name = n;
+        i.value = v;
+        tempForm.appendChild(i);
+      };
+      appendField(ENTRY_MAP.name, name);
+      appendField(ENTRY_MAP.phone, phone);
+      appendField(ENTRY_MAP.email, email);
+      appendField(ENTRY_MAP.apartment, apartment);
+      appendField(ENTRY_MAP.message, "Popup lead");
+      document.body.appendChild(tempForm);
+      tempForm.submit();
+      setTimeout(() => {
+        alert("Cảm ơn bạn! Chúng tôi sẽ liên hệ sớm.");
+        btn.innerHTML = original;
+        btn.disabled = false;
+        closeModal();
+        if (document.body.contains(tempForm))
+          document.body.removeChild(tempForm);
+      }, 1000);
+    });
+  }
+})();
+
 const contactForm = document.getElementById("contactForm");
 if (contactForm) {
   const GOOGLE_FORM_ACTION =
@@ -76,7 +197,7 @@ if (contactForm) {
     // Honeypot anti-bot
     const hp = (document.getElementById("hp") || { value: "" }).value.trim();
     if (hp) {
-      return; // silently drop bots
+      return; 
     }
 
     if (!name || !phone) {

@@ -32,6 +32,10 @@
       once: true,
       disable: prefersReduced,
     });
+    try {
+      const disabled = prefersReduced || (AOS && AOS.options && AOS.options.disable);
+      if (disabled) document.documentElement.classList.add("aos-disabled");
+    } catch (e) {}
   }
 
   // Swiper for projects
@@ -349,5 +353,8 @@
     initGSAP();
     initMarquee();
     initAnchorSmoothScroll();
+    if (!window.AOS) {
+      document.documentElement.classList.add("aos-disabled");
+    }
   });
 })();

@@ -724,6 +724,42 @@
         <i class="fas fa-phone"></i>
     </div>
 
+        <!-- Lead Capture Modal -->
+        <div class="lead-modal-overlay" id="leadModal" role="dialog" aria-modal="true" aria-labelledby="leadModalTitle" aria-hidden="true">
+            <div class="lead-modal" role="document">
+                <div class="lead-modal__header">
+                    <h3 class="lead-modal__title" id="leadModalTitle">Nhận tư vấn & bảng giá</h3>
+                    <button class="lead-modal__close" type="button" aria-label="Đóng" data-close-lead>
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="lead-modal__body">
+                    <form class="lead-form" id="leadForm">
+                        <div class="form-row">
+                            <input type="text" name="name" id="lead_name" placeholder="Họ và tên *" required>
+                        </div>
+                        <div class="form-row half">
+                            <input type="tel" name="phone" id="lead_phone" placeholder="Số điện thoại *" required>
+                            <input type="email" name="email" id="lead_email" placeholder="Email (không bắt buộc)">
+                        </div>
+                        <div class="form-row">
+                            <select name="apartment" id="lead_apartment" aria-label="Loại căn hộ quan tâm">
+                                <option>1 phòng ngủ (42-47m²)</option>
+                                <option>2 phòng ngủ (63-78m²)</option>
+                                <option>3 phòng ngủ (91-95m²)</option>
+                            </select>
+                        </div>
+                        <div class="visually-hidden" aria-hidden="true">
+                            <label for="lead_hp">Để trống</label>
+                            <input type="text" id="lead_hp" name="hp" tabindex="-1" autocomplete="off">
+                        </div>
+                        <button class="submit" type="submit"><i class="fas fa-paper-plane"></i> Gửi thông tin</button>
+                        <p class="paragraph-xs text-muted" style="text-align:center;margin-top:.75rem;">Chúng tôi tôn trọng quyền riêng tư của bạn.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     <!-- JS libraries -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js" defer></script>
