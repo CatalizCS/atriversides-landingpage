@@ -9,21 +9,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300..900;1,300..900&family=Noto+Serif+Display:ital,wght@0,400..900;1,400..900&display=swap&subset=vietnamese"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap&subset=vietnamese"
         rel="stylesheet">
+
+    <!-- Required CSS libraries -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/modern-normalize/modern-normalize.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+
+    <!-- Project stylesheet -->
     <link rel="stylesheet" href="assets/css/style.css">
 
 </head>
 
 <body>
-    <div class="floating-decoratives"></div>
-    
     <!-- Header -->
     <header class="header" id="header">
         <div class="nav-container">
             <a href="#" class="logo">
-                <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/logo-at-saigon-riverside.png"
-                    alt="A&T Saigon Riverside Logo"
+                <img src="assets/imgs/logo.png" alt="A&T Saigon Riverside Logo"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                 <span class="logo-text">A&T Saigon Riverside</span>
             </a>
@@ -36,587 +40,630 @@
                 <a href="#pricing" class="nav-link">Bảng giá</a>
                 <a href="#contact" class="nav-link">Liên hệ</a>
             </nav>
-            <a href="#contact" class="contact-btn">
-                <i class="fas fa-phone"></i> Hotline
-            </a>
-        </div>
+            </div>
     </header>
 
     <main id="main-content" tabindex="-1">
-    <!-- Hero Section -->
+        <!-- Hero Section -->
         <section class="hero" id="home" data-section="hero">
             <div class="hero-decorative"></div>
             <div class="hero-particles"></div>
-            
+
             <div class="hero-inner container-narrow">
                 <div class="hero-col hero-textual" data-animate>
                     <div class="pill gradient mb-sm">Dự án cao cấp bậc nhất Thuận An</div>
                     <h1 class="hero-title display-1" data-animate style="animation-delay:.05s">A&T Saigon Riverside</h1>
-                    <p class="hero-subtitle text-lead" data-animate style="animation-delay:.1s">Chuẩn sống thượng lưu ven sông – hòa quyện thiên nhiên xanh và nhịp phát triển năng động, kiến tạo giá trị bền vững cho tương lai.</p>
+                    <p class="hero-subtitle text-lead" data-animate style="animation-delay:.1s">Chuẩn sống thượng lưu
+                        ven sông – hòa quyện thiên nhiên xanh và nhịp phát triển năng động, kiến tạo giá trị bền vững
+                        cho tương lai.</p>
                 </div>
             </div>
         </section>
 
-                <!-- Key Metrics Section (moved out from hero) -->
-                <section class="key-metrics" id="key-metrics" data-section="metrics">
-                    <div class="container" data-animate>
-                        <div class="metrics-bar">
-                            <div class="metric-item">
-                                <div class="metric-value" data-counter="30"><span class="counter-number">30</span><span class="metric-unit"> tầng</span></div>
-                                <div class="metric-label">2 block cao cấp</div>
-                            </div>
-                            <div class="metric-item">
-                                <div class="metric-value" data-counter="850" data-suffix="+"><span class="counter-number">850+</span></div>
-                                <div class="metric-label">Căn hộ đa dạng</div>
-                            </div>
-                            <div class="metric-item">
-                                <div class="metric-value" data-counter="65" data-suffix="%"><span class="counter-number">65%</span></div>
-                                <div class="metric-label">Diện tích tiện ích</div>
-                            </div>
-                            <div class="metric-item">
-                                <div class="metric-value" data-counter="2026"><span class="counter-number">2026</span></div>
-                                <div class="metric-label">Dự kiến bàn giao</div>
-                            </div>
-                        </div>
-                        <ul class="metrics-benefits">
-                            <li><i class="fas fa-crown"></i> Nội thất luxury tinh chọn</li>
-                            <li><i class="fas fa-water"></i> View sông & mảng xanh lớn</li>
-                            <li><i class="fas fa-shield-alt"></i> An ninh đa lớp 24/7</li>
-                            <li><i class="fas fa-percentage"></i> Ưu đãi giai đoạn sớm</li>
-                        </ul>
+        <!-- Key Metrics Section -->
+        <section class="key-metrics" id="key-metrics" data-section="metrics">
+            <div class="container" data-animate>
+                <div class="metrics-bar">
+                    <div class="metric-item">
+                        <div class="metric-value" data-counter="30"><span class="counter-number">30</span><span
+                                class="metric-unit"> tầng</span></div>
+                        <div class="metric-label">2 block cao cấp</div>
                     </div>
-                </section>
-
-    <!-- Project Information Section -->
-    <section class="project-info" id="project-info" data-section="project-info">
-      <div class="section-decorative top-right"></div>
-      <div class="accent-line top"></div>
-      <div class="container">
-        <div class="section-header" data-animate>
-          <div class="section-eyebrow">Thông tin dự án</div>
-          <h2 class="section-heading">A&T Saigon Riverside</h2>
-          <p class="section-sub">Tổ hợp căn hộ ven sông chuẩn cao cấp – tinh gọn, pháp lý minh bạch, tối ưu giá trị sở hữu lâu dài.</p>
-        </div>
-        <div class="project-essentials" data-animate>
-          <div class="essentials-intro">
-            <p style="font-size:1.05rem;line-height:1.65;color:#475569;max-width:680px;margin:0 auto 2.2rem;text-align:center;">
-              Một điểm nhấn mới tại Thuận An với lợi thế ven sông, tỷ lệ tiện ích cao và chuẩn sống khác biệt dành cho cộng đồng cư dân chọn lọc.
-            </p>
-          </div>
-          <div class="spec-grid">
-            <div class="spec-item"><i class="fas fa-layer-group"></i><span class="label">Quy mô</span><strong>2 block / 30 tầng</strong></div>
-            <div class="spec-item"><i class="fas fa-home"></i><span class="label">Số căn</span><strong>850+ đa dạng</strong></div>
-            <div class="spec-item"><i class="fas fa-square"></i><span class="label">Tiện ích</span><strong>65% diện tích</strong></div>
-            <div class="spec-item"><i class="fas fa-shield-alt"></i><span class="label">Pháp lý</span><strong>Sổ hồng riêng</strong></div>
-            <div class="spec-item"><i class="fas fa-calendar"></i><span class="label">Bàn giao</span><strong>2025 - 2026</strong></div>
-            <div class="spec-item"><i class="fas fa-parking"></i><span class="label">Đậu xe</span><strong>100% đảm bảo</strong></div>
-          </div>
-          <div class="spec-visual" data-animate>
-            <img src="https://atsaigonriverside.com/wp-content/uploads/2025/08/tong-the-phoi-canh-at-saigon-riverside.jpg" alt="Phối cảnh tổng thể" class="shadow-card" style="width:100%;max-width:1100px;height:420px;object-fit:cover;border-radius:25px;margin:3rem auto 0;display:block;">
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Location & Advantages Section -->
-    <section class="location-advantages" data-section="location">
-        <div class="section-decorative bottom-left"></div>
-        <div class="dots-pattern"></div>
-        <div class="container">
-            <div class="section-header" data-animate>
-                <div class="section-eyebrow">Vị trí đắc địa</div>
-                <h2 class="section-heading">Ưu Thế Vị Trí</h2>
-                <p class="section-sub">Liên kết vùng chiến lược – hạ tầng đồng bộ – tâm điểm tăng trưởng mới của cửa ngõ Đông Sài Gòn.</p>
+                    <div class="metric-item">
+                        <div class="metric-value" data-counter="850" data-suffix="+"><span
+                                class="counter-number">850+</span></div>
+                        <div class="metric-label">Căn hộ đa dạng</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" data-counter="65" data-suffix="%"><span
+                                class="counter-number">65%</span></div>
+                        <div class="metric-label">Diện tích tiện ích</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value" data-counter="2026"><span class="counter-number">2026</span></div>
+                        <div class="metric-label">Dự kiến bàn giao</div>
+                    </div>
+                </div>
+                <ul class="metrics-benefits">
+                    <li><i class="fas fa-crown"></i> Nội thất luxury tinh chọn</li>
+                    <li><i class="fas fa-water"></i> View sông & mảng xanh lớn</li>
+                    <li><i class="fas fa-shield-alt"></i> An ninh đa lớp 24/7</li>
+                    <li><i class="fas fa-percentage"></i> Ưu đãi giai đoạn sớm</li>
+                </ul>
             </div>
+        </section>
 
-            <div class="advantages-grid">
-                <div class="advantage-card">
-                    <div class="advantage-icon">
-                        <i class="fas fa-subway"></i>
-                    </div>
-                    <h3 class="advantage-title">Giao Thông Thuận Tiện</h3>
-                    <p>Cách Sài Gòn 15 phút, kết nối metro, cao tốc và các tuyến đường huyết mạch</p>
+        <!-- Project Information Section -->
+        <section class="project-info" id="project-info" data-section="project-info">
+            <div class="section-decorative top-right"></div>
+            <div class="accent-line top"></div>
+            <div class="container">
+                <div class="section-header" data-animate>
+                    <div class="section-eyebrow">Thông tin dự án</div>
+                    <h2 class="section-heading">A&T Saigon Riverside</h2>
+                    <p class="section-sub">Tổ hợp căn hộ ven sông chuẩn cao cấp – tinh gọn, pháp lý minh bạch, tối ưu
+                        giá trị sở hữu lâu dài.</p>
                 </div>
-
-                <div class="advantage-card">
-                    <div class="advantage-icon">
-                        <i class="fas fa-water"></i>
+                <div class="project-essentials" data-animate>
+                    <div class="essentials-intro">
+                        <p
+                            style="font-size:1.05rem;line-height:1.65;color:#475569;max-width:680px;margin:0 auto 2.2rem;text-align:center;">
+                            Một điểm nhấn mới tại Thuận An với lợi thế ven sông, tỷ lệ tiện ích cao và chuẩn sống khác
+                            biệt dành cho cộng đồng cư dân chọn lọc.
+                        </p>
                     </div>
-                    <h3 class="advantage-title">Mặt Tiền Sông</h3>
-                    <p>View sông Sài Gòn thơ mộng, không gian trong lành và thoáng mát ququanh năm</p>
-                </div>
-
-                <div class="advantage-card">
-                    <div class="advantage-icon">
-                        <i class="fas fa-shopping-bag"></i>
+                    <div class="spec-grid">
+                        <div class="spec-item"><i class="fas fa-layer-group"></i><span class="label">Quy
+                                mô</span><strong>2 block / 30 tầng</strong></div>
+                        <div class="spec-item"><i class="fas fa-home"></i><span class="label">Số căn</span><strong>850+
+                                đa dạng</strong></div>
+                        <div class="spec-item"><i class="fas fa-square"></i><span class="label">Tiện
+                                ích</span><strong>65% diện tích</strong></div>
+                        <div class="spec-item"><i class="fas fa-shield-alt"></i><span class="label">Pháp
+                                lý</span><strong>Sổ hồng riêng</strong></div>
+                        <div class="spec-item"><i class="fas fa-calendar"></i><span class="label">Bàn
+                                giao</span><strong>2025 - 2026</strong></div>
+                        <div class="spec-item"><i class="fas fa-parking"></i><span class="label">Đậu
+                                xe</span><strong>100% đảm bảo</strong></div>
                     </div>
-                    <h3 class="advantage-title">Tiện Ích Xung Quanh</h3>
-                    <p>Gần trường học, bệnh viện, trung tâm thương mại và khu công nghiệp</p>
-                </div>
-
-                <div class="advantage-card">
-                    <div class="advantage-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="advantage-title">Tiềm Năng Tăng Giá</h3>
-                    <p>Khu vực phát triển mạnh, hạ tầng hoàn thiện, giá trị gia tăng bền vững</p>
-                </div>
-
-                <div class="advantage-card">
-                    <div class="advantage-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3 class="advantage-title">Môi Trường An Toàn</h3>
-                    <p>Khu dân cư văn minh, an ninh 24/7 và không gian sống yên bình</p>
-                </div>
-
-                <div class="advantage-card">
-                    <div class="advantage-icon">
-                        <i class="fas fa-leaf"></i>
-                    </div>
-                    <h3 class="advantage-title">Không Gian Xanh</h3>
-                    <p>65% diện tích dành cho cây xanh và tiện ích cộng đồng</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Apartments Section -->
-    <section class="horizontal-section apartments" id="apartments" data-section="apartments">
-        <div class="container">
-            <div class="section-header" data-animate>
-                <div class="section-eyebrow">Đa dạng lựa chọn</div>
-                <h2 class="section-heading">Căn Hộ Cao Cấp</h2>
-                <p class="section-sub">Thiết kế tối ưu công năng, đường nét tinh gọn và vật liệu sang trọng tạo nên chuẩn sống khác biệt.</p>
-            </div>
-
-            <div class="horizontal-cards">
-                <div class="horizontal-card">
-                    <div class="card-image">
-                        <img src="https://atsaigonriverside.com/wp-content/uploads/2025/05/thiet-ke-can-1pn-at-saigon-riverisde.jpg"
-                            alt="Căn hộ 1 phòng ngủ">
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">Studio & 1 Phòng Ngủ</h3>
-                        <p class="card-description">Thiết kế thông minh, tối ưu hóa không gian sống cho người độc thân
-                            hoặc cặp đôi trẻ</p>
-                        <ul class="card-features">
-                            <li><i class="fas fa-expand-arrows-alt"></i> Diện tích: 42-47m²</li>
-                            <li><i class="fas fa-bed"></i> 1 phòng ngủ + 1 WC</li>
-                            <li><i class="fas fa-eye"></i> Ban công view sông</li>
-                            <li><i class="fas fa-home"></i> Nội thất cao cấp</li>
-                            <li><i class="fas fa-dollar-sign"></i> Từ 1.2 - 1.5 tỷ</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="horizontal-card">
-                    <div class="card-image">
-                        <img src="https://atsaigonriverside.com/wp-content/uploads/2025/05/can-2pn-du-an-at-saigon-riverisde.jpg"
-                            alt="Căn hộ 2 phòng ngủ">
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">2 Phòng Ngủ Premium</h3>
-                        <p class="card-description">Không gian lý tưởng cho gia đình trẻ với đầy đủ tiện nghi và thiết
-                            kế hiện đại</p>
-                        <ul class="card-features">
-                            <li><i class="fas fa-expand-arrows-alt"></i> Diện tích: 63-78m²</li>
-                            <li><i class="fas fa-bed"></i> 2 phòng ngủ + 2 WC</li>
-                            <li><i class="fas fa-utensils"></i> Bếp riêng biệt</li>
-                            <li><i class="fas fa-couch"></i> Phòng khách rộng rãi</li>
-                            <li><i class="fas fa-dollar-sign"></i> Từ 2.1 - 2.8 tỷ</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="horizontal-card">
-                    <div class="card-image">
-                        <img src="https://atsaigonriverside.com/wp-content/uploads/2025/02/Thiet-ke-can-3pn-at-saigon-riverside.jpg"
-                            alt="Căn hộ 3 phòng ngủ">
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">3 Phòng Ngủ Luxury</h3>
-                        <p class="card-description">Đẳng cấp thượng lưu dành cho gia đình đa thế hệ với không gian sống
-                            rộng rãi</p>
-                        <ul class="card-features">
-                            <li><i class="fas fa-expand-arrows-alt"></i> Diện tích: 91-95m²</li>
-                            <li><i class="fas fa-bed"></i> 3 phòng ngủ + 2 WC</li>
-                            <li><i class="fas fa-door-open"></i> Phòng khách + phòng ăn riêng</li>
-                            <li><i class="fas fa-crown"></i> Nội thất luxury</li>
-                            <li><i class="fas fa-dollar-sign"></i> Từ 3.2 - 3.8 tỷ</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="horizontal-card">
-                    <div class="card-image">
-                        <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/at-saigon-riverside.jpg"
-                            alt="Penthouse">
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">Penthouse Duplex</h3>
-                        <p class="card-description">Đỉnh cao của sự sang trọng với thiết kế duplex và tầm nhìn panorama
-                            tuyệt đẹp</p>
-                        <ul class="card-features">
-                            <li><i class="fas fa-expand-arrows-alt"></i> Diện tích: 120-150m²</li>
-                            <li><i class="fas fa-bed"></i> 3-4 phòng ngủ + 3 WC</li>
-                            <li><i class="fas fa-stairs"></i> Thiết kế duplex 2 tầng</li>
-                            <li><i class="fas fa-eye"></i> View 360° toàn thành phố</li>
-                            <li><i class="fas fa-dollar-sign"></i> Từ 5.5 - 7.2 tỷ</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Amenities Section -->
-    <section class="horizontal-section amenities" id="amenities" data-section="amenities">
-        <div class="section-decorative center"></div>
-        <div class="accent-line bottom"></div>
-        <div class="container">
-            <div class="section-header" data-animate>
-                <div class="section-eyebrow">Tiện ích đẳng cấp</div>
-                <h2 class="section-heading">Hệ Sinh Thái Tiện Ích</h2>
-                <p class="section-sub">Chuỗi tiện ích đa tầng chuẩn resort: sức khỏe, thư giãn, giáo dục và kết nối cộng đồng tinh hoa.</p>
-            </div>
-
-            <div class="horizontal-cards">
-                <div class="horizontal-card">
-                    <div class="card-image">
+                    <div class="spec-visual" data-animate>
                         <img src="https://atsaigonriverside.com/wp-content/uploads/2025/08/tong-the-phoi-canh-at-saigon-riverside.jpg"
-                            alt="Hồ bơi">
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">Hồ Bơi Resort</h3>
-                        <p class="card-description">Hồ bơi tràn bờ với tầm nhìn panorama ra sông Sài Gòn thơ mộng</p>
-                        <ul class="card-features">
-                            <li><i class="fas fa-swimming-pool"></i> Hồ bơi tràn bờ 25m</li>
-                            <li><i class="fas fa-child"></i> Hồ bơi trẻ em riêng biệt</li>
-                            <li><i class="fas fa-cocktail"></i> Pool bar & lounge</li>
-                            <li><i class="fas fa-umbrella-beach"></i> Khu thư giãn cao cấp</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="horizontal-card">
-                    <div class="card-image">
-                        <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/at-saigon-riverside.jpg"
-                            alt="Gym & Spa">
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">Gym & Spa Premium</h3>
-                        <p class="card-description">Phòng gym hiện đại và spa thư giãn chăm sóc sức khỏe toàn diện</p>
-                        <ul class="card-features">
-                            <li><i class="fas fa-dumbbell"></i> Gym 24/7 thiết bị Technogym</li>
-                            <li><i class="fas fa-spa"></i> Spa & massage trị liệu</li>
-                            <li><i class="fas fa-hot-tub"></i> Phòng xông hơi & jacuzzi</li>
-                            <li><i class="fas fa-heart"></i> Yoga & meditation</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="horizontal-card">
-                    <div class="card-image">
-                        <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/Cong-chao-du-an-can-ho-at-saigon-riverside.jpg"
-                            alt="Vườn xanh">
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">Công Viên Xanh</h3>
-                        <p class="card-description">Không gian xanh rộng lớn với thiết kế cảnh quan hiện đại</p>
-                        <ul class="card-features">
-                            <li><i class="fas fa-tree"></i> Vườn BBQ gia đình</li>
-                            <li><i class="fas fa-running"></i> Đường chạy bộ 500m</li>
-                            <li><i class="fas fa-playground"></i> Khu vui chơi trẻ em</li>
-                            <li><i class="fas fa-chess"></i> Khu thể thao ngoài trời</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="horizontal-card">
-                    <div class="card-image">
-                        <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/Phoi-canh-can-ho-at-saigon-riverside.jpg"
-                            alt="Tiện ích khác">
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">Tiện Ích Đa Dạng</h3>
-                        <p class="card-description">Hệ thống tiện ích phong phú phục vụ mọi nhu cầu sinh hoạt</p>
-                        <ul class="card-features">
-                            <li><i class="fas fa-graduation-cap"></i> Trường mầm non quốc tế</li>
-                            <li><i class="fas fa-store"></i> Minimart & coffee shop</li>
-                            <li><i class="fas fa-car"></i> Hầm đậu xe thông minh</li>
-                            <li><i class="fas fa-shield-alt"></i> An ninh 24/7</li>
-                        </ul>
+                            alt="Phối cảnh tổng thể" class="shadow-card"
+                            style="width:100%;max-width:1100px;height:420px;object-fit:cover;border-radius:25px;margin:3rem auto 0;display:block;">
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Gallery Section -->
-    <section class="gallery" id="gallery">
-        <div class="section-decorative top-right"></div>
-        <div class="container">
-            <div class="section-header">
-                <div class="section-badge">Hình ảnh thực tế</div>
-                <h2 class="section-title">Kiệt Tác Kiến Trúc</h2>
-                <p class="section-description">
-                    Khám phá vẻ đẹp kiến trúc hiện đại và không gian sống đẳng cấp qua bộ sưu tập hình ảnh
-                </p>
-            </div>
-
-            <div class="gallery-grid">
-                <div class="gallery-item">
-                    <img src="https://atsaigonriverside.com/wp-content/uploads/2025/08/tong-the-phoi-canh-at-saigon-riverside.jpg"
-                        alt="Tổng thể phối cảnh">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/at-saigon-riverside.jpg"
-                        alt="View từ ngoài">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/Cong-chao-du-an-can-ho-at-saigon-riverside.jpg"
-                        alt="Cổng chào dự án">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/Phoi-canh-can-ho-at-saigon-riverside.jpg"
-                        alt="Phối cảnh căn hộ">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://atsaigonriverside.com/wp-content/uploads/2025/05/thiet-ke-can-1pn-at-saigon-riverisde.jpg"
-                        alt="Thiết kế căn 1PN">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://atsaigonriverside.com/wp-content/uploads/2025/05/can-2pn-du-an-at-saigon-riverisde.jpg"
-                        alt="Căn 2PN">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section class="pricing" id="pricing">
-        <div class="container">
-            <div class="section-header" data-animate>
-                <div class="section-eyebrow" style="background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.35);">Bảng giá chính thức</div>
-                <h2 class="section-heading" style="background:linear-gradient(135deg,#fff,#e2e8f0);-webkit-background-clip:text;background-clip:text;color:transparent;">Bảng Giá Căn Hộ</h2>
-                <p class="section-sub" style="color:#e2e8f0;">Bảng giá minh bạch từ CĐT – ưu đãi giai đoạn sớm & hỗ trợ tài chính linh hoạt.</p>
-            </div>
-
-            <div class="pricing-cards">
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3 class="pricing-type">Studio & 1PN</h3>
-                        <p class="pricing-size">42 - 47m²</p>
-                        <div class="pricing-amount">1.2 - 1.5 tỷ</div>
-                        <p>Phù hợp cho người độc thân</p>
-                    </div>
-                    <div class="pricing-content">
-                        <ul class="pricing-features">
-                            <li><i class="fas fa-check"></i> Thiết kế thông minh tối ưu</li>
-                            <li><i class="fas fa-check"></i> Ban công riêng view sông</li>
-                            <li><i class="fas fa-check"></i> Nội thất cao cấp đầy đủ</li>
-                            <li><i class="fas fa-check"></i> Hệ thống smart home</li>
-                            <li><i class="fas fa-check"></i> Chỗ đậu xe ưu tiên</li>
-                        </ul>
-                        <a href="#contact" class="btn w-100">
-                            <i class="fas fa-phone"></i> Tư vấn chi tiết
-                        </a>
-                    </div>
+        <!-- Location & Advantages Section -->
+        <section class="location-advantages" data-section="location">
+            <div class="section-decorative bottom-left"></div>
+            <div class="dots-pattern"></div>
+            <div class="container">
+                <div class="section-header" data-animate>
+                    <div class="section-eyebrow">Vị trí đắc địa</div>
+                    <h2 class="section-heading">Ưu Thế Vị Trí</h2>
+                    <p class="section-sub">Liên kết vùng chiến lược – hạ tầng đồng bộ – tâm điểm tăng trưởng mới của cửa
+                        ngõ Đông Sài Gòn.</p>
                 </div>
 
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3 class="pricing-type">2 Phòng Ngủ</h3>
-                        <p class="pricing-size">63 - 78m²</p>
-                        <div class="pricing-amount">2.1 - 2.8 tỷ</div>
-                        <p>Lựa chọn phổ biến nhất</p>
-                    </div>
-                    <div class="pricing-content">
-                        <ul class="pricing-features">
-                            <li><i class="fas fa-check"></i> 2 phòng ngủ + 2 WC</li>
-                            <li><i class="fas fa-check"></i> Phòng khách rộng rãi</li>
-                            <li><i class="fas fa-check"></i> Bếp riêng biệt hiện đại</li>
-                            <li><i class="fas fa-check"></i> Ban công lớn view đẹp</li>
-                            <li><i class="fas fa-check"></i> Phòng ngủ master có WC</li>
-                        </ul>
-                        <a href="#contact" class="btn w-100">
-                            <i class="fas fa-phone"></i> Tư vấn chi tiết
-                        </a>
-                    </div>
-                </div>
-
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3 class="pricing-type">3 Phòng Ngủ</h3>
-                        <p class="pricing-size">91 - 95m²</p>
-                        <div class="pricing-amount">3.2 - 3.8 tỷ</div>
-                        <p>Cao cấp cho gia đình lớn</p>
-                    </div>
-                    <div class="pricing-content">
-                        <ul class="pricing-features">
-                            <li><i class="fas fa-check"></i> 3 phòng ngủ + 2 WC</li>
-                            <li><i class="fas fa-check"></i> Phòng khách + phòng ăn</li>
-                            <li><i class="fas fa-check"></i> Bếp đảo sang trọng</li>
-                            <li><i class="fas fa-check"></i> 2 ban công riêng biệt</li>
-                            <li><i class="fas fa-check"></i> Khu vực sinh hoạt gia đình</li>
-                        </ul>
-                        <a href="#contact" class="btn w-100">
-                            <i class="fas fa-phone"></i> Tư vấn chi tiết
-                        </a>
-                    </div>
-                </div>
-
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3 class="pricing-type">Penthouse</h3>
-                        <p class="pricing-size">120 - 150m²</p>
-                        <div class="pricing-amount">5.5 - 7.2 tỷ</div>
-                        <p>Đỉnh cao sang trọng</p>
-                    </div>
-                    <div class="pricing-content">
-                        <ul class="pricing-features">
-                            <li><i class="fas fa-check"></i> Thiết kế duplex 2 tầng</li>
-                            <li><i class="fas fa-check"></i> 3-4 phòng ngủ + 3 WC</li>
-                            <li><i class="fas fa-check"></i> View 360° toàn thành phố</li>
-                            <li><i class="fas fa-check"></i> Sân thượng riêng</li>
-                            <li><i class="fas fa-check"></i> Nội thất luxury nhập khẩu</li>
-                        </ul>
-                        <a href="#contact" class="btn w-100">
-                            <i class="fas fa-phone"></i> Tư vấn chi tiết
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-3rem">
-                <p class="text-muted" style="margin-bottom:1rem;">
-                    <i class="fas fa-gift"></i> Ưu đãi đặc biệt: Tặng voucher 5 triệu + Hỗ trợ vay 0% lãi suất 24 tháng
-                </p>
-                <a href="tel:0975589913" class="btn btn-outline">
-                    <i class="fas fa-phone"></i>
-                    Hotline: 0975.589.913
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <div class="section-header" data-animate>
-                <div class="section-eyebrow">Liên hệ ngay</div>
-                <h2 class="section-heading">Đăng Ký Tư Vấn</h2>
-                <p class="section-sub">Đăng ký để nhận bảng giá, lịch mở bán & ưu đãi giới hạn dành riêng cho khách hàng sớm.</p>
-            </div>
-
-            <div class="contact-grid">
-                <div>
-                    <h3 class="section-subtitle"
-                        style="font-family:var(--font-serif-display);font-size:2rem;color:var(--deep-blue);margin-bottom:2rem;">
-                        Thông Tin Liên Hệ</h3>
-
-                    <div class="shadow-card" style="padding:2rem;margin-bottom:2rem;">
-                        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
-                            <div class="icon-circle">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                            <div>
-                                <strong style="color: var(--deep-blue);">Hotline Tư Vấn</strong>
-                                <p style="margin: 0; color: #64748b;">0975.589.913 (24/7)</p>
-                            </div>
+                <div class="advantages-grid">
+                    <div class="advantage-card">
+                        <div class="advantage-icon">
+                            <i class="fas fa-subway"></i>
                         </div>
+                        <h3 class="advantage-title">Giao Thông Thuận Tiện</h3>
+                        <p>Cách Sài Gòn 15 phút, kết nối metro, cao tốc và các tuyến đường huyết mạch</p>
+                        <ul class="card-features">
+                            <li><i class="fas fa-road"></i> 5 phút: QL13, Phạm Văn Đồng</li>
+                            <li><i class="fas fa-train"></i> 10 phút: Kết nối Metro khu Đông</li>
+                            <li><i class="fas fa-plane-departure"></i> ~35 phút: Tân Sơn Nhất</li>
+                        </ul>
+                    </div>
 
-                        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
-                            <div class="icon-circle">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div>
-                                <strong style="color: var(--deep-blue);">Địa Chỉ Dự Án</strong>
-                                <p style="margin: 0; color: #64748b;">Thuận An, Bình Dương</p>
-                            </div>
+                    <div class="advantage-card">
+                        <div class="advantage-icon">
+                            <i class="fas fa-water"></i>
                         </div>
+                        <h3 class="advantage-title">Mặt Tiền Sông</h3>
+                        <p>View sông Sài Gòn thơ mộng, không gian trong lành và thoáng mát quanh năm</p>
+                        <ul class="card-features">
+                            <li><i class="fas fa-water"></i> ~300m mặt tiền sông</li>
+                            <li><i class="fas fa-wind"></i> Không khí đối lưu tự nhiên</li>
+                            <li><i class="fas fa-sun"></i> Tầm nhìn bình minh & hoàng hôn</li>
+                        </ul>
+                    </div>
 
-                        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
-                            <div class="icon-circle">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <div>
-                                <strong style="color: var(--deep-blue);">Giờ Tham Quan</strong>
-                                <p style="margin: 0; color: #64748b;">8:00 - 20:00 (Cả T7, CN)</p>
-                            </div>
+                    <div class="advantage-card">
+                        <div class="advantage-icon">
+                            <i class="fas fa-shopping-bag"></i>
                         </div>
+                        <h3 class="advantage-title">Tiện Ích Xung Quanh</h3>
+                        <p>Gần trường học, bệnh viện, trung tâm thương mại và khu công nghiệp</p>
+                        <ul class="card-features">
+                            <li><i class="fas fa-hospital"></i> 8 phút: Bệnh viện khu vực</li>
+                            <li><i class="fas fa-school"></i> 5 phút: Trường học các cấp</li>
+                            <li><i class="fas fa-shopping-cart"></i> 7 phút: TTTM & siêu thị</li>
+                        </ul>
+                    </div>
 
-                        <div style="display:flex;align-items:center;gap:1rem;">
-                            <div class="icon-circle">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div>
-                                <strong style="color: var(--deep-blue);">Email</strong>
-                                <p style="margin: 0; color: #64748b;">info@atsaigonriverside.com</p>
-                            </div>
+                    <div class="advantage-card">
+                        <div class="advantage-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="advantage-title">Tiềm Năng Tăng Giá</h3>
+                        <p>Khu vực phát triển mạnh, hạ tầng hoàn thiện, giá trị gia tăng bền vững</p>
+                        <ul class="card-features">
+                            <li><i class="fas fa-chart-line"></i> Tăng trưởng ước tính 8–12%/năm</li>
+                            <li><i class="fas fa-hand-holding-usd"></i> Nhu cầu thuê cao</li>
+                            <li><i class="fas fa-route"></i> Hạ tầng liên kết mở rộng</li>
+                        </ul>
+                    </div>
+
+                    <div class="advantage-card">
+                        <div class="advantage-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="advantage-title">Môi Trường An Toàn</h3>
+                        <p>Khu dân cư văn minh, an ninh 24/7 và không gian sống yên bình</p>
+                        <ul class="card-features">
+                            <li><i class="fas fa-video"></i> 200+ camera an ninh</li>
+                            <li><i class="fas fa-user-shield"></i> Bảo vệ tuần tra 24/7</li>
+                            <li><i class="fas fa-door-closed"></i> Kiểm soát ra vào bằng thẻ</li>
+                        </ul>
+                    </div>
+
+                    <div class="advantage-card">
+                        <div class="advantage-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3 class="advantage-title">Không Gian Xanh</h3>
+                        <p>65% diện tích dành cho cây xanh và tiện ích cộng đồng</p>
+                        <ul class="card-features">
+                            <li><i class="fas fa-percentage"></i> 65% mảng xanh & tiện ích</li>
+                            <li><i class="fas fa-seedling"></i> Vườn cảnh quan đa lớp</li>
+                            <li><i class="fas fa-bicycle"></i> Đường dạo bộ nội khu</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Slider (Swiper) -->
+        <section class="projects" id="projects" aria-label="Dự án tiêu biểu">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <div class="section-eyebrow">Dự án nổi bật</div>
+                    <h2 class="section-heading">Bộ Sưu Tập Dự Án</h2>
+                    <p class="section-sub">Khám phá những công trình biểu tượng mang dấu ấn thiết kế sang trọng.</p>
+                </div>
+                <div class="swiper projects-swiper" aria-label="Trình chiếu dự án" role="region">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <article class="project-card card" tabindex="0">
+                                <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/Phoi-canh-can-ho-at-saigon-riverside.jpg"
+                                    alt="Phối cảnh dự án 1" class="project-card__img" />
+                                <div class="project-card__body">
+                                    <h3 class="project-card__title">Saigon Riverside A</h3>
+                                    <p class="project-card__meta"><i class="fas fa-map-marker-alt"></i> Thuận An, Bình
+                                        Dương</p>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="swiper-slide">
+                            <article class="project-card card" tabindex="0">
+                                <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/at-saigon-riverside.jpg"
+                                    alt="Phối cảnh dự án 2" class="project-card__img" />
+                                <div class="project-card__body">
+                                    <h3 class="project-card__title">Riverside Garden</h3>
+                                    <p class="project-card__meta"><i class="fas fa-map-marker-alt"></i> TP. Thủ Đức</p>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="swiper-slide">
+                            <article class="project-card card" tabindex="0">
+                                <img src="https://atsaigonriverside.com/wp-content/uploads/2025/08/tong-the-phoi-canh-at-saigon-riverside.jpg"
+                                    alt="Phối cảnh dự án 3" class="project-card__img" />
+                                <div class="project-card__body">
+                                    <h3 class="project-card__title">A&T Landmark</h3>
+                                    <p class="project-card__meta"><i class="fas fa-map-marker-alt"></i> Quận 7</p>
+                                </div>
+                            </article>
+                        </div>
+                        <div class="swiper-slide">
+                            <article class="project-card card" tabindex="0">
+                                <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/Cong-chao-du-an-can-ho-at-saigon-riverside.jpg"
+                                    alt="Cổng chào dự án" class="project-card__img" />
+                                <div class="project-card__body">
+                                    <h3 class="project-card__title">Gateway Residence</h3>
+                                    <p class="project-card__meta"><i class="fas fa-map-marker-alt"></i> Bình Thạnh</p>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination" aria-label="Phân trang dự án"></div>
+                    <div class="swiper-button-prev" aria-label="Trước"></div>
+                    <div class="swiper-button-next" aria-label="Sau"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Apartments Section -->
+        <section class="horizontal-section apartments" id="apartments" data-section="apartments">
+            <div class="container">
+                <div class="section-header" data-animate>
+                    <div class="section-eyebrow">Đa dạng lựa chọn</div>
+                    <h2 class="section-heading">Căn Hộ Cao Cấp</h2>
+                    <p class="section-sub">Thiết kế tối ưu công năng, đường nét tinh gọn và vật liệu sang trọng tạo nên
+                        chuẩn sống khác biệt.</p>
+                </div>
+
+                <div class="horizontal-cards">
+                    <div class="horizontal-card">
+                        <div class="card-image">
+                            <img src="https://atsaigonriverside.com/wp-content/uploads/2025/05/thiet-ke-can-1pn-at-saigon-riverisde.jpg"
+                                alt="Căn hộ 1 phòng ngủ">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Studio & 1 Phòng Ngủ</h3>
+                            <p class="card-description">Thiết kế thông minh, tối ưu hóa không gian sống cho người độc
+                                thân
+                                hoặc cặp đôi trẻ</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-expand-arrows-alt"></i> Diện tích: 42-47m²</li>
+                                <li><i class="fas fa-bed"></i> 1 phòng ngủ + 1 WC</li>
+                                <li><i class="fas fa-eye"></i> Ban công view sông</li>
+                                <li><i class="fas fa-home"></i> Nội thất cao cấp</li>
+                                <li><i class="fas fa-dollar-sign"></i> Từ 1.2 - 1.5 tỷ</li>
+                            </ul>
                         </div>
                     </div>
 
-                    <div class="gradient-panel">
-                        <h4 style="font-size:1.3rem;margin-bottom:1rem;">Ưu Đãi Đặc Biệt</h4>
-                        <ul class="list-unstyled">
-                            <li style="margin-bottom:0.8rem;"><i class="fas fa-gift voucher-highlight"></i> Tặng voucher
-                                5 triệu VNĐ</li>
-                            <li style="margin-bottom:0.8rem;"><i class="fas fa-car voucher-highlight"></i> Đưa đón tham
-                                quan miễn phí</li>
-                            <li style="margin-bottom:0.8rem;"><i class="fas fa-percentage voucher-highlight"></i> Hỗ trợ
-                                vay 0% lãi suất 24 tháng</li>
-                            <li><i class="fas fa-handshake voucher-highlight"></i> Tư vấn pháp lý miễn phí</li>
-                        </ul>
+                    <div class="horizontal-card">
+                        <div class="card-image">
+                            <img src="https://atsaigonriverside.com/wp-content/uploads/2025/05/can-2pn-du-an-at-saigon-riverisde.jpg"
+                                alt="Căn hộ 2 phòng ngủ">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">2 Phòng Ngủ Premium</h3>
+                            <p class="card-description">Không gian lý tưởng cho gia đình trẻ với đầy đủ tiện nghi và
+                                thiết
+                                kế hiện đại</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-expand-arrows-alt"></i> Diện tích: 63-78m²</li>
+                                <li><i class="fas fa-bed"></i> 2 phòng ngủ + 2 WC</li>
+                                <li><i class="fas fa-utensils"></i> Bếp riêng biệt</li>
+                                <li><i class="fas fa-couch"></i> Phòng khách rộng rãi</li>
+                                <li><i class="fas fa-dollar-sign"></i> Từ 2.1 - 2.8 tỷ</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="horizontal-card">
+                        <div class="card-image">
+                            <img src="https://atsaigonriverside.com/wp-content/uploads/2025/02/Thiet-ke-can-3pn-at-saigon-riverside.jpg"
+                                alt="Căn hộ 3 phòng ngủ">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">3 Phòng Ngủ Luxury</h3>
+                            <p class="card-description">Đẳng cấp thượng lưu dành cho gia đình đa thế hệ với không gian
+                                sống
+                                rộng rãi</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-expand-arrows-alt"></i> Diện tích: 91-95m²</li>
+                                <li><i class="fas fa-bed"></i> 3 phòng ngủ + 2 WC</li>
+                                <li><i class="fas fa-door-open"></i> Phòng khách + phòng ăn riêng</li>
+                                <li><i class="fas fa-crown"></i> Nội thất luxury</li>
+                                <li><i class="fas fa-dollar-sign"></i> Từ 3.2 - 3.8 tỷ</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Amenities Section -->
+        <section class="horizontal-section amenities" id="amenities" data-section="amenities">
+            <div class="section-decorative center"></div>
+            <div class="accent-line bottom"></div>
+            <div class="container">
+                <div class="section-header" data-animate>
+                    <div class="section-eyebrow">Tiện ích đẳng cấp</div>
+                    <h2 class="section-heading">Hệ Sinh Thái Tiện Ích</h2>
+                    <p class="section-sub">Chuỗi tiện ích đa tầng chuẩn resort: sức khỏe, thư giãn, giáo dục và kết nối
+                        cộng đồng tinh hoa.</p>
+                </div>
+
+                <div class="horizontal-cards">
+                    <div class="horizontal-card">
+                        <div class="card-image">
+                            <img src="https://atsaigonriverside.com/wp-content/uploads/2025/08/tong-the-phoi-canh-at-saigon-riverside.jpg"
+                                alt="Hồ bơi">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Hồ Bơi Resort</h3>
+                            <p class="card-description">Hồ bơi tràn bờ với tầm nhìn panorama ra sông Sài Gòn thơ mộng
+                            </p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-swimming-pool"></i> Hồ bơi tràn bờ 25m</li>
+                                <li><i class="fas fa-child"></i> Hồ bơi trẻ em riêng biệt</li>
+                                <li><i class="fas fa-cocktail"></i> Pool bar & lounge</li>
+                                <li><i class="fas fa-umbrella-beach"></i> Khu thư giãn cao cấp</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="horizontal-card">
+                        <div class="card-image">
+                            <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/at-saigon-riverside.jpg"
+                                alt="Gym & Spa">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Gym & Spa Premium</h3>
+                            <p class="card-description">Phòng gym hiện đại và spa thư giãn chăm sóc sức khỏe toàn diện
+                            </p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-dumbbell"></i> Gym 24/7 thiết bị Technogym</li>
+                                <li><i class="fas fa-spa"></i> Spa & massage trị liệu</li>
+                                <li><i class="fas fa-hot-tub"></i> Phòng xông hơi & jacuzzi</li>
+                                <li><i class="fas fa-heart"></i> Yoga & meditation</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="horizontal-card">
+                        <div class="card-image">
+                            <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/Cong-chao-du-an-can-ho-at-saigon-riverside.jpg"
+                                alt="Vườn xanh">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Công Viên Xanh</h3>
+                            <p class="card-description">Không gian xanh rộng lớn với thiết kế cảnh quan hiện đại</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-tree"></i> Vườn BBQ gia đình</li>
+                                <li><i class="fas fa-running"></i> Đường chạy bộ 500m</li>
+                                <li><i class="fas fa-playground"></i> Khu vui chơi trẻ em</li>
+                                <li><i class="fas fa-chess"></i> Khu thể thao ngoài trời</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="horizontal-card">
+                        <div class="card-image">
+                            <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/Phoi-canh-can-ho-at-saigon-riverside.jpg"
+                                alt="Tiện ích khác">
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Tiện Ích Đa Dạng</h3>
+                            <p class="card-description">Hệ thống tiện ích phong phú phục vụ mọi nhu cầu sinh hoạt</p>
+                            <ul class="card-features">
+                                <li><i class="fas fa-graduation-cap"></i> Trường mầm non quốc tế</li>
+                                <li><i class="fas fa-store"></i> Minimart & coffee shop</li>
+                                <li><i class="fas fa-car"></i> Hầm đậu xe thông minh</li>
+                                <li><i class="fas fa-shield-alt"></i> An ninh 24/7</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <form class="contact-form" id="contactForm" style="margin:0;">
-                    <div class="form-group">
-                        <label for="name" class="form-label">Họ và tên *</label>
-                        <input type="text" id="name" name="name" class="form-input" required placeholder="Nhập họ và tên của bạn">
-                    </div>
+            </div>
+        </section>
 
-                    <div class="form-group">
-                        <label for="phone" class="form-label">Số điện thoại *</label>
-                        <input type="tel" id="phone" name="phone" class="form-input" required placeholder="Nhập số điện thoại">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" id="email" name="email" class="form-input" placeholder="Nhập địa chỉ email">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="apartment" class="form-label">Loại căn hộ quan tâm</label>
-                        <select id="apartment" name="apartment" class="form-input">
-                            <option>1 phòng ngủ (42-47m²)</option>
-                            <option>2 phòng ngủ (63-78m²)</option>
-                            <option>3 phòng ngủ (91-95m²)</option>
-                            <option>Penthouse (120-150m²)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="message" class="form-label">Ghi chú</label>
-                        <textarea id="message" name="message" class="form-input form-textarea"
-                            placeholder="Nhập ghi chú của bạn (nếu có)"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-block">
-                        <i class="fas fa-paper-plane"></i>
-                        Gửi thông tin
-                    </button>
-
-                    <p class="paragraph-xs text-muted" style="text-align:center;margin-top:1rem;">
-                        Bằng việc gửi thông tin, bạn đồng ý với <strong>chính sách bảo mật</strong> của chúng tôi
+        <!-- Gallery Section -->
+        <section class="gallery" id="gallery">
+            <div class="section-decorative top-right"></div>
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-badge">Hình ảnh thực tế</div>
+                    <h2 class="section-title">Kiệt Tác Kiến Trúc</h2>
+                    <p class="section-description">
+                        Khám phá vẻ đẹp kiến trúc hiện đại và không gian sống đẳng cấp qua bộ sưu tập hình ảnh
                     </p>
-                </form>
-                <!-- Hidden iframe for Google Forms submission (do not remove) -->
-                <iframe name="hidden_gf_iframe" id="hidden_gf_iframe" style="display:none;width:0;height:0;border:0;" title="Hidden form target"></iframe>
+                </div>
+
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="https://atsaigonriverside.com/wp-content/uploads/2025/08/tong-the-phoi-canh-at-saigon-riverside.jpg"
+                            alt="Tổng thể phối cảnh">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/at-saigon-riverside.jpg"
+                            alt="View từ ngoài">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/Cong-chao-du-an-can-ho-at-saigon-riverside.jpg"
+                            alt="Cổng chào dự án">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/Phoi-canh-can-ho-at-saigon-riverside.jpg"
+                            alt="Phối cảnh căn hộ">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://atsaigonriverside.com/wp-content/uploads/2025/05/thiet-ke-can-1pn-at-saigon-riverisde.jpg"
+                            alt="Thiết kế căn 1PN">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://atsaigonriverside.com/wp-content/uploads/2025/05/can-2pn-du-an-at-saigon-riverisde.jpg"
+                            alt="Căn 2PN">
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- News Grid -->
+        <section class="news" id="news" aria-label="Tin tức mới">
+            <div class="container">
+                <div class="section-header" data-aos="fade-up">
+                    <div class="section-eyebrow">Tin tức</div>
+                    <h2 class="section-heading">Cập Nhật Mới Nhất</h2>
+                    <p class="section-sub">Thông tin thị trường và tiến độ dự án được cập nhật thường xuyên.</p>
+                </div>
+                <div class="grid news-grid-3" role="list">
+                    <article class="news-card card" role="listitem" data-aos="fade-up">
+                        <div class="news-card__media">
+                            <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/at-saigon-riverside.jpg"
+                                alt="Cập nhật tiến độ dự án" />
+                            <span class="news-card__date" aria-label="Ngày đăng">28/09</span>
+                        </div>
+                        <div class="news-card__body">
+                            <h3 class="news-card__title">Tiến Độ Xây Dựng Tháng 9</h3>
+                            <p class="news-card__excerpt">Khối tháp A đã hoàn thành tầng 12, tháp B đổ sàn tầng 10, hạ
+                                tầng tiện ích đạt 60%.</p>
+                        </div>
+                    </article>
+                    <article class="news-card card" role="listitem" data-aos="fade-up" data-aos-delay="100">
+                        <div class="news-card__media">
+                            <img src="https://atsaigonriverside.com/wp-content/uploads/2025/07/Phoi-canh-can-ho-at-saigon-riverside.jpg"
+                                alt="Sự kiện giới thiệu dự án" />
+                            <span class="news-card__date" aria-label="Ngày đăng">21/09</span>
+                        </div>
+                        <div class="news-card__body">
+                            <h3 class="news-card__title">Sự Kiện Trải Nghiệm Nhà Mẫu</h3>
+                            <p class="news-card__excerpt">Hơn 300 khách hàng tham dự, ấn tượng với thiết kế và chính
+                                sách ưu đãi.</p>
+                        </div>
+                    </article>
+                    <article class="news-card card" role="listitem" data-aos="fade-up" data-aos-delay="200">
+                        <div class="news-card__media">
+                            <img src="https://atsaigonriverside.com/wp-content/uploads/2025/05/can-2pn-du-an-at-saigon-riverisde.jpg"
+                                alt="Chính sách bán hàng mới" />
+                            <span class="news-card__date" aria-label="Ngày đăng">15/09</span>
+                        </div>
+                        <div class="news-card__body">
+                            <h3 class="news-card__title">Ưu Đãi Giai Đoạn Sớm</h3>
+                            <p class="news-card__excerpt">Tặng voucher 5 triệu và hỗ trợ vay 0% lãi suất 24 tháng cho
+                                đợt mở bán.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact" id="contact">
+            <div class="container">
+                <div class="section-header" data-animate>
+                    <div class="section-eyebrow">Liên hệ ngay</div>
+                    <h2 class="section-heading">Đăng Ký Tư Vấn</h2>
+                    <p class="section-sub">Đăng ký để nhận bảng giá, lịch mở bán & ưu đãi giới hạn dành riêng cho khách
+                        hàng sớm.</p>
+                </div>
+
+                <div class="contact-grid">
+                    <div>
+                        <h3 class="section-subtitle"
+                            style="font-family:var(--font-serif-display);font-size:2rem;color:var(--deep-blue);margin-bottom:2rem;">
+                            Thông Tin Liên Hệ</h3>
+
+                        <div class="shadow-card" style="padding:2rem;margin-bottom:2rem;">
+                            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
+                                <div class="icon-circle">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <strong style="color: var(--deep-blue);">Hotline Tư Vấn</strong>
+                                    <p style="margin: 0; color: #64748b;">0975.589.913 (24/7)</p>
+                                </div>
+                            </div>
+
+                            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
+                                <div class="icon-circle">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <strong style="color: var(--deep-blue);">Địa Chỉ Dự Án</strong>
+                                    <p style="margin: 0; color: #64748b;">Thuận An, Bình Dương</p>
+                                </div>
+                            </div>
+
+                            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;">
+                                <div class="icon-circle">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <strong style="color: var(--deep-blue);">Giờ Tham Quan</strong>
+                                    <p style="margin: 0; color: #64748b;">8:00 - 20:00 (Cả T7, CN)</p>
+                                </div>
+                            </div>
+
+                            <div style="display:flex;align-items:center;gap:1rem;">
+                                <div class="icon-circle">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <strong style="color: var(--deep-blue);">Email</strong>
+                                    <p style="margin: 0; color: #64748b;">info@atsaigonriverside.com</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="gradient-panel">
+                            <h4 style="font-size:1.3rem;margin-bottom:1rem;">Ưu Đãi Đặc Biệt</h4>
+                            <ul class="list-unstyled">
+                                <li style="margin-bottom:0.8rem;"><i class="fas fa-car voucher-highlight"></i> Đưa đón
+                                    tham
+                                    quan miễn phí</li>
+                                <li style="margin-bottom:0.8rem;"><i class="fas fa-percentage voucher-highlight"></i> Hỗ
+                                    trợ
+                                    vay 0% lãi suất 24 tháng</li>
+                                <li><i class="fas fa-handshake voucher-highlight"></i> Tư vấn pháp lý miễn phí</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <form class="contact-form" id="contactForm" style="margin:0;">
+                        <!-- Honeypot field -->
+                        <div class="visually-hidden" aria-hidden="true">
+                            <label for="hp">Để trống trường này</label>
+                            <input type="text" id="hp" name="hp" tabindex="-1" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="form-label">Họ và tên *</label>
+                            <input type="text" id="name" name="name" class="form-input" required
+                                placeholder="Nhập họ và tên của bạn">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Số điện thoại *</label>
+                            <input type="tel" id="phone" name="phone" class="form-input" required
+                                placeholder="Nhập số điện thoại">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" class="form-input"
+                                placeholder="Nhập địa chỉ email">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="apartment" class="form-label">Loại căn hộ quan tâm</label>
+                            <select id="apartment" name="apartment" class="form-input">
+                                <option>1 phòng ngủ (42-47m²)</option>
+                                <option>2 phòng ngủ (63-78m²)</option>
+                                <option>3 phòng ngủ (91-95m²)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message" class="form-label">Ghi chú</label>
+                            <textarea id="message" name="message" class="form-input form-textarea"
+                                placeholder="Nhập ghi chú của bạn (nếu có)"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-block">
+                            <i class="fas fa-paper-plane"></i>
+                            Gửi thông tin
+                        </button>
+
+                        <p class="paragraph-xs text-muted" style="text-align:center;margin-top:1rem;">
+                            Bằng việc gửi thông tin, bạn đồng ý với <strong>chính sách bảo mật</strong> của chúng tôi
+                        </p>
+                    </form>
+                    <!-- Hidden iframe for Google Forms submission (do not remove) -->
+                    <iframe name="hidden_gf_iframe" id="hidden_gf_iframe"
+                        style="display:none;width:0;height:0;border:0;" title="Hidden form target"></iframe>
+                </div>
+            </div>
+        </section>
 
     </main>
     <!-- Footer -->
@@ -677,60 +724,17 @@
         <i class="fas fa-phone"></i>
     </div>
 
-        <!-- Lenis smooth scroll -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.0.6/lenis.min.js" integrity="sha512-oV8BgUUT5bIeZnZ2lRcSYn8K8fvGmXQMd1sZmN6WWK6GUbdJVHdwZ0pCnDj+j59N+4cTfFc6z0M9he3fti3w8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7mGzM0RKZ77N8BINU3CFAaj6MqFmoVoeAQMtk0iA0WIMRqjYOEoTP0TO+GfY+3CX6XcncxZV8oPZxC25fRTf6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-os3wNmDCwcx6pQb0Gwe35Sc1i1Zq9FwP0tZqeaNCAIu6XqG0u1oqQ9PcRvUhqQjaySOndDCkUe4tLCnintDe3Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script>
-                    function animateCounters() {
-                        const counters = document.querySelectorAll('.metric-value[data-counter]');
-                        counters.forEach(el => {
-                            const target = +el.getAttribute('data-counter');
-                            const suffix = el.getAttribute('data-suffix') || '';
-                            const numberSpan = el.querySelector('.counter-number');
-                            if(!numberSpan) return; // safety
-                            // Reset to 0 before animating (visual effect) but only if not already animated
-                            if(!el.dataset.animated){
-                                numberSpan.textContent = '0' + suffix;
-                            }
-                            const duration = 1600;
-                            const start = performance.now();
-                            function tick(now){
-                                const progress = Math.min((now - start) / duration, 1);
-                                const value = Math.floor(progress * target);
-                                numberSpan.textContent = value + suffix;
-                                if(progress < 1) requestAnimationFrame(tick); else { el.dataset.animated = 'true'; }
-                            }
-                            requestAnimationFrame(tick);
-                        });
-                    }
-            // GSAP hero entrance
-            window.addEventListener('DOMContentLoaded', () => {
-                if (window.gsap) {
-                    gsap.registerPlugin(ScrollTrigger);
-                    const tl = gsap.timeline({ delay: 0.2 });
-                                tl.from('.hero-textual .pill', { y: 30, opacity: 0, duration: 0.6, ease: 'power3.out' })
-                                    .from('.hero-title', { y: 50, opacity: 0, duration: 0.8, ease: 'power4.out' }, '-=0.2')
-                                    .from('.hero-subtitle', { y: 40, opacity: 0, duration: 0.6, ease: 'power3.out' }, '-=0.3')
-                                    .from('.hero-textual .cluster a', { y: 30, opacity: 0, duration: 0.5, stagger: 0.12, ease: 'power3.out' }, '-=0.3');
-                                // Metrics section animation
-                                gsap.from('.metrics-bar .metric-item', {
-                                    scrollTrigger: { trigger: '.metrics-bar', start: 'top 80%' },
-                                    opacity: 0, y: 40, duration: 0.6, stagger: 0.08, ease: 'power2.out', onComplete: animateCounters
-                                });
-                                gsap.from('.metrics-benefits li', {
-                                    scrollTrigger: { trigger: '.metrics-benefits', start: 'top 82%' },
-                                    opacity: 0, y: 28, duration: 0.5, stagger: 0.07, ease: 'power2.out'
-                                });
-                    // Subtle parallax on scroll for hero stats panel
-                      // Removed hero-stats parallax since stats moved out
-                } else {
-                    // Fallback: animate counters once visible
-                    animateCounters();
-                }
-            });
-        </script>
-        <script src="assets/js/main.js"></script>
+    <!-- JS libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js" defer></script>
+    <script src="https://unpkg.com/lenis@1.3.11/dist/lenis.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js" defer></script>
+
+    <!-- Project scripts -->
+    <script src="assets/js/app.js" defer></script>
+    <script src="assets/js/main.js" defer></script>
 </body>
 
 </html>
