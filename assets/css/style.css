@@ -3569,32 +3569,6 @@ body {
   /* Lock body scroll when menu is open */
   body.no-scroll {
     overflow: hidden;
-    position: fixed;
-    width: 100%;
-    top: 0;
-  }
-  
-  /* Đảm bảo header không bị ảnh hưởng khi modal popup */
-  body.no-scroll .header {
-    position: fixed !important;
-    bottom: max(15px, env(safe-area-inset-bottom, 0px) + 5px) !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: calc(100% - 3rem) !important;
-    max-width: 640px !important;
-    padding: 0.5rem 0.85rem !important;
-    margin: 0 !important;
-    z-index: 999 !important; /* Thấp hơn modal nhưng vẫn hiển thị */
-  }
-  
-  /* Đặc biệt cho mobile nhỏ */
-  @media (max-width: 480px) {
-    body.no-scroll .header {
-      width: calc(100% - 2rem) !important;
-      padding: 0.4rem 0.6rem !important;
-      bottom: 8px !important;
-      border-radius: 30px !important;
-    }
   }
   .hero-title {
     font-size: 2.8rem;
@@ -3835,13 +3809,9 @@ input:focus, select:focus, textarea:focus {
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 10000; /* Đảm bảo modal luôn ở trên cùng */
-  backdrop-filter: blur(2px);
+  z-index: 10000;
 }
-.lead-modal-overlay.is-open { 
-  display: flex; 
-}
-
+.lead-modal-overlay.is-open { display: flex; }
 .lead-modal {
   width: min(92vw, 520px);
   background: #fff;
@@ -3849,27 +3819,6 @@ input:focus, select:focus, textarea:focus {
   box-shadow: var(--elev-card-xl);
   border: 1px solid var(--color-border);
   padding: 1.25rem;
-  position: relative;
-  z-index: 10001;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-/* Đảm bảo modal responsive tốt trên mobile */
-@media (max-width: 480px) {
-  .lead-modal {
-    width: calc(100vw - 2rem);
-    margin: 1rem;
-    padding: 1rem;
-    max-height: calc(100vh - 2rem);
-    border-radius: 12px;
-  }
-  
-  .lead-modal-overlay {
-    padding: 1rem;
-    align-items: flex-start;
-    padding-top: 2rem;
-  }
 }
 .lead-modal__header {
   display: flex;
