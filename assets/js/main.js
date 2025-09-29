@@ -994,3 +994,90 @@ window.addEventListener('beforeunload', () => {
     }
   });
 });
+
+// Lazy Loading Implementation with fallback for older browsers
+function initLazyLoading() {
+  // Check if native lazy loading is supported
+  if ('loading' in HTMLImageElement.prototype) {
+    // Native lazy loading is supported
+    const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+    
+    lazyImages.forEach((img) => {
+      // Set up load event for fade-in effect
+      img.addEventListener('load', () => {
+        img.classList.add('loaded');
+        img.style.opacity = '1';
+      });
+      
+      // Handle error cases
+      img.addEventListener('error', () => {
+        img.setAttribute('data-error', 'true');
+        console.warn('Image failed to load:', img.src);
+      });
+      
+      // If image is already cached/loaded, trigger load event
+      if (img.complete && img.naturalWidth > 0) {
+        img.classList.add('loaded');
+        img.style.opacity = '1';
+      }
+    });
+  } else {
+    // Fallback: Intersection Observer for older browsers
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          const src = img.getAttribute('src');
+          
+          if (src) {
+            img.addEventListener('load', () => {
+              img.classList.add('loaded');
+              img.style.opacity = '1';
+            });
+            
+            img.addEventListener('error', () => {
+              img.setAttribute('data-error', 'true');
+              console.warn('Image failed to load:', img.src);
+            });
+          }
+          
+          imageObserver.unobserve(img);
+        }
+      });
+    }, {
+      rootMargin: '50px 0px',
+      threshold: 0.1
+    });
+    
+    // Observe all lazy images
+    document.querySelectorAll('img[loading="lazy"]').forEach((img) => {
+      img.style.opacity = '0';
+      imageObserver.observe(img);
+    });
+  }
+}
+
+// Preload critical images (above the fold)
+function preloadCriticalImages() {
+  const criticalImages = [
+    'assets/imgs/logo.png',
+    // Add other critical images that should load immediately
+  ];
+  
+  criticalImages.forEach((src) => {
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = src;
+    document.head.appendChild(link);
+  });
+}
+
+// Initialize lazy loading when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  preloadCriticalImages();
+  initLazyLoading();
+});
+
+// Also run after a delay to catch any dynamically added images
+setTimeout(initLazyLoading, 1000);

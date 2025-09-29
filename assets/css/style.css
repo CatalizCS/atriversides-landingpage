@@ -878,6 +878,43 @@ button:focus-visible {
   max-width: 960px;
 }
 
+/* Image loading states and lazy loading styles */
+img {
+  max-width: 100%;
+  height: auto;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.5s ease, filter 0.3s ease;
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* Loading placeholder for images */
+.image-placeholder {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  min-height: 200px;
+  border-radius: 12px;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Error state for failed images */
+img[data-error="true"] {
+  opacity: 0.7;
+  filter: blur(1px);
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+}
+
 /* Utility for fade entrance marker */
 *[data-animate] {
   opacity: 0;
