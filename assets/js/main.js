@@ -30,7 +30,13 @@ function unlockScroll() {
     document.body.classList.remove("no-scroll");
     document.documentElement.classList.remove("no-scroll");
     document.documentElement.style.overflow = "";
+    document.documentElement.style.position = "";
+    document.documentElement.style.width = "";
+    document.documentElement.style.top = "";
     document.body.style.overflow = "";
+    document.body.style.position = "";
+    document.body.style.width = "";
+    document.body.style.top = "";
   } catch (e) {
     /* no-op */
   }
@@ -107,11 +113,50 @@ setTimeout(unlockScroll, 500);
   const closeBtn = modal.querySelector("[data-close-lead]");
   const form = document.getElementById("leadForm");
 
+  // Improved scroll locking for mobile
+  let scrollPosition = 0;
+  
+  function lockScroll() {
+    // Lưu vị trí scroll hiện tại
+    scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Apply scroll lock
+    document.body.classList.add("no-scroll");
+    document.body.style.top = `-${scrollPosition}px`;
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    
+    // Prevent scroll on touch devices
+    document.addEventListener('touchmove', preventScroll, { passive: false });
+  }
+  
+  function unlockScroll() {
+    // Remove scroll lock
+    document.body.classList.remove("no-scroll");
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    
+    // Restore scroll position
+    window.scrollTo(0, scrollPosition);
+    
+    // Remove touch prevention
+    document.removeEventListener('touchmove', preventScroll);
+  }
+  
+  function preventScroll(e) {
+    // Allow scrolling inside modal
+    if (e.target.closest('.lead-modal')) {
+      return;
+    }
+    e.preventDefault();
+  }
+
   function openModal(force = false) {
     if (!force && sessionStorage.getItem("lead_shown") === "1") return;
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("no-scroll");
+    lockScroll(); // Use improved scroll lock
     sessionStorage.setItem("lead_shown", "1");
     // focus first input
     const first = modal.querySelector("input, select, button");
@@ -120,7 +165,7 @@ setTimeout(unlockScroll, 500);
   function closeModal() {
     modal.classList.remove("is-open");
     modal.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("no-scroll");
+    unlockScroll(); // Use improved scroll unlock
   }
   window.addEventListener("load", () => {
     try {
