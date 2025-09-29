@@ -15,6 +15,23 @@ function handleScroll() {
     }
     lastScrollY = scrollTop;
   }
+  
+  // iOS Safari specific viewport handling
+  if (isIOSSafari()) {
+    // Ensure header stays visible during iOS Safari toolbar changes
+    const header = document.getElementById("header");
+    if (header) {
+      // Force repaint to prevent positioning glitches
+      header.style.transform = header.style.transform;
+    }
+  }
+}
+
+// iOS Safari detection
+function isIOSSafari() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && 
+         /Safari/.test(navigator.userAgent) && 
+         !/CriOS|FxiOS|OPiOS|mercury/.test(navigator.userAgent);
 }
 
 window.addEventListener("scroll", function () {
@@ -35,7 +52,10 @@ function unlockScroll() {
     /* no-op */
   }
 }
-document.addEventListener("DOMContentLoaded", unlockScroll);
+document.addEventListener("DOMContentLoaded", function() {
+  unlockScroll();
+  initIOSFixes();
+});
 window.addEventListener("load", unlockScroll);
 
 let lenis;
@@ -96,16 +116,56 @@ function initImageObserver() {
   });
 }
 
+// iOS Safari specific initialization
+function initIOSFixes() {
+  if (isIOSSafari()) {
+    // Prevent viewport scaling issues
+    const viewport = document.querySelector('meta[name="viewport"]');
+    if (viewport) {
+      viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
+    }
+    
+    // Fix iOS Safari scroll bouncing issues
+    document.addEventListener('touchmove', function(e) {
+      if (e.target.closest('.header')) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+    
+    // Handle iOS Safari toolbar show/hide
+    let initialViewportHeight = window.innerHeight;
+    window.addEventListener('resize', function() {
+      const header = document.getElementById('header');
+      if (header && Math.abs(window.innerHeight - initialViewportHeight) > 100) {
+        // Toolbar visibility changed, ensure header positioning
+        header.style.bottom = `max(15px, ${window.innerHeight < initialViewportHeight ? '8px' : '15px'})`;
+      }
+    });
+    
+    // Prevent scroll when interacting with header
+    const header = document.getElementById('header');
+    if (header) {
+      header.addEventListener('touchstart', function(e) {
+        e.stopPropagation();
+      }, { passive: true });
+    }
+  }
+}
+
 function initLenis() {
   if (window.Lenis && !window.__lenisManaged) {
     
     lenis = new Lenis({
       duration: 1.0,
       smoothWheel: true,
-      smoothTouch: false,
+      smoothTouch: isIOSSafari() ? false : false, // Always disable for better iOS compatibility
       easing: (t) => 1 - Math.pow(1 - t, 1.5), // Smoother easing
       wheelMultiplier: 1,
-      touchMultiplier: 1.5,
+      touchMultiplier: isIOSSafari() ? 1 : 1.5, // Reduce multiplier for iOS
+      // iOS-specific optimizations
+      infinite: false,
+      gestureDirection: 'vertical',
+      normalizeWheel: true,
     });
     
     let rafId;

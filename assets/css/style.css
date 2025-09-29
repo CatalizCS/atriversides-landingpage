@@ -1244,6 +1244,13 @@ body {
   will-change: transform, background, box-shadow;
   backface-visibility: hidden;
   transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  /* iOS Safari stability improvements */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent iOS scrolling interference */
+  -webkit-overflow-scrolling: touch;
+  /* Improve rendering performance */
+  transform-style: preserve-3d;
   border-radius: 48px;
   border: 1px solid rgba(218, 165, 32, 0.2);
   box-shadow: 0 15px 60px rgba(0, 0, 0, 0.12), 0 5px 30px rgba(218, 165, 32, 0.15);
@@ -1378,23 +1385,116 @@ body {
   }
 }
 
+/* iOS Safari dynamic viewport fixes */
+@supports (height: 100dvh) {
+  @media (max-width: 768px) {
+    .header {
+      /* Use dynamic viewport units for better iOS compatibility */
+      bottom: max(15px, calc(env(safe-area-inset-bottom, 0px) + 8px));
+    }
+  }
+}
+
+/* iOS Safari keyboard handling */
+@media screen and (max-width: 768px) {
+  .header {
+    /* Ensure header stays visible when iOS keyboard appears */
+    position: fixed !important;
+    /* Use transform3d for better performance */
+    transform: translate3d(-50%, 0, 0) !important;
+    -webkit-transform: translate3d(-50%, 0, 0) !important;
+  }
+  
+  .header.scrolled {
+    transform: translate3d(-50%, 0, 0) scale(1.02) !important;
+    -webkit-transform: translate3d(-50%, 0, 0) scale(1.02) !important;
+  }
+}
+
 /* iOS Safari specific fixes */
 @supports (-webkit-touch-callout: none) {
   .header {
-    /* iOS Safari - chỉ áp dụng khi thực sự cần thiết */
-    bottom: max(15px, env(safe-area-inset-bottom, 0px) + 2px) !important;
+    /* iOS Safari - enhanced positioning and backdrop support */
+    bottom: max(15px, env(safe-area-inset-bottom, 0px) + 5px) !important;
+    /* Fallback for older iOS versions */
+    background: rgba(255, 255, 255, 0.95) !important;
+    /* Enhanced backdrop filter for iOS */
+    -webkit-backdrop-filter: blur(25px) saturate(1.5) !important;
+    backdrop-filter: blur(25px) saturate(1.5) !important;
+    /* Prevent iOS Safari positioning bugs */
+    transform: translateX(-50%) translateZ(0) !important;
+    /* Force hardware acceleration */
+    will-change: transform !important;
+    /* Fix iOS scroll bounce issues */
+    -webkit-transform: translateX(-50%) translateZ(0) !important;
+  }
+  
+  .header.scrolled {
+    background: rgba(255, 255, 255, 0.98) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(1.8) !important;
+    backdrop-filter: blur(30px) saturate(1.8) !important;
+    transform: translateX(-50%) translateZ(0) scale(1.02) !important;
+    -webkit-transform: translateX(-50%) translateZ(0) scale(1.02) !important;
   }
   
   @media (max-width: 768px) {
     .header {
-      bottom: max(10px, env(safe-area-inset-bottom, 0px) + 2px) !important;
+      bottom: max(12px, env(safe-area-inset-bottom, 0px) + 8px) !important;
+      /* Ensure visibility above iOS keyboard */
+      position: fixed !important;
     }
   }
   
   @media (max-width: 480px) {
     .header {
-      bottom: max(8px, env(safe-area-inset-bottom, 0px) + 2px) !important;
+      bottom: max(10px, env(safe-area-inset-bottom, 0px) + 8px) !important;
+      /* More aggressive positioning for small screens */
+      min-height: 44px;
     }
+  }
+}
+
+/* Additional iOS Safari fallbacks */
+@media screen and (-webkit-min-device-pixel-ratio: 2) {
+  .header {
+    /* Fallback for iOS devices without backdrop-filter support */
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 15px 60px rgba(0, 0, 0, 0.15), 0 5px 30px rgba(218, 165, 32, 0.2);
+  }
+  
+  /* Disable backdrop-filter on older iOS */
+  @supports not (backdrop-filter: blur(1px)) {
+    .header {
+      background: rgba(255, 255, 255, 0.98) !important;
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+    }
+  }
+}
+
+/* iOS Safari scroll behavior improvements */
+html {
+  /* Improve scroll performance on iOS */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 768px) {
+  html {
+    /* Disable smooth scrolling on mobile for better performance */
+    scroll-behavior: auto;
+  }
+}
+
+/* Prevent iOS zoom on form inputs */
+input, select, textarea {
+  font-size: 16px !important;
+}
+
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important; /* Prevent iOS zoom */
+    transform: translateZ(0); /* Enable hardware acceleration */
   }
 }
 
@@ -1435,7 +1535,11 @@ body {
   position: fixed !important;
   bottom: 15px !important;
   top: auto !important; /* Đảm bảo không bị override */
-  transform: translateX(-50%) !important; /* Chỉ center X, không Y */
+  transform: translateX(-50%) translateZ(0) !important; /* Hardware acceleration */
+  /* iOS Safari viewport stability */
+  -webkit-transform: translateX(-50%) translateZ(0) !important;
+  /* Prevent layout shifts */
+  contain: layout style paint !important;
 }
 
 @media (max-width: 1024px) {
