@@ -4054,3 +4054,46 @@ input:focus, select:focus, textarea:focus {
     display: none;
   }
 }
+
+/* === Lazy Loading Styles === */
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+img[loading="lazy"].fade-in,
+img[loading="lazy"]:not([loading]) {
+  opacity: 1;
+}
+
+/* Fallback for browsers without native lazy loading */
+img[loading="lazy"][src] {
+  opacity: 1;
+}
+
+/* Loading placeholder animation */
+img[loading="lazy"]:not(.fade-in) {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 2s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  img[loading="lazy"] {
+    transition: none;
+  }
+  
+  img[loading="lazy"]:not(.fade-in) {
+    animation: none;
+  }
+}

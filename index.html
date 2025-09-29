@@ -53,7 +53,7 @@
     <!-- Preload critical resources -->
     <link rel="preload" href="assets/css/style.css" as="style">
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap&subset=vietnamese" as="style">
-    <link rel="preload" href="assets/imgs/logo.png" as="image">
+    <link rel="preload" href="assets/imgs/logo.png" as="image" fetchpriority="high">
     
     <!-- Critical CSS inline for above-the-fold content -->
     <style>
@@ -293,6 +293,8 @@
             <a href="#home" class="logo">
                 <img src="assets/imgs/logo.png" alt="A&T Saigon Riverside - Căn hộ cao cấp mặt tiền sông Thuận An"
                     title="A&T Saigon Riverside - Dự án căn hộ cao cấp"
+                    loading="eager"
+                    fetchpriority="high"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             </a>
             

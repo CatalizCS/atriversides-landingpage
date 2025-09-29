@@ -39,6 +39,63 @@ document.addEventListener("DOMContentLoaded", unlockScroll);
 window.addEventListener("load", unlockScroll);
 
 let lenis;
+
+// Ensure lazy loading for all images
+function ensureLazyLoading() {
+  const images = document.querySelectorAll('img');
+  
+  images.forEach(img => {
+    // Skip logo and images with explicit eager loading
+    if (img.src && (img.src.includes('logo.png') || img.getAttribute('loading') === 'eager' || img.hasAttribute('preload'))) {
+      return;
+    }
+    
+    // Add loading='lazy' if not present
+    if (!img.hasAttribute('loading')) {
+      img.setAttribute('loading', 'lazy');
+      console.log('Added lazy loading to:', img.src || img.getAttribute('src'));
+    }
+    
+    // Add error handling if not present
+    if (!img.hasAttribute('onerror')) {
+      img.setAttribute('onerror', "this.onerror=null; this.style.opacity='0.7'; this.style.filter='blur(1px)'; console.warn('Image failed to load:', this.src);");
+    }
+  });
+  
+  console.log('Lazy loading ensured for', images.length, 'images');
+}
+
+// Intersection Observer fallback for older browsers
+function initImageObserver() {
+  if (!('IntersectionObserver' in window)) {
+    // Fallback for browsers without Intersection Observer
+    const images = document.querySelectorAll('img[loading="lazy"]');
+    images.forEach(img => {
+      img.removeAttribute('loading');
+    });
+    return;
+  }
+  
+  const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.classList.add('fade-in');
+        observer.unobserve(img);
+      }
+    });
+  }, {
+    rootMargin: '50px 0px',
+    threshold: 0.01
+  });
+  
+  // Observe all lazy images
+  const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+  lazyImages.forEach(img => {
+    imageObserver.observe(img);
+  });
+}
+
 function initLenis() {
   if (window.Lenis && !window.__lenisManaged) {
     
@@ -1594,4 +1651,15 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initGallery);
 } else {
   initGallery();
+}
+
+// Initialize lazy loading functionality
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    ensureLazyLoading();
+    initImageObserver();
+  });
+} else {
+  ensureLazyLoading();
+  initImageObserver();
 }
