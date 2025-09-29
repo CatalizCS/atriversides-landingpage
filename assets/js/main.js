@@ -211,6 +211,38 @@ setTimeout(unlockScroll, 500);
       tempForm.submit();
       setTimeout(() => {
         alert("Cảm ơn bạn! Chúng tôi sẽ liên hệ sớm.");
+        
+        // Facebook Pixel: Track lead form submission
+        if (typeof fbq !== 'undefined') {
+          fbq('track', 'Lead', {
+            content_name: 'Lead Modal Form',
+            content_category: 'Contact Form',
+            value: 1.00,
+            currency: 'VND'
+          });
+        }
+
+        // Google Analytics 4: Track lead conversion
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'generate_lead', {
+            event_category: 'Contact',
+            event_label: 'Lead Modal Form',
+            value: 1,
+            currency: 'VND',
+            method: 'popup_form'
+          });
+        }
+
+        // Hotjar: Track conversion event
+        if (typeof hj !== 'undefined') {
+          hj('event', 'lead_form_submission');
+        }
+
+        // Microsoft Clarity: Track custom event
+        if (typeof clarity !== 'undefined') {
+          clarity('event', 'lead_conversion');
+        }
+        
         btn.innerHTML = original;
         btn.disabled = false;
         closeModal();
@@ -300,6 +332,36 @@ if (contactForm) {
       alert(
         "Cảm ơn bạn đã quan tâm đến dự án A&T Saigon Riverside!\nChúng tôi sẽ liên hệ lại trong thời gian sớm nhất."
       );
+      
+      // Facebook Pixel: Track contact form submission
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'Contact', {
+          content_name: 'Main Contact Form',
+          content_category: 'Contact Form',
+          value: 1.00,
+          currency: 'VND'
+        });
+      }
+
+      // Google Analytics 4: Track contact conversion
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'contact', {
+          event_category: 'Contact',
+          event_label: 'Main Contact Form',
+          method: 'contact_form'
+        });
+      }
+
+      // Hotjar: Track contact event
+      if (typeof hj !== 'undefined') {
+        hj('event', 'contact_form_submission');
+      }
+
+      // Microsoft Clarity: Track custom event
+      if (typeof clarity !== 'undefined') {
+        clarity('event', 'contact_conversion');
+      }
+      
       contactForm.reset();
       button.innerHTML = originalText;
       button.disabled = false;
@@ -1081,3 +1143,238 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Also run after a delay to catch any dynamically added images
 setTimeout(initLazyLoading, 1000);
+
+// Comprehensive Analytics Tracking Integration
+function initAnalyticsTracking() {
+  // Initialize all analytics tools
+  const analytics = {
+    fbq: typeof fbq !== 'undefined' ? fbq : null,
+    gtag: typeof gtag !== 'undefined' ? gtag : null,
+    hj: typeof hj !== 'undefined' ? hj : null,
+    clarity: typeof clarity !== 'undefined' ? clarity : null
+  };
+  
+  // Track scroll depth with all analytics tools
+  let scrollTracked = {
+    25: false,
+    50: false,
+    75: false,
+    100: false
+  };
+  
+  function trackScrollDepth() {
+    const scrollTop = window.pageYOffset;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = Math.round((scrollTop / docHeight) * 100);
+    
+    Object.keys(scrollTracked).forEach(depth => {
+      if (scrollPercent >= parseInt(depth) && !scrollTracked[depth]) {
+        scrollTracked[depth] = true;
+        
+        // Facebook Pixel
+        if (analytics.fbq) {
+          analytics.fbq('trackCustom', 'ScrollDepth', {
+            scroll_depth: `${depth}%`,
+            content_name: 'Page Scroll'
+          });
+        }
+        
+        // Google Analytics 4
+        if (analytics.gtag) {
+          analytics.gtag('event', 'scroll', {
+            event_category: 'Engagement',
+            event_label: `${depth}% Scroll Depth`,
+            value: parseInt(depth)
+          });
+        }
+        
+        // Hotjar
+        if (analytics.hj) {
+          analytics.hj('event', `scroll_${depth}_percent`);
+        }
+        
+        // Microsoft Clarity
+        if (analytics.clarity) {
+          analytics.clarity('event', `scroll_depth_${depth}`);
+        }
+      }
+    });
+  }
+  
+  // Enhanced time tracking with multiple milestones
+  let timeOnPage = 0;
+  const timeTracker = setInterval(() => {
+    timeOnPage += 10;
+    
+    // Track engagement milestones with all tools
+    const milestones = [15, 30, 60, 120, 300]; // seconds
+    milestones.forEach(milestone => {
+      if (timeOnPage === milestone) {
+        const label = milestone < 60 ? `${milestone}_seconds` : `${Math.floor(milestone/60)}_minutes`;
+        
+        // Facebook Pixel
+        if (analytics.fbq) {
+          analytics.fbq('trackCustom', 'TimeOnPage', {
+            time_spent: label,
+            content_name: 'Page Engagement'
+          });
+        }
+        
+        // Google Analytics 4
+        if (analytics.gtag) {
+          analytics.gtag('event', 'timing_complete', {
+            event_category: 'Engagement',
+            event_label: `Time on Page: ${label}`,
+            value: milestone
+          });
+        }
+        
+        // Hotjar
+        if (analytics.hj) {
+          analytics.hj('event', `time_on_page_${label}`);
+        }
+        
+        // Microsoft Clarity
+        if (analytics.clarity) {
+          analytics.clarity('event', `engagement_${label}`);
+        }
+      }
+    });
+  }, 10000);
+  
+  // Enhanced section tracking with detailed analytics
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+        const sectionName = entry.target.id || entry.target.className.split(' ')[0];
+        const sectionTitle = entry.target.querySelector('h2, .section-heading')?.textContent || sectionName;
+        
+        // Facebook Pixel
+        if (analytics.fbq) {
+          analytics.fbq('trackCustom', 'ViewContent', {
+            content_type: 'section',
+            content_name: sectionName,
+            content_category: 'Page Section'
+          });
+        }
+        
+        // Google Analytics 4
+        if (analytics.gtag) {
+          analytics.gtag('event', 'page_view', {
+            event_category: 'Section View',
+            event_label: sectionTitle || sectionName,
+            content_group1: 'Real Estate Sections'
+          });
+        }
+        
+        // Hotjar
+        if (analytics.hj) {
+          analytics.hj('event', `section_view_${sectionName}`);
+        }
+        
+        // Microsoft Clarity
+        if (analytics.clarity) {
+          analytics.clarity('event', `section_${sectionName}_viewed`);
+        }
+        
+        sectionObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  
+  // Track CTA button clicks
+  document.addEventListener('click', (event) => {
+    const target = event.target.closest('a[href*="#"], .btn, .nav-link');
+    if (target) {
+      const buttonText = target.textContent?.trim() || target.getAttribute('title') || 'Button';
+      const buttonType = target.classList.contains('nav-link') ? 'Navigation' : 
+                         target.classList.contains('btn') ? 'CTA Button' : 'Link';
+      
+      // Google Analytics 4
+      if (analytics.gtag) {
+        analytics.gtag('event', 'click', {
+          event_category: buttonType,
+          event_label: buttonText,
+          link_url: target.href || target.getAttribute('onclick')
+        });
+      }
+      
+      // Hotjar
+      if (analytics.hj) {
+        analytics.hj('event', 'button_click', {
+          button_text: buttonText,
+          button_type: buttonType
+        });
+      }
+    }
+  });
+  
+  // Track external link clicks
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href^="http"]');
+    if (link && !link.href.includes(window.location.hostname)) {
+      // Google Analytics 4
+      if (analytics.gtag) {
+        analytics.gtag('event', 'click', {
+          event_category: 'External Link',
+          event_label: link.href,
+          link_domain: new URL(link.href).hostname
+        });
+      }
+    }
+  });
+  
+  // Observe main sections
+  document.querySelectorAll('section[id], .hero, .key-metrics').forEach(section => {
+    sectionObserver.observe(section);
+  });
+  
+  // Add scroll listener with throttling
+  let scrollTimer = null;
+  window.addEventListener('scroll', () => {
+    if (scrollTimer) return;
+    scrollTimer = requestAnimationFrame(() => {
+      trackScrollDepth();
+      scrollTimer = null;
+    });
+  }, { passive: true });
+  
+  // Track page exit intent
+  document.addEventListener('mouseleave', (event) => {
+    if (event.clientY <= 0) {
+      // Google Analytics 4
+      if (analytics.gtag) {
+        analytics.gtag('event', 'exit_intent', {
+          event_category: 'Engagement',
+          event_label: 'Mouse Leave Top'
+        });
+      }
+      
+      // Hotjar
+      if (analytics.hj) {
+        analytics.hj('event', 'exit_intent');
+      }
+    }
+  });
+  
+  // Clean up on page unload
+  window.addEventListener('beforeunload', () => {
+    clearInterval(timeTracker);
+    
+    // Send final engagement data
+    if (analytics.gtag) {
+      analytics.gtag('event', 'session_end', {
+        event_category: 'Engagement',
+        event_label: 'Page Unload',
+        value: Math.round(timeOnPage)
+      });
+    }
+  });
+}
+
+// Initialize comprehensive analytics tracking
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initAnalyticsTracking);
+} else {
+  initAnalyticsTracking();
+}

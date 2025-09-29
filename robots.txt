@@ -1,0 +1,57 @@
+User-agent: *
+Allow: /
+
+# Allow specific file types that are important for SEO
+Allow: /assets/css/
+Allow: /assets/js/
+Allow: /assets/imgs/
+
+# Block sensitive or unnecessary directories
+Disallow: /admin/
+Disallow: /private/
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /temp/
+Disallow: /cache/
+
+# Allow search engines to crawl all content
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.gif$
+Allow: /*.webp$
+Allow: /*.svg$
+
+# Crawl-delay (optional - can help with server load)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://atsaigonriverside.vn/sitemap.xml
+
+# Specific instructions for major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Block aggressive crawlers or bots that might harm server performance
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: MJ12bot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# Host directive (helps with canonical URL)
+Host: https://atsaigonriverside.vn

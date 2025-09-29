@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+    
+    <!-- Homepage -->
+    <url>
+        <loc>https://atsaigonriverside.vn/</loc>
+        <lastmod>2024-12-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        <image:image>
+            <image:loc>https://atsaigonriverside.vn/assets/imgs/hero-bg.jpg</image:loc>
+            <image:caption>A&T Saigon Riverside - Căn hộ cao cấp mặt tiền sông Thuận An</image:caption>
+            <image:title>A&T Saigon Riverside Homepage</image:title>
+        </image:image>
+    </url>
+    
+    <!-- About Section -->
+    <url>
+        <loc>https://atsaigonriverside.vn/#about</loc>
+        <lastmod>2024-12-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+        <image:image>
+            <image:loc>https://atsaigonriverside.com/wp-content/uploads/2025/08/tong-the-phoi-canh-at-saigon-riverside.jpg</image:loc>
+            <image:caption>Tổng thể phối cảnh dự án A&T Saigon Riverside</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- Location Advantages -->
+    <url>
+        <loc>https://atsaigonriverside.vn/#advantages</loc>
+        <lastmod>2024-12-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Projects Portfolio -->
+    <url>
+        <loc>https://atsaigonriverside.vn/#projects</loc>
+        <lastmod>2024-12-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+        <image:image>
+            <image:loc>https://atsaigonriverside.com/wp-content/uploads/2025/07/Phoi-canh-can-ho-at-saigon-riverside.jpg</image:loc>
+            <image:caption>Phối cảnh căn hộ A&T Saigon Riverside</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- Apartments -->
+    <url>
+        <loc>https://atsaigonriverside.vn/#apartments</loc>
+        <lastmod>2024-12-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+        <image:image>
+            <image:loc>https://atsaigonriverside.com/wp-content/uploads/2025/05/thiet-ke-can-1pn-at-saigon-riverisde.jpg</image:loc>
+            <image:caption>Thiết kế căn hộ 1 phòng ngủ A&T Saigon Riverside</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://atsaigonriverside.com/wp-content/uploads/2025/05/can-2pn-du-an-at-saigon-riverisde.jpg</image:loc>
+            <image:caption>Căn hộ 2 phòng ngủ A&T Saigon Riverside</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://atsaigonriverside.com/wp-content/uploads/2025/02/Thiet-ke-can-3pn-at-saigon-riverside.jpg</image:loc>
+            <image:caption>Thiết kế căn hộ 3 phòng ngủ A&T Saigon Riverside</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- Amenities -->
+    <url>
+        <loc>https://atsaigonriverside.vn/#amenities</loc>
+        <lastmod>2024-12-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Gallery -->
+    <url>
+        <loc>https://atsaigonriverside.vn/#gallery</loc>
+        <lastmod>2024-12-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <!-- Contact -->
+    <url>
+        <loc>https://atsaigonriverside.vn/#contact</loc>
+        <lastmod>2024-12-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+</urlset>
