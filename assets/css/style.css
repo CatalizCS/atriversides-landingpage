@@ -1302,10 +1302,10 @@ body {
   .nav-link { font-size: 0.75rem; padding: 0.3rem 0.4rem; border-radius: 16px; } /* Giảm hơn nữa */
   
   .floating-contact {
-    bottom: 70px; /* Điều chỉnh theo header mới */
-    right: 25px;
-    width: 50px;
-    height: 50px;
+    bottom: 85px; /* Tăng khoảng cách với header */
+    right: 20px;
+    width: 52px;
+    height: 52px;
     font-size: 1.3rem;
   }
 }
@@ -1313,9 +1313,9 @@ body {
 /* Additional safety fixes */
 @media (max-width: 480px) {
   .header {
-    width: calc(100% - 2rem);
-    max-width: none;
-    padding: 0.4rem 0.6rem;
+    width: calc(100% - 4rem);
+    max-width: 320px;
+    padding: 0.4rem 0.8rem;
     border-radius: 30px;
     bottom: 8px !important; /* Cặm vị trí để không bị kéo lên */
     margin-bottom: 0;
@@ -1347,10 +1347,10 @@ body {
   }
   
   .floating-contact {
-    bottom: 60px; /* Move above the floating bar */
-    right: 20px;
-    width: 48px;
-    height: 48px;
+    bottom: 75px; /* Tăng khoảng cách với header */
+    right: 18px;
+    width: 50px;
+    height: 50px;
     font-size: 1.2rem;
     z-index: 1600; /* Higher z-index */
   }
@@ -1359,8 +1359,9 @@ body {
 /* Very small screens */
 @media (max-width: 360px) {
   .header {
-    width: calc(100% - 1.5rem);
-    padding: 0.3rem 0.5rem;
+    width: calc(100% - 3rem);
+    max-width: 280px;
+    padding: 0.3rem 0.6rem;
   }
   
   .nav-container {
@@ -1398,6 +1399,34 @@ body {
   }
 }
 
+/* Additional mobile safety fixes */
+@media (max-width: 768px) {
+  .header {
+    /* Đảm bảo header luôn được center và không bị overflow */
+    left: 50% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  
+  .nav-container {
+    /* Đảm bảo nội dung không bị overflow */
+    min-width: 0;
+    flex-shrink: 1;
+    overflow: hidden;
+  }
+  
+  .nav-link {
+    /* Ngăn chặn text overflow */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+}
+
 /* Fix for landscape mode on mobile */
 @media (max-height: 500px) and (orientation: landscape) {
   .header {
@@ -1420,9 +1449,10 @@ body {
   }
   
   .floating-contact {
-    bottom: 70px;
-    width: 42px;
-    height: 42px;
+    bottom: 80px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
     font-size: 1.1rem;
   }
 }
@@ -1436,6 +1466,9 @@ body {
   bottom: 15px !important;
   top: auto !important; /* Đảm bảo không bị override */
   transform: translateX(-50%) !important; /* Chỉ center X, không Y */
+  /* Đảm bảo không expand quá mức */
+  max-width: min(90vw, 500px) !important;
+  min-width: 280px !important;
 }
 
 @media (max-width: 1024px) {
@@ -2194,8 +2227,8 @@ body {
     order: -1;
   }
   .header {
-    width: calc(100% - 3rem);
-    max-width: 640px;
+    width: calc(100% - 4rem);
+    max-width: 500px;
     bottom: max(15px, env(safe-area-inset-bottom, 0px) + 5px);
     padding: 0.5rem 0.85rem;
     border-radius: 40px;
@@ -3440,8 +3473,9 @@ body {
 @media (max-width: 768px) {
   .header {
     bottom: 20px;
-    padding: 0.8rem 1.5rem;
-    width: calc(100% - 2rem);
+    padding: 0.6rem 1rem;
+    width: calc(100% - 3rem);
+    max-width: 400px;
     border-radius: 50px;
   }
   .header.scrolled {
