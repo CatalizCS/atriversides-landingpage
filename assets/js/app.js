@@ -157,63 +157,87 @@
     const { gsap } = window;
     if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
 
-    // Hero entrance timeline
+    // Hero entrance timeline with advanced text animations
     if (document.querySelector(".hero")) {
-      const tl = gsap.timeline({ delay: 0.15 });
-      const setWC = (sel) => {
-        try {
-          gsap.set(sel, { willChange: "transform, opacity" });
-        } catch (e) {}
-      };
-      const resetWC = (sel) => {
-        try {
-          gsap.set(sel, { willChange: "auto" });
-        } catch (e) {}
-      };
-      setWC([".hero-textual .pill", ".hero-title", ".hero-subtitle"]);
-      tl.from(".hero-textual .pill", {
-        y: 24,
-        autoAlpha: 0,
+      const tl = gsap.timeline({ delay: 0.3 });
+      
+      // Animate pill first
+      tl.from(".hero-textual .scale-fade", {
+        y: 20,
+        opacity: 0,
+        scale: 0.9,
         duration: 0.5,
-        ease: "power3.out",
+        ease: "back.out(1.7)",
         force3D: true,
-        autoRound: false,
-        clearProps: "all",
+        onComplete: () => {
+          document.querySelector(".hero-textual .scale-fade")?.classList.add("is-visible");
+        }
       })
-        .from(
-          ".hero-title",
-          {
-            y: 44,
-            autoAlpha: 0,
-            duration: 0.7,
-            ease: "power3.out",
+      
+      // Then animate title characters
+      .add(() => {
+        const heroTitle = document.querySelector(".hero-title.char-reveal");
+        if (heroTitle && heroTitle.querySelectorAll('.char').length > 0) {
+          heroTitle.classList.add("is-visible");
+          const chars = heroTitle.querySelectorAll(".char");
+          gsap.from(chars, {
+            y: 60,
+            opacity: 0,
+            rotation: 5,
+            duration: 0.4,
+            ease: "back.out(1.2)",
+            stagger: 0.02,
             force3D: true,
-            autoRound: false,
-            clearProps: "all",
-          },
-          "-=0.2"
-        )
-        .from(
-          ".hero-subtitle",
-          {
-            y: 32,
-            autoAlpha: 0,
-            duration: 0.55,
-            ease: "power3.out",
+          });
+        } else {
+          // Fallback if characters not processed yet
+          const heroTitle = document.querySelector(".hero-title");
+          if (heroTitle) {
+            gsap.from(heroTitle, {
+              y: 40,
+              opacity: 0,
+              duration: 0.6,
+              ease: "power2.out",
+              force3D: true,
+            });
+          }
+        }
+      }, "-=0.2")
+      
+      // Finally animate subtitle words
+      .add(() => {
+        const subtitle = document.querySelector(".hero-subtitle.word-reveal");
+        if (subtitle && subtitle.querySelectorAll('.word').length > 0) {
+          subtitle.classList.add("is-visible");
+          const words = subtitle.querySelectorAll(".word");
+          gsap.from(words, {
+            y: 30,
+            opacity: 0,
+            duration: 0.4,
+            ease: "power2.out",
+            stagger: 0.05,
             force3D: true,
-            autoRound: false,
-            clearProps: "all",
-          },
-          "-=0.25"
-        )
-        .add(() =>
-          resetWC([".hero-textual .pill", ".hero-title", ".hero-subtitle"])
-        );
+          });
+        } else {
+          // Fallback if words not processed yet
+          const subtitle = document.querySelector(".hero-subtitle");
+          if (subtitle) {
+            gsap.from(subtitle, {
+              y: 28,
+              opacity: 0,
+              duration: 0.5,
+              ease: "power2.out",
+              force3D: true,
+            });
+          }
+        }
+      }, "-=0.1");
     }
 
     if (window.ScrollTrigger && !prefersReduced) {
       const hero = document.querySelector(".hero");
       if (hero) {
+        gsap.set(hero, { willChange: "background-position" });
         gsap.to(hero, {
           backgroundPosition: "50% 30%",
           ease: "none",
@@ -221,7 +245,8 @@
             trigger: hero,
             start: "top top",
             end: "bottom top",
-            scrub: true,
+            scrub: 1.2,
+            onComplete: () => gsap.set(hero, { willChange: "auto" })
           },
         });
       }
@@ -232,23 +257,25 @@
       const headers = Array.from(
         document.querySelectorAll(".section-header")
       ).filter((h) => !h.hasAttribute("data-aos"));
+      
       headers.forEach((header) => {
-        try {
-          gsap.set(header.children, { willChange: "transform, opacity" });
-        } catch (e) {}
-        gsap.from(header.children, {
-          autoAlpha: 0,
-          y: 36,
-          duration: 0.65,
-          ease: "power3.out",
-          stagger: 0.1,
-          scrollTrigger: { trigger: header, start: "top 80%" },
+        const children = Array.from(header.children);
+        gsap.set(children, { 
+          willChange: "transform, opacity",
+          force3D: true 
+        });
+        
+        gsap.from(children, {
+          opacity: 0,
+          y: 30,
+          duration: 0.5,
+          ease: "power2.out",
+          stagger: 0.08,
           force3D: true,
-          autoRound: false,
-          onComplete: () => {
-            try {
-              gsap.set(header.children, { willChange: "auto" });
-            } catch (e) {}
+          scrollTrigger: { 
+            trigger: header, 
+            start: "top 85%",
+            onComplete: () => gsap.set(children, { willChange: "auto" })
           },
         });
       });
@@ -290,22 +317,40 @@
     if (!track || !window.gsap) return;
     const rows = track.querySelectorAll(".partners-row");
     if (rows.length < 2) return;
+    
     // duplicate first row into second
     rows[1].innerHTML = rows[0].innerHTML;
 
-    const totalWidth = rows[0].scrollWidth;
+    // Set up for GPU acceleration
     rows.forEach((row) => {
-      row.style.willChange = "transform";
+      gsap.set(row, { 
+        willChange: "transform",
+        force3D: true 
+      });
     });
+    
     const tween = gsap.to(rows, {
       xPercent: -50,
       ease: "none",
-      duration: 20,
+      duration: 18,
       repeat: -1,
+      force3D: true,
     });
-    // Pause on hover
-    track.addEventListener("mouseenter", () => tween.pause());
-    track.addEventListener("mouseleave", () => tween.play());
+    
+    // Pause on hover with smooth transition
+    let isHovered = false;
+    track.addEventListener("mouseenter", () => {
+      if (!isHovered) {
+        isHovered = true;
+        gsap.to(tween, { timeScale: 0, duration: 0.3, ease: "power2.out" });
+      }
+    });
+    track.addEventListener("mouseleave", () => {
+      if (isHovered) {
+        isHovered = false;
+        gsap.to(tween, { timeScale: 1, duration: 0.3, ease: "power2.out" });
+      }
+    });
   }
 
   // Anchor smooth scroll with header offset

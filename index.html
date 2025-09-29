@@ -26,36 +26,35 @@
     <!-- Header -->
     <header class="header" id="header">
         <div class="nav-container">
-            <a href="#" class="logo">
+            <!-- Left navigation - Current section -->
+            <div class="nav-current">
+                <a href="#home" class="nav-link current-nav" id="currentNav">Trang chủ</a>
+            </div>
+            
+            <!-- Center logo -->
+            <a href="#home" class="logo">
                 <img src="assets/imgs/logo.png" alt="A&T Saigon Riverside Logo"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <span class="logo-text">A&T Saigon Riverside</span>
             </a>
-            <nav class="nav-menu" role="navigation" aria-label="Điều hướng chính">
-                <a href="#home" class="nav-link">Trang chủ</a>
-                <a href="#project-info" class="nav-link">Dự án</a>
-                <a href="#apartments" class="nav-link">Căn hộ</a>
-                <a href="#amenities" class="nav-link">Tiện ích</a>
-                <a href="#gallery" class="nav-link">Hình ảnh</a>
-                <a href="#pricing" class="nav-link">Bảng giá</a>
-                <a href="#contact" class="nav-link">Liên hệ</a>
-            </nav>
+            
+            <!-- Right navigation - Next section -->
+            <div class="nav-next">
+                <a href="#project-info" class="nav-link next-nav" id="nextNav">Dự án</a>
+            </div>
         </div>
     </header>
 
     <main id="main-content" tabindex="-1">
         <!-- Hero Section -->
-        <section class="hero" id="home" data-section="hero">
+    <section class="hero" id="home" data-section="hero" data-nav="Trang chủ">
             <div class="hero-decorative"></div>
             <div class="hero-particles"></div>
 
             <div class="hero-inner container-narrow">
                 <div class="hero-col hero-textual" data-animate>
-                    <div class="pill gradient mb-sm">Dự án cao cấp bậc nhất Thuận An</div>
-                    <h1 class="hero-title display-1" data-animate style="animation-delay:.05s">A&T Saigon Riverside</h1>
-                    <p class="hero-subtitle text-lead" data-animate style="animation-delay:.1s">Chuẩn sống thượng lưu
-                        ven sông – hòa quyện thiên nhiên xanh và nhịp phát triển năng động, kiến tạo giá trị bền vững
-                        cho tương lai.</p>
+                    <div class="pill gradient mb-sm" data-animate style="animation-delay: 0.1s">Dự án cao cấp bậc nhất Thuận An</div>
+                    <h1 class="hero-title display-1" data-animate style="animation-delay: 0.2s">A&T Saigon Riverside</h1>
+                    <p class="hero-subtitle text-lead" data-animate style="animation-delay: 0.3s">Chuẩn sống thượng lưu ven sông – hòa quyện thiên nhiên xanh và nhịp phát triển năng động, kiến tạo giá trị bền vững cho tương lai.</p>
                 </div>
             </div>
         </section>
@@ -94,7 +93,7 @@
         </section>
 
         <!-- Project Information Section -->
-        <section class="project-info" id="project-info" data-section="project-info">
+        <section class="project-info" id="project-info" data-section="project-info" data-animate>
             <div class="section-decorative top-right"></div>
             <div class="accent-line top"></div>
             <div class="container">
@@ -136,7 +135,7 @@
         </section>
 
         <!-- Location & Advantages Section -->
-        <section class="location-advantages" data-section="location">
+    <section class="location-advantages" id="location" data-section="location" data-animate>
             <div class="section-decorative bottom-left"></div>
             <div class="dots-pattern"></div>
             <div class="container">
@@ -289,7 +288,7 @@
         </section>
 
         <!-- Apartments Section -->
-        <section class="horizontal-section apartments" id="apartments" data-section="apartments">
+        <section class="horizontal-section apartments" id="apartments" data-section="apartments" data-animate>
             <div class="container">
                 <div class="section-header" data-animate>
                     <div class="section-eyebrow">Đa dạng lựa chọn</div>
@@ -364,7 +363,7 @@
         </section>
 
         <!-- Amenities Section -->
-        <section class="horizontal-section amenities" id="amenities" data-section="amenities">
+        <section class="horizontal-section amenities" id="amenities" data-section="amenities" data-animate>
             <div class="section-decorative center"></div>
             <div class="accent-line bottom"></div>
             <div class="container">
