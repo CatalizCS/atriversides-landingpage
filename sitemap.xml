@@ -80,6 +80,26 @@
         <loc>https://atsaigonriverside.vn/#gallery</loc>
         <lastmod>2024-12-01</lastmod>
         <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+        <image:image>
+            <image:loc>https://atsaigonriverside.vn/assets/imgs/Phối cảnh dự án/z7003389707041_a501076caa35abe3077d72d00e52ae55.jpg</image:loc>
+            <image:caption>Phối cảnh chính A&T Saigon Riverside</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://atsaigonriverside.vn/assets/imgs/Tiện ích nội và Ngoại khu/z7021116899085_650677dff00483c9fc95708dd5ec032e.jpg</image:loc>
+            <image:caption>Hồ bơi resort 5 sao A&T Saigon Riverside</image:caption>
+        </image:image>
+        <image:image>
+            <image:loc>https://atsaigonriverside.vn/assets/imgs/Vị trí và kết nối vùng/z7003389608597_8a18775c431afece6312018efbb26f56.jpg</image:loc>
+            <image:caption>Sơ đồ vị trí A&T Saigon Riverside</image:caption>
+        </image:image>
+    </url>
+    
+    <!-- Gallery -->
+    <url>
+        <loc>https://atsaigonriverside.vn/#gallery</loc>
+        <lastmod>2024-12-01</lastmod>
+        <changefreq>weekly</changefreq>
         <priority>0.6</priority>
     </url>
     

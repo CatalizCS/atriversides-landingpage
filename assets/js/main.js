@@ -1378,3 +1378,220 @@ if (document.readyState === 'loading') {
 } else {
   initAnalyticsTracking();
 }
+
+// Gallery functionality
+function initGallery() {
+  console.log('Initializing gallery...'); // Debug
+  
+  const galleryTabs = document.querySelectorAll('.gallery-tab');
+  const galleryItems = document.querySelectorAll('.gallery-item');
+  const loadMoreBtn = document.querySelector('.gallery-load-more .btn');
+  
+  console.log('Found', galleryTabs.length, 'tabs and', galleryItems.length, 'items'); // Debug
+  
+  // Đảm bảo tất cả gallery items hiển thị ngay
+  galleryItems.forEach(item => {
+    item.style.display = 'block';
+    item.style.opacity = '1';
+    item.classList.remove('hidden');
+  });
+  
+  let currentCategory = 'all';
+  let visibleItems = Math.max(6, galleryItems.length); // Hiển thị tất cả nếu ít hơn 6
+  
+  // Filter gallery items function 
+  function filterGallery() {
+    console.log('Filtering gallery for category:', currentCategory); // Debug
+    
+    galleryItems.forEach((item, index) => {
+      const category = item.getAttribute('data-category');
+      console.log('Item category:', category); // Debug
+      
+      let shouldShow = false;
+      
+      if (currentCategory === 'all') {
+        shouldShow = true; // Hiển thị tất cả
+      } else {
+        shouldShow = category === currentCategory; // Chỉ hiển thị category khớp
+      }
+      
+      if (shouldShow) {
+        item.style.display = 'block';
+        item.style.opacity = '1';
+        item.classList.remove('hidden');
+        item.style.transform = 'translateY(0)';
+      } else {
+        item.style.display = 'none';
+        item.classList.add('hidden');
+      }
+    });
+  }
+  
+  // Tab filtering functionality
+  if (galleryTabs.length > 0) {
+    galleryTabs.forEach((tab, index) => {
+      console.log('Adding listener to tab', index, 'with data-tab:', tab.getAttribute('data-tab')); // Debug
+      
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        console.log('Tab clicked:', tab.getAttribute('data-tab')); // Debug
+        
+        // Update active tab
+        galleryTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        currentCategory = tab.getAttribute('data-tab');
+        console.log('Current category set to:', currentCategory); // Debug
+        
+        filterGallery();
+        
+        // Analytics tracking for gallery filter
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'gallery_filter', {
+            event_category: 'Gallery',
+            event_label: currentCategory,
+            custom_map: {'dimension3': 'gallery_interaction'}
+          });
+        }
+      });
+    });
+    
+    // Set first tab as active and perform initial filter
+    if (galleryTabs[0]) {
+      galleryTabs[0].classList.add('active');
+      currentCategory = galleryTabs[0].getAttribute('data-tab') || 'all';
+      console.log('Initial category set to:', currentCategory); // Debug
+      filterGallery();
+    }
+  } else {
+    console.warn('No gallery tabs found!'); // Debug
+  }
+  
+  // Load more functionality
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', () => {
+      visibleItems += 6;
+      filterGallery();
+      
+      // Analytics for load more
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'load_more_gallery', {
+          event_category: 'Gallery',
+          event_label: 'Load More Images'
+        });
+      }
+    });
+  }
+  
+  // Update load more button visibility
+  function updateLoadMoreButton() {
+    if (loadMoreBtn) {
+      const visibleCount = Array.from(galleryItems).filter(item => 
+        !item.classList.contains('hidden')).length;
+      const totalFilteredItems = Array.from(galleryItems).filter(item => {
+        const category = item.dataset.category;
+        return currentCategory === 'all' || category === currentCategory || category === 'all';
+      }).length;
+      
+      loadMoreBtn.style.display = visibleCount < totalFilteredItems ? 'inline-block' : 'none';
+    }
+  }
+  
+  // Lightbox functionality
+  galleryItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const img = item.querySelector('img');
+      const alt = img.alt;
+      const src = img.src;
+      
+      openLightbox(src, alt);
+      
+      // Analytics for image view
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'view_gallery_image', {
+          event_category: 'Gallery',
+          event_label: alt,
+          image_url: src
+        });
+      }
+    });
+  });
+  
+  // Create lightbox modal
+  function createLightboxModal() {
+    if (document.querySelector('.lightbox-modal')) return;
+    
+    const modal = document.createElement('div');
+    modal.className = 'lightbox-modal';
+    modal.innerHTML = `
+      <div class="lightbox-content">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-image" src="" alt="">
+        <div class="lightbox-caption"></div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Close modal functionality
+    const closeBtn = modal.querySelector('.lightbox-close');
+    closeBtn.addEventListener('click', closeLightbox);
+    
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeLightbox();
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.style.display === 'block') {
+        closeLightbox();
+      }
+    });
+  }
+  
+  function openLightbox(src, caption) {
+    createLightboxModal();
+    const modal = document.querySelector('.lightbox-modal');
+    const img = modal.querySelector('.lightbox-image');
+    const captionEl = modal.querySelector('.lightbox-caption');
+    
+    img.src = src;
+    img.alt = caption;
+    captionEl.textContent = caption;
+    
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    
+    // Fade in animation
+    setTimeout(() => {
+      modal.style.opacity = '1';
+    }, 10);
+  }
+  
+  function closeLightbox() {
+    const modal = document.querySelector('.lightbox-modal');
+    if (modal) {
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+  }
+  
+  // Initialize gallery - hiển thị tất cả items ngay
+  if (typeof filterGallery === 'function') {
+    filterGallery();
+  } else {
+    // Fallback: hiển thị tất cả items
+    galleryItems.forEach(item => {
+      item.style.display = 'block';
+      item.style.opacity = '1';
+      item.classList.remove('hidden');
+    });
+  }
+}
+
+// Initialize gallery when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initGallery);
+} else {
+  initGallery();
+}
