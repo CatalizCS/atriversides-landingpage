@@ -5,6 +5,18 @@ let lastScrollY = window.pageYOffset;
 function handleScroll() {
   const header = document.getElementById("header");
   const scrollTop = window.pageYOffset;
+  const docHeight = Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight
+  ) - window.innerHeight;
+  const progress = docHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / docHeight) * 100)) : 0;
+  // Drive CSS progress line in header
+  if (header) {
+    header.style.setProperty('--progress', progress + '%'); // legacy
+    header.style.setProperty('--page-progress', (progress / 100).toFixed(4)); // 0..1
+    const elev = Math.min(1, Math.max(0, scrollTop / 480)); // elevate over first ~480px
+    header.style.setProperty('--header-elev', elev.toFixed(3));
+  }
   
   // Only update if scroll position changed significantly
   if (Math.abs(scrollTop - lastScrollY) > 5) {
@@ -55,6 +67,18 @@ function unlockScroll() {
 document.addEventListener("DOMContentLoaded", function() {
   unlockScroll();
   initIOSFixes();
+  // Initialize header state and progress immediately
+  try { handleScroll(); } catch(e) {}
+
+  // Optional: show full text on hover if truncated
+  try {
+    const navs = [document.getElementById('currentNav'), document.getElementById('nextNav')].filter(Boolean);
+    navs.forEach(a => {
+      if (!a) return;
+      const txt = a.textContent?.trim() || '';
+      a.title = txt; // native tooltip
+    });
+  } catch (e) {}
 });
 window.addEventListener("load", unlockScroll);
 
@@ -487,53 +511,52 @@ if (contactForm) {
   });
 }
 
-// Intersection Observer animations (unified via [data-animate]) - optimized
 const observerOptions = { 
-  threshold: [0, 0.05, 0.1], 
-  rootMargin: "0px 0px -30px 0px" 
+  threshold: [0], 
+  rootMargin: "50px 0px 0px 0px" 
 };
 
 const io = new IntersectionObserver((entries) => {
-  const toAnimate = [];
-  
   entries.forEach((entry) => {
-    if (entry.isIntersecting && entry.intersectionRatio >= 0.05) {
-      toAnimate.push(entry.target);
-      io.unobserve(entry.target);
+    if (entry.isIntersecting) {
+      const target = entry.target;
+      
+      target.style.transition = "opacity 1.2s cubic-bezier(0.215, 0.61, 0.355, 1), transform 1.2s cubic-bezier(0.215, 0.61, 0.355, 1)";
+      target.style.willChange = "transform, opacity";
+      target.style.opacity = "1";
+      target.style.transform = "translate3d(0, 0, 0) scale(1)";
+      
+      setTimeout(() => {
+        target.style.willChange = "auto";
+        target.style.transition = "";
+      }, 1200);
+      
+      io.unobserve(target);
     }
   });
-  
-  // Batch DOM updates
-  if (toAnimate.length > 0) {
-    requestAnimationFrame(() => {
-      toAnimate.forEach(target => {
-        target.style.willChange = "transform, opacity";
-        target.classList.add("is-visible");
-        
-        // Clean up will-change after animation
-        setTimeout(() => {
-          target.style.willChange = "auto";
-        }, 800);
-      });
-    });
-  }
 }, observerOptions);
 
-// Observe all animatable elements
+// Observe all animatable elements with smoother timing
 setTimeout(() => {
-  document.querySelectorAll("[data-animate]").forEach((el) => io.observe(el));
-  
-  // Force animation for above-the-fold content
-  const heroElements = document.querySelectorAll('.hero [data-animate]');
-  heroElements.forEach(el => {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight) {
-      setTimeout(() => {
-        el.classList.add('is-visible');
-      }, 50);
-    }
+  document.querySelectorAll("[data-animate]").forEach((el) => {
+    // Pre-setup for ultra smooth animation
+    el.style.opacity = "0";
+    el.style.transform = "translate3d(0, 10px, 0) scale(0.99)";
+    el.style.willChange = "transform, opacity";
+    
+    io.observe(el);
   });
-}, 50);
+  
+  // Immediate animation for hero elements (no delay)
+  const heroElements = document.querySelectorAll('.hero [data-animate]');
+  heroElements.forEach((el, index) => {
+    setTimeout(() => {
+      el.style.transition = "opacity 1s cubic-bezier(0.215, 0.61, 0.355, 1), transform 1s cubic-bezier(0.215, 0.61, 0.355, 1)";
+      el.style.opacity = "1";
+      el.style.transform = "translate3d(0, 0, 0) scale(1)";
+    }, index * 100); // Stagger very gently
+  });
+}, 10); 
 
 // Smart navigation with current/next section detection
 const sections = [...document.querySelectorAll("section[id]")];
@@ -939,42 +962,45 @@ function initDecorativeInteractions() {
 // Initialize enhanced interactions
 initDecorativeInteractions();
 
-// Simple text animations - no innerHTML manipulation
+// Simple text animations - ultra smooth
 function initSimpleTextAnimations() {
-  // Enhanced initialization with smooth animations - no DOM manipulation
   const elements = document.querySelectorAll('[data-animate], .text-reveal, .char-reveal, .word-reveal, .scale-fade');
   
   elements.forEach((element, index) => {
-    // Set initial state for smooth animations
+    // Set initial state for ultra smooth animations
     if (!element.classList.contains('is-visible')) {
       element.style.opacity = '0';
-      element.style.transform = 'translateY(30px) scale(0.95)';
-      element.style.transition = 'opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1)';
-      element.style.transitionDelay = `${index * 0.1}s`;
+      element.style.transform = 'translate3d(0, 20px, 0)';
+      element.style.transition = 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+      element.style.transitionDelay = `${index * 0.05}s`;
       element.style.willChange = 'transform, opacity';
+      // Force hardware acceleration
+      element.style.backfaceVisibility = 'hidden';
+      element.style.perspective = '1000px';
     }
     
-    // Mark as ready for animations
     element.dataset.ready = 'true';
   });
 }
 
-  // Simple observer - no complex processing
+  // Ultra smooth observer - no complex processing
   const simpleObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.01) {
           const target = entry.target;
-          requestAnimationFrame(() => {
-            target.classList.add('is-visible');
-          });
+          
+          // Direct style application for smoothest animation
+          target.style.opacity = '1';
+          target.style.transform = 'translate3d(0, 0, 0)';
+          
           simpleObserver.unobserve(target);
         }
       });
     },
     {
-      threshold: 0.05,
-      rootMargin: '0px 0px -30px 0px'
+      threshold: [0, 0.01],
+      rootMargin: '0px 0px -5px 0px'
     }
   );
 
@@ -990,30 +1016,28 @@ function initSimpleTextAnimations() {
 // Initialize simple text animations - disabled complex version to prevent text loss
 // initAdvancedTextAnimations();
 
-// Enhanced backup animation fallback
 function ensureContentVisible() {
   setTimeout(() => {
-    // Make sure all text is visible after 1.5 seconds
     const hiddenElements = document.querySelectorAll('[data-animate]:not(.is-visible), .char-reveal:not(.is-visible), .word-reveal:not(.is-visible), .scale-fade:not(.is-visible), .fade-in-blur:not(.is-visible)');
     hiddenElements.forEach(el => {
-      el.classList.add('is-visible');
-      // Force visibility with inline styles as backup
+      el.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
       el.style.opacity = '1';
-      el.style.transform = 'none';
+      el.style.transform = 'translate3d(0, 0, 0)';
       el.style.filter = 'none';
     });
-  }, 1500);
+  }, 1000);
   
-  // Emergency fallback after 3 seconds
+  // Emergency fallback after 2 seconds
   setTimeout(() => {
     const stillHidden = document.querySelectorAll('[data-animate], .char-reveal, .word-reveal, .scale-fade, .fade-in-blur');
     stillHidden.forEach(el => {
       el.style.opacity = '1';
-      el.style.transform = 'none';
+      el.style.transform = 'translate3d(0, 0, 0)';
       el.style.filter = 'none';
       el.style.visibility = 'visible';
+      el.style.willChange = 'auto';
     });
-  }, 3000);
+  }, 2000);
 }
 
 // Run backup after everything loads
