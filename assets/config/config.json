@@ -1,0 +1,217 @@
+{
+  "site": {
+    "title": "AT Riverside",
+    "meta": {
+      "description": "AT Riverside – Khu căn hộ ven sông tại Bình Dương, kết nối thuận tiện TP.HCM, hệ tiện ích nội khu phong phú và không gian sống trong lành.",
+      "keywords": "căn hộ, bình dương, ven sông, dự án, bất động sản",
+      "author": "AT Riverside",
+      "canonical": "https://example.com/at-riverside"
+    },
+    "analytics": {
+      "gtmContainerId": "",
+      "ga4MeasurementId": "",
+      "facebookPixelId": "",
+      "hotjarId": "",
+      "clarityId": ""
+    },
+    "contacts": [
+      "Hotline: 0900 000 000",
+      "Email: sales@atriverside.vn",
+      "Địa chỉ: Bình Dương"
+    ]
+  },
+  "libraries": {
+    "googleFonts": "https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap&subset=vietnamese",
+    "css": [
+      "https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/2.0.0/modern-normalize.min.css",
+      "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css",
+      "https://unpkg.com/aos@2.3.4/dist/aos.css"
+    ],
+    "js": [
+      "https://cdn.jsdelivr.net/npm/lenis@1.0.44/dist/lenis.min.js",
+      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js",
+      "https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js",
+      "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.8.0/countUp.umd.js",
+      "https://unpkg.com/aos@2.3.4/dist/aos.js"
+    ]
+  },
+  "designTokens": {
+    "--color-bg": "#0a0a0b",
+    "--color-bg-alt": "#0d0f14",
+    "--color-text": "#f5f7fa",
+    "--color-muted": "#b7c0d1",
+    "--color-border": "rgba(255,255,255,0.12)",
+    "--focus-ring": "0 0 0 3px rgba(255, 215, 0, 0.35)",
+    "--grad-hero-overlay": "linear-gradient(180deg, rgba(8,10,15,0.55) 0%, rgba(8,10,15,0.78) 60%, rgba(8,10,15,0.92) 100%)",
+    "--grad-hero-cta": "linear-gradient(90deg, #F2C265 0%, #D9A441 100%)",
+    "--grad-line-gold-20": "linear-gradient(90deg, rgba(242,194,101,0.3), rgba(217,164,65,0.3))",
+    "--shadow-gold": "0 8px 24px rgba(242,194,101,0.25)",
+    "--elev-card": "0 2px 8px rgba(0,0,0,0.25)",
+    "--radius-md": "10px",
+    "--radius-lg": "16px",
+    "--radius-xl": "20px",
+    "--space-lg": "2rem",
+    "--space-xl": "3rem",
+    "--space-2xl": "4rem",
+    "--space-3xl": "6rem",
+    "--header-h": "70px",
+    "--progress-h": "3px"
+  },
+  "navigation": {
+    "header": {
+      "logo": "https://atrealtors.vn/wp-content/uploads/2025/08/AT-REALTORS-1.png",
+      "logoHref": "#home",
+      "current": [
+        { "label": "Trang chủ", "href": "#home" },
+        { "label": "Thông tin dự án", "href": "#project-info" },
+        { "label": "Vị trí", "href": "#location" }
+      ],
+      "next": [
+        { "label": "Dự án", "href": "#projects" },
+        { "label": "Căn hộ", "href": "#apartments" },
+        { "label": "Tiện ích", "href": "#amenities" },
+        { "label": "Bộ sưu tập", "href": "#gallery" },
+        { "label": "Tin tức", "href": "#news" },
+        { "label": "Liên hệ", "href": "#contact" }
+      ]
+    },
+    "footerLinks": [
+      { "label": "Chính sách bảo mật", "href": "#contact" },
+      { "label": "Điều khoản sử dụng", "href": "#contact" }
+    ]
+  },
+  "sections": [
+    { "id": "home", "label": "Trang chủ" },
+    { "id": "key-metrics", "label": "Chỉ số nổi bật" },
+    { "id": "project-info", "label": "Thông tin dự án" },
+    { "id": "location", "label": "Vị trí & Kết nối" },
+    { "id": "projects", "label": "Dự án nổi bật" },
+    { "id": "apartments", "label": "Mặt bằng căn hộ" },
+    { "id": "amenities", "label": "Tiện ích" },
+    { "id": "gallery", "label": "Bộ sưu tập" },
+    { "id": "news", "label": "Tin tức" },
+    { "id": "contact", "label": "Liên hệ" }
+  ],
+  "counters": {
+    "legacy": [
+      { "label": "Diện tích khu đất (ha)", "value": 12 },
+      { "label": "Tiện ích nội khu", "value": 30 },
+      { "label": "Số block", "value": 5 },
+      { "label": "Căn hộ", "value": 1800 }
+    ]
+  },
+  "sliders": [
+    {
+      "name": "projects",
+      "config": {
+        "loop": true,
+        "spaceBetween": 12,
+        "pagination": { "el": ".swiper-pagination", "clickable": true },
+        "navigation": { "nextEl": ".swiper-button-next", "prevEl": ".swiper-button-prev" },
+        "breakpoints": {
+          "0": { "slidesPerView": 1.1 },
+          "640": { "slidesPerView": 1.4 },
+          "768": { "slidesPerView": 2 },
+          "1024": { "slidesPerView": 3 }
+        }
+      },
+      "slides": [
+        { "title": "Tháp A", "desc": "View sông", "image": "/assets/imgs/Phối cảnh dự án/z7003389721482_9c40dac15ea0143ad73919ddc0dbcfaf.jpg" },
+        { "title": "Tháp B", "desc": "Nội khu", "image": "/assets/imgs/Phối cảnh dự án/z7003389707041_a501076caa35abe3077d72d00e52ae55.jpg" },
+        { "title": "Tháp C", "desc": "Công viên", "image": "/assets/imgs/Phối cảnh dự án/z7003389608601_444b41af1241baa7041719b650cb4dbb.jpg" }
+      ]
+    }
+  ],
+  "gallery": {
+    "tabs": [
+      { "key": "all", "label": "Tất cả" },
+      { "key": "exterior", "label": "Phối cảnh" },
+      { "key": "amenities", "label": "Tiện ích" },
+      { "key": "location", "label": "Vị trí" },
+      { "key": "apartments", "label": "Căn hộ" }
+    ],
+    "itemsUseLightbox": true
+  },
+  "forms": {
+    "leadForm": {
+      "id": "lead",
+      "title": "Đăng ký tư vấn",
+      "googleFormAction": "https://docs.google.com/forms/u/0/d/e/1FAIpQLScQ-demo-form-id/formResponse",
+      "targetIframe": "lead_iframe",
+      "submitLabel": "Gửi thông tin",
+      "fields": [
+        { "name": "name", "label": "Họ tên", "type": "text", "placeholder": "Nguyễn Văn A", "required": true, "autocomplete": "name" },
+        { "name": "phone", "label": "Số điện thoại", "type": "tel", "placeholder": "090...", "required": true, "autocomplete": "tel" },
+        { "name": "email", "label": "Email", "type": "email", "placeholder": "you@example.com" },
+        { "name": "apartment", "label": "Loại căn quan tâm", "type": "select", "options": ["Studio", "1PN", "2PN", "3PN"] },
+        { "name": "hp", "label": "Leave empty", "type": "text" }
+      ],
+      "entryMap": { "name": "1111111", "phone": "2222222", "email": "3333333", "apartment": "4444444" }
+    },
+    "contactForm": {
+      "id": "contact",
+      "title": "Liên hệ",
+      "googleFormAction": "https://docs.google.com/forms/u/0/d/e/1FAIpQLScQ-demo-form-id/formResponse",
+      "targetIframe": "contact_iframe",
+      "submitLabel": "Gửi liên hệ",
+      "fields": [
+        { "name": "name", "label": "Họ tên", "type": "text", "required": true, "autocomplete": "name" },
+        { "name": "phone", "label": "Số điện thoại", "type": "tel", "required": true, "autocomplete": "tel" },
+        { "name": "email", "label": "Email", "type": "email" },
+        { "name": "apartment", "label": "Loại căn", "type": "select", "options": ["Studio", "1PN", "2PN", "3PN"] },
+        { "name": "message", "label": "Lời nhắn", "type": "textarea", "placeholder": "Nội dung liên hệ" },
+        { "name": "hp", "label": "Leave empty", "type": "text" }
+      ],
+      "entryMap": { "name": "5555555", "phone": "6666666", "email": "7777777", "apartment": "8888888", "message": "9999999" }
+    }
+  },
+  "cta": {
+    "primary": { "label": "Đăng ký tư vấn", "href": "#contact" },
+    "secondary": { "label": "Thông tin dự án", "href": "#project-info" }
+  },
+  "images": {
+    "summary": {
+      "rootFiles": [
+        "/assets/imgs/Phối cảnh dự án/z7013932665443_af65ad4b356b254d79d1d88972dc5567.jpg"
+      ],
+      "folders": [
+        { "name": "Phối cảnh dự án", "files": [
+          "/assets/imgs/Phối cảnh dự án/z7003389721482_9c40dac15ea0143ad73919ddc0dbcfaf.jpg",
+          "/assets/imgs/Phối cảnh dự án/z7003389707041_a501076caa35abe3077d72d00e52ae55.jpg",
+          "/assets/imgs/Phối cảnh dự án/z7003389608601_444b41af1241baa7041719b650cb4dbb.jpg"
+        ]},
+        { "name": "Tiện ích nội và Ngoại khu", "files": [
+          "/assets/imgs/Tiện ích nội và Ngoại khu/z7003389608604_5f4a34f1d2e7b57f2aa2a52dd40aa503.jpg",
+          "/assets/imgs/Tiện ích nội và Ngoại khu/z7003389608605_908a9f1cb760062177615b0455c0ba9d.jpg",
+          "/assets/imgs/Tiện ích nội và Ngoại khu/z7003389608607_2a68b36e2bbc76a38c6fa27f7b52c97f.jpg"
+        ]},
+        { "name": "Vị trí và kết nối vùng", "files": [
+          "/assets/imgs/Vị trí và kết nối vùng/z7003389608600_2d35237e5026dfc803c52baf1149818b.jpg",
+          "/assets/imgs/Vị trí và kết nối vùng/z7003389608602_cfa2c52457533854723a31fb4575b430.jpg",
+          "/assets/imgs/Vị trí và kết nối vùng/z7003389706982_c1d824aa284a3aab4fefc27acc6e817b.jpg"
+        ]},
+        { "name": "Mặt bằng căn hộ", "files": [
+          "/assets/imgs/Mặt bằng căn hộ/A01 và A02.jpg",
+          "/assets/imgs/Mặt bằng căn hộ/B01 và B02.jpg",
+          "/assets/imgs/Mặt bằng căn hộ/Căn 1pn/z7013198911869_b495d22b380a7da9f6365052b4de8a22.jpg"
+        ]}
+      ]
+    },
+    "folders": {
+      "Phối cảnh dự án": [
+        "/assets/imgs/Phối cảnh dự án/z7003389721482_9c40dac15ea0143ad73919ddc0dbcfaf.jpg",
+        "/assets/imgs/Phối cảnh dự án/z7003389707041_a501076caa35abe3077d72d00e52ae55.jpg"
+      ],
+      "Tiện ích nội và Ngoại khu": [
+        "/assets/imgs/Tiện ích nội và Ngoại khu/z7003389608604_5f4a34f1d2e7b57f2aa2a52dd40aa503.jpg"
+      ],
+      "Vị trí và kết nối vùng": [
+        "/assets/imgs/Vị trí và kết nối vùng/z7003389608600_2d35237e5026dfc803c52baf1149818b.jpg"
+      ],
+      "Mặt bằng căn hộ": [
+        "/assets/imgs/Mặt bằng căn hộ/A01 và A02.jpg"
+      ]
+    }
+  }
+}
