@@ -14,6 +14,7 @@
       let __preloaderEl = null; let __preloaderHidden = false; let __preloaderStart = 0;
       function showPreloader(defaultLogo){
         if (__preloaderEl) return; __preloaderStart = performance.now();
+        try { document.body.classList.add('preload-active'); } catch(_){}
         const d = document.createElement('div'); d.id='preloader'; d.setAttribute('aria-busy','true'); d.setAttribute('aria-live','polite');
         const inner = document.createElement('div'); inner.className='inner';
         const img = document.createElement('img'); img.className='logo'; img.alt='Logo'; img.loading='eager'; img.decoding='async'; img.src = defaultLogo || 'assets/imgs/logo.png';
@@ -24,9 +25,17 @@
         if(!__preloaderEl || !u) return; const img = __preloaderEl.querySelector('img.logo'); if(img){ try { img.src = asset(u); } catch(_){} }
       }
       function hidePreloaderAfterMin(minMs=2000, maxMs=3000){
-        const hide = ()=>{ if(__preloaderHidden) return; __preloaderHidden = true; const el = __preloaderEl; if(!el) return; el.classList.add('hide'); setTimeout(()=>{ el.remove(); __preloaderEl=null; }, 650); };
+        const hide = ()=>{ if(__preloaderHidden) return; __preloaderHidden = true; const el = __preloaderEl; if(!el) return;
+          // Start overlay fade-out
+          el.classList.add('hide');
+          // Trigger page fade-in on next frame to ensure transition applies
+          try { requestAnimationFrame(()=>{ document.body.classList.remove('preload-active'); }); } catch(_) { try { document.body.classList.remove('preload-active'); } catch(__){} }
+          // Remove preloader after transition end (with fallback)
+          const cleanup = ()=>{ try { el.remove(); } catch(_){} __preloaderEl=null; };
+          el.addEventListener('transitionend', cleanup, { once: true });
+          setTimeout(cleanup, 900);
+        };
         const elapsed = performance.now() - __preloaderStart; const remain = Math.max(0, minMs - elapsed);
-        // Always keep at least minMs, and force-hide at maxMs
         setTimeout(hide, remain);
         setTimeout(hide, maxMs);
       }
@@ -38,7 +47,10 @@
       hidePreloaderAfterMin(2000, 3000);
   const cfg = await fetchConfig('assets/config/config.json');
       state.config = cfg;
-  // Update preloader logo to configured one as soon as config is ready
+      if (Array.isArray(cfg.sections) && cfg.sections.length){
+        state.sectionsOrder = cfg.sections.map(s=> s.id).filter(Boolean);
+      }
+      if (isDebug()){ console.info('[Init] Debug on'); }
   updatePreloaderLogo(cfg.navigation?.header?.logo);
       await ensureLibraries(cfg.libraries);
       if (window.gsap && window.ScrollTrigger && gsap.registerPlugin) {
@@ -46,7 +58,6 @@
       }
       applyDesignTokens(cfg.designTokens);
       applyHeadMeta(cfg);
-  // Preload hero image for LCP
   try { const p=document.createElement('link'); p.rel='preload'; p.as='image'; p.href = (function(){ const u = asset(chooseHeroImage(cfg)); try { return new URL(u, location.href).href; } catch { return u; } })(); document.head.appendChild(p); } catch(e){}
       buildHeader(cfg);
       await renderSections(cfg);
@@ -56,8 +67,18 @@
       initNavActiveObserver();
       initProgressBar();
       injectAnalytics(cfg.site?.analytics);
-      // Refresh after images/swipers load
-      setTimeout(() => { if (window.ScrollTrigger) window.ScrollTrigger.refresh(); }, 800);
+  setTimeout(() => { if (window.ScrollTrigger) window.ScrollTrigger.refresh(); }, 800);
+  setTimeout(()=>{ try { document.body.classList.remove('preload-active'); } catch(_){} }, 1200);
+      if (isDebug()){
+        console.info('[Libs]', {
+          hasLenis: !!window.Lenis,
+          hasGSAP: !!window.gsap,
+          hasScrollTrigger: !!window.ScrollTrigger,
+          hasAOS: !!window.AOS,
+          motionEnabled: motionEnabled(),
+          prefersReduced: prefersReducedMotion()
+        });
+      }
     } catch (err){
       console.error('Init failed:', err);
       // Preloader will auto-hide after the scheduled max timeout (3s)
@@ -263,9 +284,12 @@
   if (key === 'home') renderHero(body, cfg);
   else if (key === 'key-metrics') renderMetrics(body, cfg);
   else if (key === 'projects') renderProjectsSlider(body, cfg);
+  else if (key === 'apartments') renderApartments(body, cfg);
   else if (key === 'gallery') renderGallery(body, cfg);
   else if (key === 'news') renderNews(body, cfg);
   else if (key === 'contact') renderContact(body, cfg);
+  else if (key === 'legal') renderLegal(body, cfg);
+  else if (key === 'materials') renderMaterials(body, cfg);
   else { renderTwoCol(body, cfg, key, splitIndex); splitIndex++; }
 
       main.appendChild(section);
@@ -302,7 +326,7 @@
     if (window.gsap){
   const tl = gsap.timeline();
   tl.from(content.children, { opacity: 0, y: 18, duration: 0.7, ease: 'power2.out', stagger: 0.07, delay: 0.05 });
-      if (window.ScrollTrigger && !prefersReducedMotion()){
+      if (window.ScrollTrigger && motionEnabled()){
         gsap.fromTo(bg, { yPercent: -8 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: body.parentElement, start: 'top top', end: 'bottom top', scrub: 0.6 } });
       }
     }
@@ -343,7 +367,8 @@
     const p = document.createElement('p'); p.textContent = 'Thông tin đang được cập nhật. Đây là đoạn giới thiệu ngắn về mục này.';
     text.append(h3,p);
     const media = document.createElement('div'); media.className='media'; const img = document.createElement('img'); img.loading='lazy'; img.decoding='async'; img.alt = h3.textContent; img.src = asset(pickSectionImage(cfg, key)); img.classList.add('zoomable'); img.addEventListener('click', ()=> openLightbox(img.src, img.alt)); media.append(img);
-    wrap.append(text, media); body.append(wrap);
+  if ((idx % 2) === 1) wrap.classList.add('reverse-on-mobile');
+  wrap.append(text, media); body.append(wrap);
 
     // Mark for GSAP slide-in animations (alternate left/right by index)
     const leftFirst = (idx % 2) === 0; // even index: text from left, image from right; odd: reversed
@@ -351,7 +376,7 @@
     media.setAttribute('data-anim', leftFirst ? 'slide-right' : 'slide-left');
 
     // Parallax background for the section wrapper
-    if (window.gsap && window.ScrollTrigger && !prefersReducedMotion()){
+    if (window.gsap && window.ScrollTrigger && motionEnabled()){
       const sec = body.parentElement; sec.style.overflow='hidden';
       const bg = document.createElement('div'); bg.className='parallax-bg'; bg.style.position='absolute'; bg.style.inset='-10% -5%'; bg.style.background='radial-gradient(1200px 600px at 20% 0%, rgba(242,194,101,0.08), rgba(0,0,0,0))'; bg.style.pointerEvents='none';
       sec.prepend(bg);
@@ -395,7 +420,20 @@
     // init after next tick
     setTimeout(()=>{
       if (window.Swiper){
-        const merged = Object.assign({ speed: 600, effect: 'slide', grabCursor: true }, sliderCfg.config||{});
+        const slidesCount = (sliderCfg.slides||[]).length;
+        const baseCfg = Object.assign({ speed: 600, effect: 'slide', grabCursor: true, watchOverflow: true }, sliderCfg.config||{});
+        let spv = 1;
+        if (baseCfg.breakpoints){
+          const w = window.innerWidth || 1024;
+          const keys = Object.keys(baseCfg.breakpoints).map(k=>parseInt(k,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
+          keys.forEach(k=>{ if (w >= k && baseCfg.breakpoints[k]?.slidesPerView){ spv = baseCfg.breakpoints[k].slidesPerView; } });
+          const maxKey = Math.max(...keys, 0);
+          if (slidesCount <= spv && baseCfg.breakpoints[maxKey]){
+            baseCfg.breakpoints[maxKey].slidesPerView = Math.min(2, slidesCount);
+          }
+        }
+        if (slidesCount <= spv){ baseCfg.loop = false; }
+        const merged = baseCfg;
         const inst = new Swiper(container, merged);
         state.swiperInstances.push(inst);
         if(window.ScrollTrigger) ScrollTrigger.refresh();
@@ -452,6 +490,55 @@
 
     renderGrid();
   }
+
+  function renderApartments(body, cfg){
+    const grid = document.createElement('div'); grid.className='apartments-grid';
+    const imgs = (cfg.images?.folders?.['Mặt bằng căn hộ']) || (cfg.images?.summary?.folders||[]).find(f=>f.name==='Mặt bằng căn hộ')?.files || [];
+    imgs.forEach(src=>{
+      const card = document.createElement('a'); card.href=asset(src); card.className='apt-item';
+      const img=document.createElement('img'); img.src=asset(src); img.alt='Mặt bằng căn hộ'; img.loading='lazy'; img.decoding='async';
+      card.append(img); grid.append(card);
+      card.addEventListener('click', (e)=>{ e.preventDefault(); openLightbox(img.src, img.alt); });
+    });
+    body.append(grid);
+  }
+
+  function renderLegal(body, cfg){
+    const imgUrl = cfg.legal?.image;
+    if (imgUrl){
+      const box = document.createElement('div'); box.className='legal-banner';
+      const img = document.createElement('img'); img.src = asset(imgUrl); img.alt = 'Pháp lý'; img.loading='lazy'; img.decoding='async';
+      box.append(img); body.append(box);
+      return;
+    }
+    // Fallback: items list (if provided)
+    const list = (cfg.legal?.items)||[];
+    if (list.length){
+      const grid = document.createElement('div'); grid.className='legal-grid';
+      list.forEach((it, i)=>{
+        const card = document.createElement('div'); card.className='legal-card card'; card.setAttribute('data-anim', (i%2===0)?'slide-left':'slide-right');
+        const t=document.createElement('h3'); t.textContent = it.title||'Hồ sơ';
+        const p=document.createElement('p'); p.textContent = it.desc||'';
+        card.append(t,p); grid.append(card);
+      });
+      body.append(grid);
+    }
+  }
+
+  function renderMaterials(body, cfg){
+    const wrap = document.createElement('div'); wrap.className='materials';
+    const grid = document.createElement('div'); grid.className='materials-logos';
+    const logos = (cfg.materials?.logos||[]);
+    const singleBanner = logos.length === 1;
+    if (singleBanner) grid.classList.add('single');
+    logos.forEach((lg, i)=>{
+      const a=document.createElement('a'); a.href=lg.href||'#'; a.className='logo'; a.target='_blank'; a.rel='noopener'; a.setAttribute('aria-label', lg.name||'Đối tác');
+      if (lg.noInvert) a.classList.add('no-invert');
+      const img=document.createElement('img'); img.src=asset(lg.logo); img.alt=lg.name||'Đối tác'; img.loading='lazy'; img.decoding='async';
+      a.append(img); grid.append(a);
+    });
+    wrap.append(grid); body.append(wrap);
+  }
   function flattenImagesToGallery(cfg){
     const out = [];
     const map = [
@@ -490,12 +577,13 @@
     const grid = document.createElement('div'); grid.className='news-grid';
     for (let i=0; i<3; i++){
       const card = document.createElement('div'); card.className='news-card card';
-      card.setAttribute('data-aos','fade-up');
+      // Also add our own animation marker so GSAP/IO fallback reveals even if AOS misses due to smooth scroll
+      card.setAttribute('data-anim', (i % 2 === 0) ? 'slide-right' : 'slide-left');
       const img = document.createElement('img'); img.src = asset(chooseHeroImage(cfg)); img.alt='Tin tức'; img.loading='lazy'; img.decoding='async'; img.classList.add('zoomable'); img.addEventListener('click', ()=> openLightbox(img.src, img.alt));
       const title = document.createElement('h3'); title.textContent = `Tin tức ${i+1}`;
       const meta = document.createElement('div'); meta.className='meta'; meta.textContent = new Date().toLocaleDateString('vi-VN');
       const p = document.createElement('p'); p.textContent='Nội dung sẽ được cập nhật sau. Đây là mô tả ngắn của bài viết.';
-      const a = document.createElement('a'); a.href='#'; a.className='btn'; a.textContent='Xem chi tiết';
+      const a = document.createElement('a'); a.href='#'; a.className='btn btn-primary'; a.textContent='Xem chi tiết';
       card.append(img, title, meta, p, a); grid.append(card);
     }
     body.append(grid);
@@ -641,17 +729,23 @@
       window.__lenis = lenis;
       // Keep ScrollTrigger in sync with Lenis
       if (window.ScrollTrigger && typeof lenis.on === 'function') {
-        try { lenis.on('scroll', () => ScrollTrigger.update()); } catch(e){}
+        try { lenis.on('scroll', () => { ScrollTrigger.update(); if (window.AOS && motionEnabled()){ try { AOS.refresh(); } catch(_){} } }); } catch(e){}
       }
       function raf(time){ lenis.raf(time); if (window.ScrollTrigger) ScrollTrigger.update(); requestAnimationFrame(raf); }
       requestAnimationFrame(raf);
     }
 
-  // AOS
-  if (window.AOS){ AOS.init({ once: true, duration: 700, easing: 'ease-out' }); }
+    // AOS: enable if available; if motion disabled, mark body with aos-disabled to keep items visible
+    const bodyEl = document.body;
+    if (window.AOS && motionEnabled()){
+      AOS.init({ once: true, duration: 700, easing: 'ease-out' });
+      setTimeout(()=>{ try { AOS.refreshHard(); } catch(_) { try { AOS.refresh(); } catch(__){} } }, 100);
+    } else if (window.AOS){
+      bodyEl.classList.add('aos-disabled');
+    }
 
     // Section header reveals
-    if (window.gsap && window.ScrollTrigger && !prefersReducedMotion()){
+    if (window.gsap && window.ScrollTrigger && motionEnabled()){
       if (gsap.registerPlugin && window.ScrollTrigger) { try { gsap.registerPlugin(ScrollTrigger); } catch(e){} }
       const heads = Array.from(document.querySelectorAll('.section .section-head'));
       heads.forEach((el, idx)=>{
@@ -692,7 +786,7 @@
             }
           );
         });
-    } else if (!prefersReducedMotion()) {
+    } else if (motionEnabled()) {
       // Fallback: IntersectionObserver-based simple slide-ins (no GSAP/ScrollTrigger)
       const io = new IntersectionObserver((entries)=>{
         entries.forEach(e=>{
@@ -729,7 +823,10 @@
     }
 
     // Refresh triggers after full load
-    window.addEventListener('load', ()=>{ if (window.ScrollTrigger) window.ScrollTrigger.refresh(); }, { once: true });
+    window.addEventListener('load', ()=>{
+      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+      if (window.AOS && motionEnabled()) { try { AOS.refreshHard(); } catch(_) { try { AOS.refresh(); } catch(__){} } }
+    }, { once: true });
 
     // Floating CTA
     const fcta = document.getElementById('floating-cta');
@@ -760,32 +857,86 @@
   function prefersReducedMotion(){
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
+  function motionEnabled(){
+    // Allow override via URL param ?anim=on
+    try { const p = new URLSearchParams(location.search); if (p.get('anim')==='on') return true; } catch(e){}
+    return !prefersReducedMotion();
+  }
+  function isDebug(){
+    try { const p = new URLSearchParams(location.search); return p.get('debug')==='1'; } catch(e) { return false; }
+  }
 
   function buildFooter(cfg){
     const inner = document.getElementById('footer-inner'); inner.innerHTML='';
     const container = document.createElement('div'); container.className='container';
-    // Brand row
-    const brandRow = document.createElement('div'); brandRow.className='footer-brand';
-    const brand = document.createElement('div'); brand.className='brand';
+
+    // Top area
+    const top = document.createElement('div'); top.className = 'footer-top';
+
+    // Brand / about column
+    const brandCol = document.createElement('div'); brandCol.className = 'brand-col';
+    const brand = document.createElement('a'); brand.className='brand'; brand.href = cfg.navigation?.header?.logoHref || '#home';
     const logo = document.createElement('img'); logo.alt = 'Logo'; logo.loading='lazy'; logo.decoding='async'; logo.src = asset(cfg.navigation?.header?.logo || 'assets/imgs/logo.png');
-    const title = document.createElement('span'); title.className='title'; title.textContent = cfg.site?.title || '';
-    brand.append(logo, title);
+    // const title = document.createElement('span'); title.className='title'; title.textContent = cfg.site?.title || '';
+    brand.append(logo);
     const tagline = document.createElement('p'); tagline.className='tagline'; tagline.textContent = cfg.site?.meta?.description || '';
-    brandRow.append(brand, tagline);
+    // hotline chip if present
+    const hotlineStr = (cfg.site?.contacts||[]).find(s=>/hotline|\b0\d{8,}/i.test(s||''));
+    let hotlineBtn = null;
+    if (hotlineStr){
+      const num = (hotlineStr.match(/\d[\d\s\.\-]{7,}/)||[])[0];
+      const tel = num ? `tel:${num.replace(/[^\d+]/g,'')}` : '#contact';
+      hotlineBtn = document.createElement('a'); hotlineBtn.href = tel; hotlineBtn.className = 'chip hotline'; hotlineBtn.setAttribute('aria-label','Gọi hotline'); hotlineBtn.textContent = (num?`Hotline ${num.replace(/\s+/g,'')}`:'Hotline');
+    }
+    brandCol.append(brand, tagline); if (hotlineBtn) brandCol.append(hotlineBtn);
 
-    // Columns row
-    const cols = document.createElement('div'); cols.className='cols';
-    const linksCol = document.createElement('div'); const hLinks=document.createElement('h4'); hLinks.textContent='Liên kết'; const ulLinks=document.createElement('ul'); ulLinks.className='link-list';
-    const links = dedupeLinks([...(cfg.navigation?.header?.current||[]), ...(cfg.navigation?.header?.next||[]), ...(cfg.navigation?.footerLinks||[])]);
-    links.forEach(l=>{ const li=document.createElement('li'); const a=document.createElement('a'); a.href=l.href; a.textContent=l.label; li.append(a); ulLinks.append(li); });
+    // Links column (site sections only)
+    const linksCol = document.createElement('nav'); linksCol.className='links-col'; linksCol.setAttribute('aria-label','Liên kết nhanh');
+    const hLinks=document.createElement('h4'); hLinks.textContent='Liên kết';
+    const ulLinks=document.createElement('ul'); ulLinks.className='link-list';
+    const sectionLinks = dedupeLinks([...(cfg.navigation?.header?.current||[]), ...(cfg.navigation?.header?.next||[])]);
+    sectionLinks.forEach(l=>{ const li=document.createElement('li'); const a=document.createElement('a'); a.href=l.href; a.textContent=l.label; li.append(a); ulLinks.append(li); });
     linksCol.append(hLinks, ulLinks);
-    const contactCol = document.createElement('div'); const hContact=document.createElement('h4'); hContact.textContent='Liên hệ'; const ulContact=document.createElement('ul'); ulContact.className='contact-list';
-    ;(cfg.site?.contacts||[]).forEach(c=>{ const li=document.createElement('li'); li.textContent = c; ulContact.append(li); });
-    contactCol.append(hContact, ulContact);
-    cols.append(linksCol, contactCol);
 
-    // Append to footer
-    container.append(brandRow, cols);
+    // Contact column (make phone/email clickable when possible)
+    const contactCol = document.createElement('div'); contactCol.className='contact-col';
+    const hContact=document.createElement('h4'); hContact.textContent='Liên hệ';
+    const ulContact=document.createElement('ul'); ulContact.className='contact-list';
+    (cfg.site?.contacts||[]).forEach(c=>{
+      const li=document.createElement('li');
+      const txt = String(c||'');
+      if (/email|@/i.test(txt)){
+        const mail = (txt.match(/[\w.\-+]+@[\w\-]+\.[\w.\-]+/i)||[])[0];
+        if (mail){ const a=document.createElement('a'); a.href=`mailto:${mail}`; a.textContent=txt; li.append(a); }
+        else { li.textContent = txt; }
+      } else if (/hotline|\d{8,}/i.test(txt)){
+        const num = (txt.match(/\d[\d\s\.\-]{7,}/)||[])[0];
+        if (num){ const a=document.createElement('a'); a.href=`tel:${num.replace(/[^\d+]/g,'')}`; a.textContent=txt; li.append(a); }
+        else { li.textContent = txt; }
+      } else {
+        li.textContent = txt;
+      }
+      ulContact.append(li);
+    });
+    contactCol.append(hContact, ulContact);
+
+    top.append(brandCol, linksCol, contactCol);
+
+    // Divider
+    const divider = document.createElement('hr'); divider.className = 'divider'; divider.setAttribute('aria-hidden','true');
+
+    // Bottom area
+    const bottom = document.createElement('div'); bottom.className = 'footer-bottom';
+    const copy = document.createElement('div'); copy.className='copyright';
+    const year = new Date().getFullYear();
+    copy.textContent = `© ${year} ${cfg.site?.title || ''}`.trim();
+    const policyNav = document.createElement('nav'); policyNav.className='policy'; policyNav.setAttribute('aria-label','Điều khoản');
+    const ulPolicy = document.createElement('ul');
+    (cfg.navigation?.footerLinks||[]).forEach(l=>{ const li=document.createElement('li'); const a=document.createElement('a'); a.href=l.href; a.textContent=l.label; li.append(a); ulPolicy.append(li); });
+    policyNav.append(ulPolicy);
+    bottom.append(copy, policyNav);
+
+    container.append(top, divider, bottom);
     inner.append(container);
   }
 

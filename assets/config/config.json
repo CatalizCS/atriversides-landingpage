@@ -70,7 +70,8 @@
       "next": [
         { "label": "Dự án", "href": "#projects" },
         { "label": "Căn hộ", "href": "#apartments" },
-        { "label": "Tiện ích", "href": "#amenities" },
+        { "label": "Pháp lý", "href": "#legal" },
+        { "label": "VL bàn giao", "href": "#materials" },
         { "label": "Bộ sưu tập", "href": "#gallery" },
         { "label": "Tin tức", "href": "#news" },
         { "label": "Liên hệ", "href": "#contact" }
@@ -85,14 +86,25 @@
     { "id": "home", "label": "Trang chủ" },
     { "id": "key-metrics", "label": "Chỉ số nổi bật" },
     { "id": "project-info", "label": "Thông tin dự án" },
+    { "id": "legal", "label": "Pháp lý" },
     { "id": "location", "label": "Vị trí & Kết nối" },
-    { "id": "projects", "label": "Dự án nổi bật" },
     { "id": "apartments", "label": "Mặt bằng căn hộ" },
-    { "id": "amenities", "label": "Tiện ích" },
+    { "id": "projects", "label": "Tiện ích nội khu" },
+    { "id": "materials", "label": "Vật liệu bàn giao" },
     { "id": "gallery", "label": "Bộ sưu tập" },
     { "id": "news", "label": "Tin tức" },
     { "id": "contact", "label": "Liên hệ" }
   ],
+  "legal": {
+    "image": "/assets/imgs/Pháp lý.jpg"
+  },
+  
+  "materials": {
+    "title": "Đối tác vật liệu & nhà tài trợ",
+    "logos": [
+      { "name": "Vật liệu bàn giao", "logo": "/assets/imgs/Vật liệu bàn giao.jpg", "href": "#", "noInvert": true }
+    ]
+  },
   "counters": {
     "legacy": [
       { "label": "Diện tích khu đất (ha)", "value": 12 },
@@ -117,9 +129,9 @@
         }
       },
       "slides": [
-        { "title": "Tháp A", "desc": "View sông", "image": "/assets/imgs/Phối cảnh dự án/z7003389721482_9c40dac15ea0143ad73919ddc0dbcfaf.jpg" },
-        { "title": "Tháp B", "desc": "Nội khu", "image": "/assets/imgs/Phối cảnh dự án/z7003389707041_a501076caa35abe3077d72d00e52ae55.jpg" },
-        { "title": "Tháp C", "desc": "Công viên", "image": "/assets/imgs/Phối cảnh dự án/z7003389608601_444b41af1241baa7041719b650cb4dbb.jpg" }
+        { "title": "Gym", "desc": "Phòng tập hiện đại", "image": "/assets/imgs/Tiện ích nội và Ngoại khu/z7003389608604_5f4a34f1d2e7b57f2aa2a52dd40aa503.jpg" },
+        { "title": "Spa", "desc": "Khu thư giãn", "image": "/assets/imgs/Tiện ích nội và Ngoại khu/z7003389608605_908a9f1cb760062177615b0455c0ba9d.jpg" },
+        { "title": "Hồ bơi", "desc": "Không gian xanh mát", "image": "/assets/imgs/Tiện ích nội và Ngoại khu/z7003389608607_2a68b36e2bbc76a38c6fa27f7b52c97f.jpg" }
       ]
     }
   ],
@@ -137,7 +149,7 @@
     "leadForm": {
       "id": "lead",
       "title": "Đăng ký tư vấn",
-      "googleFormAction": "https://docs.google.com/forms/u/0/d/e/1FAIpQLScQ-demo-form-id/formResponse",
+      "googleFormAction": "https://docs.google.com/forms/u/0/d/e/1FAIpQLScmIpZcewi8w0oeyWUOKPprybM9pLMoq5IZbHt1hiSAu56_ow/formResponse",
       "targetIframe": "lead_iframe",
       "submitLabel": "Gửi thông tin",
       "fields": [
@@ -147,12 +159,12 @@
         { "name": "apartment", "label": "Loại căn quan tâm", "type": "select", "options": ["Studio", "1PN", "2PN", "3PN"] },
         { "name": "hp", "label": "Leave empty", "type": "text" }
       ],
-      "entryMap": { "name": "1111111", "phone": "2222222", "email": "3333333", "apartment": "4444444" }
+      "entryMap": { "name": "223043346", "phone": "1607246013", "email": "1947902975", "apartment": "707847209" }
     },
     "contactForm": {
       "id": "contact",
       "title": "Liên hệ",
-      "googleFormAction": "https://docs.google.com/forms/u/0/d/e/1FAIpQLScQ-demo-form-id/formResponse",
+      "googleFormAction": "https://docs.google.com/forms/u/0/d/e/1FAIpQLScmIpZcewi8w0oeyWUOKPprybM9pLMoq5IZbHt1hiSAu56_ow/formResponse",
       "targetIframe": "contact_iframe",
       "submitLabel": "Gửi liên hệ",
       "fields": [
@@ -163,7 +175,7 @@
         { "name": "message", "label": "Lời nhắn", "type": "textarea", "placeholder": "Nội dung liên hệ" },
         { "name": "hp", "label": "Leave empty", "type": "text" }
       ],
-      "entryMap": { "name": "5555555", "phone": "6666666", "email": "7777777", "apartment": "8888888", "message": "9999999" }
+      "entryMap": { "name": "223043346", "phone": "1607246013", "email": "1947902975", "apartment": "707847209", "message": "641513450" }
     }
   },
   "cta": {
@@ -193,7 +205,15 @@
         ]},
         { "name": "Mặt bằng căn hộ", "files": [
           "/assets/imgs/Mặt bằng căn hộ/A01 và A02.jpg",
+          "/assets/imgs/Mặt bằng căn hộ/A05 và A06.jpg",
+          "/assets/imgs/Mặt bằng căn hộ/A07 và A08.jpg",
+          "/assets/imgs/Mặt bằng căn hộ/A09 và A10.jpg",
           "/assets/imgs/Mặt bằng căn hộ/B01 và B02.jpg",
+          "/assets/imgs/Mặt bằng căn hộ/B03 và B04.jpg",
+          "/assets/imgs/Mặt bằng căn hộ/B05 và B06.jpg",
+          "/assets/imgs/Mặt bằng căn hộ/B07 và B08.jpg",
+          "/assets/imgs/Mặt bằng căn hộ/B09 và B10.jpg",
+          "/assets/imgs/Mặt bằng căn hộ/B11 và B11A.jpg",
           "/assets/imgs/Mặt bằng căn hộ/Căn 1pn/z7013198911869_b495d22b380a7da9f6365052b4de8a22.jpg"
         ]}
       ]
@@ -210,7 +230,16 @@
         "/assets/imgs/Vị trí và kết nối vùng/z7003389608600_2d35237e5026dfc803c52baf1149818b.jpg"
       ],
       "Mặt bằng căn hộ": [
-        "/assets/imgs/Mặt bằng căn hộ/A01 và A02.jpg"
+        "/assets/imgs/Mặt bằng căn hộ/A01 và A02.jpg",
+        "/assets/imgs/Mặt bằng căn hộ/A05 và A06.jpg",
+        "/assets/imgs/Mặt bằng căn hộ/A07 và A08.jpg",
+        "/assets/imgs/Mặt bằng căn hộ/A09 và A10.jpg",
+        "/assets/imgs/Mặt bằng căn hộ/B01 và B02.jpg",
+        "/assets/imgs/Mặt bằng căn hộ/B03 và B04.jpg",
+        "/assets/imgs/Mặt bằng căn hộ/B05 và B06.jpg",
+        "/assets/imgs/Mặt bằng căn hộ/B07 và B08.jpg",
+        "/assets/imgs/Mặt bằng căn hộ/B09 và B10.jpg",
+        "/assets/imgs/Mặt bằng căn hộ/B11 và B11A.jpg"
       ]
     }
   }
