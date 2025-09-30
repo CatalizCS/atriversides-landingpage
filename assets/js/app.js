@@ -10,10 +10,36 @@
 
   document.addEventListener('DOMContentLoaded', init);
 
+      // Preloader helpers
+      let __preloaderEl = null; let __preloaderHidden = false; let __preloaderStart = 0;
+      function showPreloader(defaultLogo){
+        if (__preloaderEl) return; __preloaderStart = performance.now();
+        const d = document.createElement('div'); d.id='preloader'; d.setAttribute('aria-busy','true'); d.setAttribute('aria-live','polite');
+        const inner = document.createElement('div'); inner.className='inner';
+        const img = document.createElement('img'); img.className='logo'; img.alt='Logo'; img.loading='eager'; img.decoding='async'; img.src = defaultLogo || 'assets/imgs/logo.png';
+        const bar = document.createElement('div'); bar.className='bar';
+        inner.append(img, bar); d.append(inner); document.body.append(d); __preloaderEl = d;
+      }
+      function updatePreloaderLogo(u){
+        if(!__preloaderEl || !u) return; const img = __preloaderEl.querySelector('img.logo'); if(img){ try { img.src = asset(u); } catch(_){} }
+      }
+      function hidePreloaderAfterMin(minMs=2000, maxMs=3000){
+        const hide = ()=>{ if(__preloaderHidden) return; __preloaderHidden = true; const el = __preloaderEl; if(!el) return; el.classList.add('hide'); setTimeout(()=>{ el.remove(); __preloaderEl=null; }, 650); };
+        const elapsed = performance.now() - __preloaderStart; const remain = Math.max(0, minMs - elapsed);
+        // Always keep at least minMs, and force-hide at maxMs
+        setTimeout(hide, remain);
+        setTimeout(hide, maxMs);
+      }
+
   async function init(){
     try {
+  // Show preloader immediately and schedule hide window
+      showPreloader('assets/imgs/logo.png');
+      hidePreloaderAfterMin(2000, 3000);
   const cfg = await fetchConfig('assets/config/config.json');
       state.config = cfg;
+  // Update preloader logo to configured one as soon as config is ready
+  updatePreloaderLogo(cfg.navigation?.header?.logo);
       await ensureLibraries(cfg.libraries);
       if (window.gsap && window.ScrollTrigger && gsap.registerPlugin) {
         try { gsap.registerPlugin(ScrollTrigger); } catch(e){}
@@ -25,6 +51,7 @@
       buildHeader(cfg);
       await renderSections(cfg);
       buildFooter(cfg);
+      
       initSmoothScrollAndAnimations();
       initNavActiveObserver();
       initProgressBar();
@@ -33,6 +60,7 @@
       setTimeout(() => { if (window.ScrollTrigger) window.ScrollTrigger.refresh(); }, 800);
     } catch (err){
       console.error('Init failed:', err);
+      // Preloader will auto-hide after the scheduled max timeout (3s)
     }
   }
 
@@ -153,9 +181,14 @@
       ...(cfg.navigation?.header?.next || []),
       ...(cfg.navigation?.footerLinks || []),
     ]);
-    links.forEach(l=>{
-      const li=document.createElement('li'); const a=document.createElement('a'); a.href=l.href; a.textContent=l.label; a.setAttribute('data-target', l.href);
-      li.appendChild(a); ul.appendChild(li);
+    // Desktop: keep first N links and collapse the rest into a "More" menu
+    const MAX_DESKTOP_PRIMARY = 4;
+    const primary = links.slice(0, MAX_DESKTOP_PRIMARY);
+    const overflow = links.slice(MAX_DESKTOP_PRIMARY);
+
+    function attachLink(liEl, link){
+      const a=document.createElement('a'); a.href=link.href; a.textContent=link.label; a.setAttribute('data-target', link.href);
+      liEl.appendChild(a);
       a.addEventListener('click', (e)=>{
         const href = a.getAttribute('href')||'';
         if(href.startsWith('#')){
@@ -169,7 +202,20 @@
           }
         }
       });
-    });
+    }
+
+    primary.forEach(l=>{ const li=document.createElement('li'); attachLink(li, l); ul.appendChild(li); });
+    if (overflow.length){
+      const moreLi=document.createElement('li'); moreLi.className='more';
+      const btn=document.createElement('button'); btn.type='button'; btn.className='more-toggle'; btn.setAttribute('aria-haspopup','true'); btn.setAttribute('aria-expanded','false'); btn.textContent='Thêm';
+      const menu=document.createElement('ul'); menu.className='more-menu';
+      overflow.forEach(l=>{ const li=document.createElement('li'); attachLink(li, l); menu.appendChild(li); });
+      moreLi.append(btn, menu); ul.appendChild(moreLi);
+      const closeMore = ()=>{ moreLi.classList.remove('open'); btn.setAttribute('aria-expanded','false'); };
+      btn.addEventListener('click', (e)=>{ e.stopPropagation(); const open = moreLi.classList.toggle('open'); btn.setAttribute('aria-expanded', String(open)); });
+      document.addEventListener('click', (e)=>{ if(!moreLi.contains(e.target)) closeMore(); });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeMore(); });
+    }
     nav.appendChild(ul);
     headerInner.append(brand, toggle, nav);
 
@@ -189,7 +235,7 @@
       }
     });
     // Close on link click or ESC
-    function closeNav(){ toggle.setAttribute('aria-expanded','false'); nav.classList.remove('open'); document.body.classList.remove('nav-open'); if (backdrop) backdrop.hidden = true; if (window.__lenis && typeof window.__lenis.start==='function') window.__lenis.start(); }
+  function closeNav(){ toggle.setAttribute('aria-expanded','false'); nav.classList.remove('open'); document.body.classList.remove('nav-open'); if (backdrop) backdrop.hidden = true; if (window.__lenis && typeof window.__lenis.start==='function') window.__lenis.start(); const m = nav.querySelector('.more.open'); if(m){ m.classList.remove('open'); const b=m.querySelector('.more-toggle'); b&&b.setAttribute('aria-expanded','false'); } }
     nav.addEventListener('click', (e)=>{ const a=e.target.closest('a'); if(a){ closeNav(); } });
     if (backdrop) backdrop.addEventListener('click', closeNav);
     document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ closeNav(); } });
@@ -439,8 +485,10 @@
 
   function renderContact(body, cfg){
     const wrap = document.createElement('div'); wrap.className='forms';
-    wrap.append(buildForm(cfg.forms?.leadForm, true), buildForm(cfg.forms?.contactForm, false));
+    // Only keep one registration form to avoid duplication
+    const lead = buildForm(cfg.forms?.leadForm, true);
     body.append(wrap);
+    wrap.append(lead);
   }
 
   function buildForm(formCfg, isLead){
@@ -697,17 +745,30 @@
 
   function buildFooter(cfg){
     const inner = document.getElementById('footer-inner'); inner.innerHTML='';
-    const cols = document.createElement('div'); cols.className='cols container';
-    const about = document.createElement('div'); const h=document.createElement('h4'); h.textContent=cfg.site?.title||''; const p=document.createElement('p'); p.textContent= cfg.site?.meta?.description || ''; about.append(h,p);
-    const links1 = document.createElement('div'); const h1=document.createElement('h4'); h1.textContent='Liên kết'; const ul1=document.createElement('ul'); ul1.style.listStyle='none'; ul1.style.padding='0';
+    const container = document.createElement('div'); container.className='container';
+    // Brand row
+    const brandRow = document.createElement('div'); brandRow.className='footer-brand';
+    const brand = document.createElement('div'); brand.className='brand';
+    const logo = document.createElement('img'); logo.alt = 'Logo'; logo.loading='lazy'; logo.decoding='async'; logo.src = asset(cfg.navigation?.header?.logo || 'assets/imgs/logo.png');
+    const title = document.createElement('span'); title.className='title'; title.textContent = cfg.site?.title || '';
+    brand.append(logo, title);
+    const tagline = document.createElement('p'); tagline.className='tagline'; tagline.textContent = cfg.site?.meta?.description || '';
+    brandRow.append(brand, tagline);
+
+    // Columns row
+    const cols = document.createElement('div'); cols.className='cols';
+    const linksCol = document.createElement('div'); const hLinks=document.createElement('h4'); hLinks.textContent='Liên kết'; const ulLinks=document.createElement('ul'); ulLinks.className='link-list';
     const links = dedupeLinks([...(cfg.navigation?.header?.current||[]), ...(cfg.navigation?.header?.next||[]), ...(cfg.navigation?.footerLinks||[])]);
-    links.forEach(l=>{ const li=document.createElement('li'); const a=document.createElement('a'); a.href=l.href; a.textContent=l.label; li.append(a); ul1.append(li); });
-    links1.append(h1, ul1);
-    const contact = document.createElement('div'); const h2=document.createElement('h4'); h2.textContent='Liên hệ'; const ul2=document.createElement('ul'); ul2.style.listStyle='none'; ul2.style.padding='0';
-    ;(cfg.site?.contacts||[]).forEach(c=>{ const li=document.createElement('li'); li.textContent = c; ul2.append(li); });
-    contact.append(h2, ul2);
-    cols.append(about, links1, contact);
-    inner.append(cols);
+    links.forEach(l=>{ const li=document.createElement('li'); const a=document.createElement('a'); a.href=l.href; a.textContent=l.label; li.append(a); ulLinks.append(li); });
+    linksCol.append(hLinks, ulLinks);
+    const contactCol = document.createElement('div'); const hContact=document.createElement('h4'); hContact.textContent='Liên hệ'; const ulContact=document.createElement('ul'); ulContact.className='contact-list';
+    ;(cfg.site?.contacts||[]).forEach(c=>{ const li=document.createElement('li'); li.textContent = c; ulContact.append(li); });
+    contactCol.append(hContact, ulContact);
+    cols.append(linksCol, contactCol);
+
+    // Append to footer
+    container.append(brandRow, cols);
+    inner.append(container);
   }
 
   function injectAnalytics(a){
