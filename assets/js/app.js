@@ -394,7 +394,12 @@
 
     // init after next tick
     setTimeout(()=>{
-      if (window.Swiper){ const inst = new Swiper(container, sliderCfg.config||{}); state.swiperInstances.push(inst); if(window.ScrollTrigger) ScrollTrigger.refresh(); }
+      if (window.Swiper){
+        const merged = Object.assign({ speed: 600, effect: 'slide', grabCursor: true }, sliderCfg.config||{});
+        const inst = new Swiper(container, merged);
+        state.swiperInstances.push(inst);
+        if(window.ScrollTrigger) ScrollTrigger.refresh();
+      }
     }, 0);
   }
 
@@ -422,14 +427,27 @@
     });
 
     function renderGrid(){
-      grid.innerHTML='';
       const list = items.filter(it=> active==='all' || it.category===active);
-      list.forEach(it=>{
-  const a=document.createElement('a'); a.href=asset(it.src); a.className='item'; a.setAttribute('data-category', it.category);
-  const img=document.createElement('img'); img.src=asset(it.src); img.alt=it.alt||it.category; img.loading='lazy'; img.decoding='async';
-        a.append(img); grid.append(a);
-        if (cfg.gallery?.itemsUseLightbox) a.addEventListener('click', (e)=>{ e.preventDefault(); openLightbox(it.src, img.alt); });
-      })
+      const firstTime = !grid.dataset.ready;
+      const swapIn = ()=>{
+        grid.innerHTML='';
+        list.forEach((it, idx)=>{
+          const a=document.createElement('a'); a.href=asset(it.src); a.className='item'; a.setAttribute('data-category', it.category);
+          const img=document.createElement('img'); img.src=asset(it.src); img.alt=it.alt||it.category; img.loading='lazy'; img.decoding='async';
+          a.append(img); grid.append(a);
+          if (cfg.gallery?.itemsUseLightbox) a.addEventListener('click', (e)=>{ e.preventDefault(); openLightbox(it.src, img.alt); });
+          // Intro animation
+          a.style.opacity='0'; a.style.transform='translateY(10px)'; a.style.transition='opacity .35s ease, transform .35s ease';
+          requestAnimationFrame(()=>{ setTimeout(()=>{ a.style.opacity='1'; a.style.transform='translateY(0)'; }, idx*25); });
+        });
+        grid.dataset.ready='1';
+        if (window.ScrollTrigger) setTimeout(()=> ScrollTrigger.refresh(), 50);
+      };
+      if (firstTime){ swapIn(); return; }
+      // Fade out current items, then swap
+      const olds = Array.from(grid.children);
+      olds.forEach((el, i)=>{ el.style.transition='opacity .25s ease, transform .25s ease'; setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateY(8px)'; }, i*15); });
+      setTimeout(swapIn, Math.min(300, 150 + olds.length*20));
     }
 
     renderGrid();
