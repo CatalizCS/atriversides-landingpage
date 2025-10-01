@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Allow: /sitemap.xml
+Allow: /feed.xml
 
 # Allow specific file types that are important for SEO
 Allow: /assets/css/
@@ -28,7 +30,7 @@ Allow: /*.svg$
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: https://atsaigonriverside.vn/sitemap.xml
+Sitemap:https://atsaigonriver-side.com/sitemap.xml
 
 # Specific instructions for major search engines
 User-agent: Googlebot
@@ -53,5 +55,5 @@ Crawl-delay: 10
 User-agent: SemrushBot
 Crawl-delay: 10
 
-# Host directive (helps with canonical URL)
-Host: https://atsaigonriverside.vn
+# Host directive (match site canonical)
+Host: https://atsaigonriver-side.com

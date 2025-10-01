@@ -1,0 +1,74 @@
+name: Build & Deploy (Minified)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Prepare dist
+        run: |
+          mkdir -p dist
+          cp -r assets dist/
+          cp -f index.html dist/ || true
+          cp -f 404.html dist/ || true
+          cp -f robots.txt dist/ || true
+          # Ensure folders exist
+          mkdir -p dist/assets/css dist/assets/js
+
+      - name: Generate sitemap and RSS
+        run: |
+          node scripts/generate-sitemap.js
+          node scripts/generate-rss.js
+          cp -f sitemap.xml dist/ || true
+          cp -f feed.xml dist/ || true
+
+      - name: Minify JavaScript
+        run: |
+          npx --yes terser assets/js/app.js -o dist/assets/js/app.js -c -m
+
+      - name: Minify CSS
+        run: |
+          npx --yes csso-cli assets/css/style.css --output dist/assets/css/style.css
+
+      - name: List output
+        run: |
+          du -h dist -d 2 || true
+          ls -la dist/assets/js
+          ls -la dist/assets/css
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
