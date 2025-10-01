@@ -42,6 +42,13 @@
 
   async function init(){
     try {
+      try {
+        const usp = new URLSearchParams(location.search);
+        if (usp.has('redirect')){
+          const cleaned = location.pathname.replace(/index\.html$/i, '') + (location.hash || '#home');
+          history.replaceState(null, '', cleaned);
+        }
+      } catch(_){}
   // Show preloader immediately and schedule hide window
       showPreloader('assets/imgs/logo.png');
       hidePreloaderAfterMin(2000, 3000);
@@ -216,10 +223,17 @@
           e.preventDefault();
           const target = document.querySelector(href);
           if (!target) return;
+          // If mobile nav is open, close it so scrolling isn't blocked
+          try {
+            const navEl = document.querySelector('nav.primary-nav');
+            if (navEl && navEl.classList.contains('open')) { closeNav(); }
+          } catch(_){}
+          const headerH = (document.getElementById('site-header')?.offsetHeight || 0) + 6;
           if (window.__lenis && typeof window.__lenis.scrollTo === 'function') {
-            window.__lenis.scrollTo(target, { offset: -10 });
+            window.__lenis.scrollTo(target, { offset: -headerH });
           } else {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const top = target.getBoundingClientRect().top + (window.scrollY || window.pageYOffset) - headerH;
+            try { window.scrollTo({ top, behavior: 'smooth' }); } catch(_) { window.scrollTo(0, top); }
           }
         }
       });
@@ -711,10 +725,19 @@
 
   function initProgressBar(){
     const bar = document.getElementById('progress-bar');
-    const onScroll = ()=>{
-      const h = document.documentElement; const sc = h.scrollTop; const max = h.scrollHeight - h.clientHeight; const p = max>0 ? (sc/max) : 0; bar.style.transform = `scaleX(${p})`;
+    const computeProgress = ()=>{
+      const h = document.documentElement;
+      const sc = h.scrollTop || window.scrollY || 0;
+      const max = h.scrollHeight - h.clientHeight;
+      const p = max>0 ? (sc/max) : 0;
+      bar.style.transform = `scaleX(${p})`;
     };
-    document.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    document.addEventListener('scroll', computeProgress, { passive: true });
+    // If Lenis is active, also update on its internal scroll events
+    if (window.__lenis && typeof window.__lenis.on === 'function'){
+      try { window.__lenis.on('scroll', computeProgress); } catch(_){}
+    }
+    computeProgress();
   }
 
   function initSmoothScrollAndAnimations(){
@@ -733,6 +756,29 @@
       }
       function raf(time){ lenis.raf(time); if (window.ScrollTrigger) ScrollTrigger.update(); requestAnimationFrame(raf); }
       requestAnimationFrame(raf);
+
+      // Safety: if smooth scroll locks the page (no wheel), auto-disable Lenis and fall back to native scroll
+      setTimeout(()=>{
+        try {
+          const before = window.scrollY || document.documentElement.scrollTop || 0;
+          window.scrollTo(0, before + 1);
+          setTimeout(()=>{
+            const now = window.scrollY || document.documentElement.scrollTop || 0;
+            // Restore position
+            window.scrollTo(0, before);
+            if (now === before) {
+              // Scrolling didn't move -> disable Lenis
+              try { lenis.destroy?.(); } catch(_){}
+              window.__lenis = null;
+              // Remove Lenis classes/styles if set
+              const html = document.documentElement; html.classList.remove('lenis','lenis-smooth','lenis-stopped');
+              html.style.removeProperty('height'); html.style.removeProperty('overflow');
+              // Ensure progress continues to update on native scroll only
+              if (typeof initProgressBar === 'function') initProgressBar();
+            }
+          }, 80);
+        } catch(_){}
+      }, 300);
     }
 
     // AOS: enable if available; if motion disabled, mark body with aos-disabled to keep items visible

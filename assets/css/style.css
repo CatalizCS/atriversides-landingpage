@@ -4,7 +4,11 @@
 * { box-sizing: border-box; }
 img { max-width: 100%; height: auto; display: block; }
 svg { display: block; }
-html, body { overflow-x: hidden; }
+html, body { overflow-x: hidden; scroll-behavior: smooth; }
+/* Ensure native anchor jumps account for fixed header */
+html { scroll-padding-top: var(--header-h); }
+/* Prevent background scroll when mobile nav is open */
+body.nav-open { overflow: hidden; }
 .zoomable { cursor: zoom-in; }
 
 .container { width: min(1200px, 92%); margin: 0 auto; }

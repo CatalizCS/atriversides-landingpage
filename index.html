@@ -33,12 +33,12 @@
       --header-h: 70px;
       --progress-h: 3px;
     }
-    html, body { height: 100%; }
-    body { margin: 0; font-family: var(--font-sans); color: var(--color-text); background: var(--color-bg-alt); -webkit-font-smoothing: antialiased; }
+  html { min-height: 100%; }
+  body { margin: 0; min-height: 100%; font-family: var(--font-sans); color: var(--color-text); background: var(--color-bg-alt); -webkit-font-smoothing: antialiased; }
     .skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
     .skip-link:focus { left: 16px; top: 16px; width:auto; height:auto; padding:8px 12px; background:#111; color:#fff; border-radius:8px; box-shadow: var(--focus-ring); z-index: 9999; }
 
-    header.site-header { position: sticky; top: 0; z-index: 1000; height: var(--header-h); display:flex; align-items:center; backdrop-filter: saturate(140%) blur(0px); background: rgba(8,10,15,0.35); border-bottom: 1px solid rgba(255,255,255,0.06); transition: background 0.3s ease, backdrop-filter 0.3s ease; }
+  header.site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: var(--header-h); display:flex; align-items:center; backdrop-filter: saturate(140%) blur(0px); background: rgba(8,10,15,0.35); border-bottom: 1px solid rgba(255,255,255,0.06); transition: background 0.3s ease, backdrop-filter 0.3s ease; }
     header.site-header.scrolled { background: rgba(8,10,15,0.6); backdrop-filter: saturate(160%) blur(10px); }
     .container { width: min(1200px, 92%); margin: 0 auto; }
     .brand { display:flex; align-items:center; gap: 12px; text-decoration: none; color: inherit; }
@@ -54,7 +54,7 @@
     main { display:block; }
     section.section { position: relative; padding: var(--space-2xl) 0; }
 
-    .hero { min-height: calc(100svh - var(--header-h)); position: relative; display:grid; place-items:center; overflow:hidden; }
+  .hero { min-height: 100svh; position: relative; display:grid; place-items:center; overflow:hidden; }
     .hero .bg { position:absolute; inset:0; background-size: cover; background-position:center; }
     .hero .overlay { position:absolute; inset:0; background: var(--grad-hero-overlay); }
     .hero .content { position: relative; z-index:2; text-align:center; padding: 0 1rem; }

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đang chuyển hướng…</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/imgs/logo.png">
+  <style>
+    html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background: #0d0f14; color: #f5f7fa; }
+    .wrap { height: 100%; display:grid; place-items:center; text-align:center; padding: 24px; }
+    .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 22px; max-width: 560px; }
+    .muted { opacity: .85; }
+  </style>
+  <script>
+    (function(){
+      // GitHub Pages SPA redirect handling per https://github.com/rafgraph/spa-github-pages
+      var l = window.location;
+      if (l.search) {
+        var q = {};
+        l.search.substr(1).split('&').forEach(function(v){ var a=v.split('='); q[decodeURIComponent(a[0])]=decodeURIComponent(a[1]||''); });
+        if (q.redirect){
+          var path = q.redirect;
+          var hash = q.hash ? '#' + q.hash : '';
+          var newUrl = l.protocol + '//' + l.host + l.pathname.replace(/404\.html$/i,'') + hash;
+          // Switch to hash-based path, keep only last segment as anchor id if possible
+          if (path && path.startsWith('/')){
+            var seg = path.split('/').filter(Boolean).pop();
+            newUrl = l.protocol + '//' + l.host + l.pathname.replace(/404\.html$/i,'') + '#' + (seg || 'home');
+          }
+          l.replace(newUrl);
+        }
+      } else {
+        // Fallback to home
+        var base = l.protocol + '//' + l.host + l.pathname.replace(/404\.html$/i,'');
+        l.replace(base + '#home');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Đang chuyển hướng…</h1>
+      <p class="muted">Không tìm thấy trang. Bạn sẽ được đưa về trang chủ.</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,11 +1,11 @@
 {
   "site": {
-    "title": "A&T Riverside",
+    "title": "A&T Saigon Riverside",
     "meta": {
-      "description": "A&T Riverside – Khu căn hộ ven sông tại Bình Dương, kết nối thuận tiện TP.HCM, hệ tiện ích nội khu phong phú và không gian sống trong lành.",
-      "keywords": "căn hộ, bình dương, ven sông, dự án, bất động sản",
-      "author": "A&T Riverside",
-      "canonical": "https://example.com/at-riverside"
+      "description": "A&T Saigon Riverside – Khu căn hộ ven sông Sài Gòn tại cửa ngõ TP.HCM: vị trí đắc địa, tiện ích đẳng cấp, thiết kế hiện đại, không gian xanh và tiềm năng đầu tư.",
+      "keywords": "A&T Saigon Riverside, căn hộ ven sông, Thuận An, TP.HCM, Bình Dương, chung cư, bất động sản",
+      "author": "A&T Saigon Riverside",
+      "canonical": "https://atsaigonriverside.com/"
     },
     "analytics": {
       "gtmContainerId": "",
@@ -15,9 +15,9 @@
       "clarityId": ""
     },
     "contacts": [
-      "Hotline: 0900 000 000",
-      "Email: sales@atriverside.vn",
-      "Địa chỉ: Bình Dương"
+      "Hotline: 0981 467 967",
+      "Email: atsaigonriverside@gmail.com",
+      "Địa chỉ: 105, Quốc Lộ 13, P.Hiệp Bình Chánh, Hồ Chí Minh"
     ]
   },
   "libraries": {
@@ -64,35 +64,35 @@
       "logoHref": "#home",
       "current": [
         { "label": "Trang chủ", "href": "#home" },
-        { "label": "Thông tin dự án", "href": "#project-info" },
+        { "label": "Tổng quan dự án", "href": "#project-info" },
         { "label": "Vị trí", "href": "#location" }
       ],
       "next": [
-        { "label": "Dự án", "href": "#projects" },
-        { "label": "Căn hộ", "href": "#apartments" },
+        { "label": "Tiện ích", "href": "#projects" },
+        { "label": "Mặt bằng", "href": "#apartments" },
         { "label": "Pháp lý", "href": "#legal" },
         { "label": "VL bàn giao", "href": "#materials" },
-        { "label": "Bộ sưu tập", "href": "#gallery" },
-        { "label": "Tin tức", "href": "#news" },
+        { "label": "Nhà mẫu & Bộ sưu tập", "href": "#gallery" },
+        { "label": "Tiến độ & Tin tức", "href": "#news" },
         { "label": "Liên hệ", "href": "#contact" }
       ]
     },
     "footerLinks": [
-      { "label": "Chính sách bảo mật", "href": "#contact" },
-      { "label": "Điều khoản sử dụng", "href": "#contact" }
+      { "label": "Chính sách bảo mật", "href": "https://atsaigonriverside.com/chinh-sach-bao-mat/" },
+      { "label": "Điều khoản sử dụng", "href": "https://atsaigonriverside.com/dieu-khoan-su-dung/" }
     ]
   },
   "sections": [
     { "id": "home", "label": "Trang chủ" },
     { "id": "key-metrics", "label": "Chỉ số nổi bật" },
-    { "id": "project-info", "label": "Thông tin dự án" },
+    { "id": "project-info", "label": "Tổng quan dự án" },
     { "id": "legal", "label": "Pháp lý" },
     { "id": "location", "label": "Vị trí & Kết nối" },
     { "id": "apartments", "label": "Mặt bằng căn hộ" },
     { "id": "projects", "label": "Tiện ích nội khu" },
     { "id": "materials", "label": "Vật liệu bàn giao" },
-    { "id": "gallery", "label": "Bộ sưu tập" },
-    { "id": "news", "label": "Tin tức" },
+    { "id": "gallery", "label": "Nhà mẫu & Bộ sưu tập" },
+    { "id": "news", "label": "Tiến độ & Tin tức" },
     { "id": "contact", "label": "Liên hệ" }
   ],
   "legal": {
@@ -100,17 +100,17 @@
   },
   
   "materials": {
-    "title": "Đối tác vật liệu & nhà tài trợ",
+    "title": "Vật liệu bàn giao",
     "logos": [
       { "name": "Vật liệu bàn giao", "logo": "/assets/imgs/Vật liệu bàn giao.jpg", "href": "#", "noInvert": true }
     ]
   },
   "counters": {
     "legacy": [
-      { "label": "Diện tích khu đất (ha)", "value": 12 },
-      { "label": "Tiện ích nội khu", "value": 30 },
-      { "label": "Số block", "value": 5 },
-      { "label": "Căn hộ", "value": 1800 }
+      { "label": "Số block", "value": 2 },
+      { "label": "Căn hộ", "value": 992 },
+      { "label": "Mật độ xây dựng (%)", "value": 38.6 },
+      { "label": "Tầng cao", "value": 40 }
     ]
   },
   "sliders": [
