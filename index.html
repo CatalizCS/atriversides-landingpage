@@ -70,7 +70,7 @@
     @keyframes drift { 0%,100% { transform: translateX(0);} 50% { transform: translateX(3%);} }
 
     @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; transition: none !important; }
+      :root:not(.anim-override) * { animation: none !important; transition: none !important; }
     }
   </style>
 

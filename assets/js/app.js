@@ -42,6 +42,12 @@
 
   async function init(){
     try {
+      // Apply animation override via URL/localStorage (bypass prefers-reduced-motion)
+      try {
+        const p = new URLSearchParams(location.search);
+        const forceOn = (p.get('anim')==='on') || (localStorage.getItem('anim')==='on');
+        if (forceOn) { document.documentElement.classList.add('anim-override'); }
+      } catch(_){}
       try {
         const usp = new URLSearchParams(location.search);
         if (usp.has('redirect')){
@@ -931,11 +937,16 @@
   }
 
   function prefersReducedMotion(){
+    // Allow override via URL param ?anim=on or a persisted localStorage flag
+    try { const p = new URLSearchParams(location.search); if (p.get('anim') === 'on') return false; } catch(e){}
+    const ls = (()=>{ try { return localStorage.getItem('anim'); } catch(_) { return null; } })();
+    if (ls === 'on') return false;
     return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
   function motionEnabled(){
     // Allow override via URL param ?anim=on
     try { const p = new URLSearchParams(location.search); if (p.get('anim')==='on') return true; } catch(e){}
+    try { if (localStorage.getItem('anim')==='on') return true; } catch(_){}
     return !prefersReducedMotion();
   }
   function isDebug(){
