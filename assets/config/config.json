@@ -9,7 +9,7 @@
     },
     "analytics": {
       "gtmContainerId": "12232742020",
-      "ga4MeasurementId": "G-F0V4P6KEEJ",
+      "ga4MeasurementId": "G-F0V4P6KEEJw",
       "facebookPixelId": "",
       "hotjarId": "",
       "clarityId": ""
@@ -107,10 +107,12 @@
   },
   "counters": {
     "legacy": [
-      { "label": "Số block", "value": 2 },
-      { "label": "Căn hộ", "value": 992 },
-      { "label": "Mật độ xây dựng (%)", "value": 38.6 },
-      { "label": "Tầng cao", "value": 40 }
+      { "label": "Tên dự án", "text": "A&T Saigon Riverside" },
+      { "label": "Quy mô dự án", "text": "7.393,6 m²", "note": "(40 tầng nổi, khối đế 4 tầng, 2 tầng hầm)" },
+      { "label": "Vị trí", "text": "Mặt tiền đường Ven Sông, Bình Hòa, Hồ Chí Minh" },
+      { "label": "Loại hình", "text": "Căn hộ" },
+      { "label": "Sản phẩm", "text": "982 căn hộ & 10 shophouse" },
+      { "label": "Chủ đầu tư", "text": "A&T Group" }
     ]
   },
   "sliders": [
@@ -144,6 +146,14 @@
       { "key": "apartments", "label": "Căn hộ" }
     ],
     "itemsUseLightbox": true
+  },
+  "content": {
+    "project-info": {
+      "text": "A&T Saigon Riverside do A&T Group phát triển, định hướng chuẩn sống nghỉ dưỡng ven sông. Kiến trúc tinh gọn tối ưu ánh sáng và gió tự nhiên; chuỗi tiện ích nội khu gồm hồ bơi tràn bờ, sky bar, vườn trên mái và khu thể thao đa năng; mỗi căn hộ thiết kế thông minh, sang trọng và riêng tư."
+    },
+    "location": {
+      "text": "Vị trí mặt tiền đường Ven Sông (Bình Hòa, TP.HCM) mang lợi thế 'cận thị – cận giang – cận lộ': kết nối nhanh các trục QL13, Phạm Văn Đồng về trung tâm; đồng thời tận hưởng không gian xanh mát của sông Sài Gòn và hệ tiện ích đô thị hiện hữu."
+    }
   },
   "forms": {
     "leadForm": {

@@ -355,13 +355,47 @@
   function renderMetrics(body, cfg){
     const wrap = document.createElement('div'); wrap.className='metrics';
     const items = cfg.counters?.legacy || [];
-    items.slice(0,4).forEach((it, idx)=>{
-      const card = document.createElement('div'); card.className='item card'; card.setAttribute('data-count', it.value || 0);
-      const num = document.createElement('div'); num.className='num'; num.textContent = '0';
+    items.forEach((it, idx)=>{
+      const card = document.createElement('div'); card.className='item card';
+      const top = document.createElement('div'); top.className='num';
       const label = document.createElement('div'); label.className='label'; label.textContent = it.label || `Chỉ số ${idx+1}`;
-      card.append(num, label); wrap.append(card);
+
+      if (typeof it.value === 'number'){
+        card.setAttribute('data-count', String(it.value));
+        if (it.prefix) card.setAttribute('data-prefix', String(it.prefix));
+        top.textContent = '0';
+      } else {
+        top.textContent = it.text || '';
+        card.classList.add('is-text');
+        if (it.note){
+          const note = document.createElement('div'); note.className='note'; note.textContent = it.note;
+          card.append(top, label, note); wrap.append(card);
+          return;
+        }
+      }
+
+      card.append(top, label); wrap.append(card);
     });
     body.append(wrap);
+
+    // Reveal animation for metric cards
+    if (window.gsap && window.ScrollTrigger && motionEnabled()){
+      const cards = wrap.querySelectorAll('.item');
+      cards.forEach(c => { c.style.willChange = 'transform, opacity'; });
+      gsap.fromTo(cards,
+        { y: 16, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.7,
+          ease: 'power2.out',
+          stagger: 0.08,
+          clearProps: 'transform,opacity',
+          scrollTrigger: { trigger: wrap, start: 'top 85%', once: true },
+          onComplete(){ cards.forEach(c => { c.style.willChange = 'auto'; }); }
+        }
+      );
+    }
 
     // CountUp on enter
     const Ctor = window.CountUp || (window.countUp && window.countUp.CountUp);
@@ -370,10 +404,18 @@
       const io = new IntersectionObserver((entries)=>{
         entries.forEach(e=>{
           if(e.isIntersecting){
-            const n = e.target.querySelector('.num');
-            const v = parseFloat(e.target.getAttribute('data-count')) || 0;
-            if(!n._counted){ const cu = new Ctor(n, v, opts); cu.start(); n._counted = true; }
-          }
+            const el = e.target;
+            // Only animate items that are numeric
+            if (!el.hasAttribute('data-count')){ io.unobserve(el); return; }
+            const n = el.querySelector('.num');
+            const v = parseFloat(el.getAttribute('data-count')) || 0;
+            if(!n._counted){
+              const options = Object.assign({}, opts, {
+                suffix: el.getAttribute('data-suffix') || opts.suffix,
+                prefix: el.getAttribute('data-prefix') || ''
+              });
+              const cu = new Ctor(n, v, options); cu.start(); n._counted = true; }
+          } 
         })
       }, { threshold: 0.4 });
       wrap.querySelectorAll('.item').forEach(el=>io.observe(el));
@@ -384,7 +426,10 @@
     const wrap = document.createElement('div'); wrap.className='split';
     const text = document.createElement('div'); text.className='text';
     const h3 = document.createElement('h3'); h3.textContent = (cfg.sections?.find(s=>s.id===key)?.label) || '';
-    const p = document.createElement('p'); p.textContent = 'Thông tin đang được cập nhật. Đây là đoạn giới thiệu ngắn về mục này.';
+    const p = document.createElement('p');
+    const fallback = 'Thông tin đang được cập nhật. Đây là đoạn giới thiệu ngắn về mục này.';
+    const txt = cfg.content?.[key]?.text || fallback;
+    p.textContent = txt;
     text.append(h3,p);
     const media = document.createElement('div'); media.className='media'; const img = document.createElement('img'); img.loading='lazy'; img.decoding='async'; img.alt = h3.textContent; img.src = asset(pickSectionImage(cfg, key)); img.classList.add('zoomable'); img.addEventListener('click', ()=> openLightbox(img.src, img.alt)); media.append(img);
   if ((idx % 2) === 1) wrap.classList.add('reverse-on-mobile');
