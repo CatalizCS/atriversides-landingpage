@@ -898,6 +898,36 @@
         if (window.__lenis && typeof window.__lenis.scrollTo==='function') window.__lenis.scrollTo(0, { offset: 0 }); else window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
+
+    // Global in-page anchor handler (covers brand/footer/any dynamic links)
+    document.addEventListener('click', (e)=>{
+      const a = e.target && e.target.closest && e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const href = a.getAttribute('href') || '';
+      if (!href || href === '#' || href.length < 2) return;
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      const headerH = (document.getElementById('site-header')?.offsetHeight || 0) + 6;
+      // If mobile nav open, close it before scroll
+      try {
+        const navEl = document.querySelector('nav.primary-nav');
+        if (navEl && navEl.classList.contains('open')){
+          const toggleBtn = document.querySelector('.nav-toggle');
+          if (toggleBtn) toggleBtn.setAttribute('aria-expanded','false');
+          navEl.classList.remove('open');
+          document.body.classList.remove('nav-open');
+          const backdrop = document.getElementById('nav-backdrop'); if (backdrop) backdrop.hidden = true;
+          if (window.__lenis && typeof window.__lenis.start==='function') window.__lenis.start();
+        }
+      } catch(_){}
+      if (window.__lenis && typeof window.__lenis.scrollTo === 'function') {
+        window.__lenis.scrollTo(target, { offset: -headerH });
+      } else {
+        const top = target.getBoundingClientRect().top + (window.scrollY || window.pageYOffset) - headerH;
+        try { window.scrollTo({ top, behavior: 'smooth' }); } catch(_) { window.scrollTo(0, top); }
+      }
+    });
   }
 
   function prefersReducedMotion(){

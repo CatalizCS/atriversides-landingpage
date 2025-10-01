@@ -33,7 +33,7 @@
       } else {
         // Fallback to home
         var base = l.protocol + '//' + l.host + l.pathname.replace(/404\.html$/i,'');
-        l.replace(base + '#home');
+        l.replace(l.origin + '/#home');
       }
     })();
   </script>

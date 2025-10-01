@@ -259,10 +259,17 @@ body.preload-active main, body.preload-active header, body.preload-active footer
 
 /* Make mobile nav kick in earlier for tablets */
 @media (max-width: 900px) {
+  #site-header .container { gap: 12px; }
+  nav.primary-nav { margin-left: 0; }
   .nav-toggle { display:inline-flex; }
   nav.primary-nav { position: absolute; top: var(--header-h); left:0; right:0; background: rgba(10,12,16,0.98); border-bottom: 1px solid var(--color-border); transform: translateY(-8px); opacity:0; pointer-events:none; transition: opacity .25s ease, transform .25s ease; }
   nav.primary-nav.open { opacity:1; transform: translateY(0); pointer-events:auto; }
   nav.primary-nav ul { flex-direction: column; padding: 12px; gap: 6px; }
+}
+
+/* Show hamburger on small tablets too */
+@media (max-width: 1024px) {
+  .nav-toggle { display: inline-flex; }
 }
 
 .aos-disabled [data-aos] { opacity: 1 !important; transform: none !important; }
