@@ -49,13 +49,21 @@ jobs:
 
       - name: Minify CSS
         run: |
-          npx --yes csso-cli assets/css/style.css --output dist/assets/css/style.css
+          npx --yes csso assets/css/style.css --output dist/assets/css/style.css
+
+      - name: Bust cache in HTML references
+        run: |
+          SHA_SHORT=${GITHUB_SHA::8}
+          sed -i "s|assets/js/app.js|assets/js/app.js?v=${SHA_SHORT}|g" dist/index.html || true
+          sed -i "s|assets/css/style.css|assets/css/style.css?v=${SHA_SHORT}|g" dist/index.html || true
 
       - name: List output
         run: |
           du -h dist -d 2 || true
           ls -la dist/assets/js
           ls -la dist/assets/css
+          echo "JS lines:" && wc -l dist/assets/js/app.js || true
+          echo "CSS lines:" && wc -l dist/assets/css/style.css || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
