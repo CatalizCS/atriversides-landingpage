@@ -49,7 +49,7 @@ jobs:
 
       - name: Minify CSS
         run: |
-          npx --yes csso-cli@5 assets/css/style.css --output dist/assets/css/style.css
+          npx --yes clean-css-cli -o dist/assets/css/style.css assets/css/style.css
 
       - name: Bust cache in HTML references
         run: |
