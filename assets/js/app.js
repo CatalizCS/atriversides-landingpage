@@ -1303,12 +1303,7 @@
     btn.addEventListener("click", closeLightbox);
     lb.append(img, btn);
     lb.hidden = false;
-    // Try fullscreen for better viewing on supported browsers
-    if (lb.requestFullscreen) {
-      try {
-        lb.requestFullscreen();
-      } catch (e) {}
-    }
+   
     const onKey = (e) => {
       if (e.key === "Escape") {
         closeLightbox();
