@@ -1,38 +1,51 @@
 {
-  "updatedAt": "2025-10-01T16:57:47.087Z",
+  "updatedAt": "2025-10-03T04:37:48.224Z",
   "groups": [
     {
-      "name": "Căn 1pn",
+      "name": "Block A",
       "files": [
-        "assets/imgs/Mặt bằng căn hộ/Căn 1pn/z7003389691012_d47047aeb1644e879b3ddcc29c8f0b1e.jpg",
-        "assets/imgs/Mặt bằng căn hộ/Căn 1pn/z7013198911869_b495d22b380a7da9f6365052b4de8a22.jpg"
+        "assets/imgs/Mặt bằng căn hộ/Block A/1PN/ad9d245c86d10c8f55c017.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block A/1PN/f87857e9f5647f3a267519.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block A/2PN/461d2493861e0c40550f15.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block A/2PN/3615a78c05018f5fd61021.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block A/2PN/ad9d245c86d10c8f55c017.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block A/2PN/e81aea8a4807c2599b1620.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block A/2PN/f2e5c9606bede1b3b8fc18.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block A/2PN/f87857e9f5647f3a267519.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block A/3 PN/3615a78c05018f5fd61021.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block A/3 PN/eb7d8ffd2d70a72efe6116.jpg"
       ]
     },
     {
-      "name": "Căn hộ 3 pn",
+      "name": "Block B",
       "files": [
-        "assets/imgs/Mặt bằng căn hộ/Căn hộ 3 pn/z7003389625547_ec4a7d752a21c752cc1bab0083c9c920.jpg"
+        "assets/imgs/Mặt bằng căn hộ/Block B/1PN/adbc0f23adae27f07ebf23.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block B/1PN/dc621a89b804325a6b1525.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block B/2PN/67e6ca1b6896e2c8bb8727.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block B/2PN/72ff9110339db9c3e08c26.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block B/2PN/a40e3ee99c64163a4f7524.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block B/2PN/adbc0f23adae27f07ebf23.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block B/2PN/c20a25e987640d3a547522.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block B/2PN/dc621a89b804325a6b1525.jpg",
+        "assets/imgs/Mặt bằng căn hộ/Block B/studio/67e6ca1b6896e2c8bb8727.jpg"
       ]
     },
     {
-      "name": "căn studio",
+      "name": "mặt bằng tầng",
       "files": [
-        "assets/imgs/Mặt bằng căn hộ/căn studio/z7013193663335_f78ea1ca2002ac0141fec095d6f3d883.jpg"
+        "assets/imgs/Mặt bằng căn hộ/mặt bằng tầng/a7deb15913d4998ac0c513.jpg",
+        "assets/imgs/Mặt bằng căn hộ/mặt bằng tầng/c567e2eb4066ca38937714.jpg"
+      ]
+    },
+    {
+      "name": "mặt bằng tiện ích căn hộ",
+      "files": [
+        "assets/imgs/Mặt bằng căn hộ/mặt bằng tiện ích căn hộ/71f41746b5cb3f9566da9.jpg",
+        "assets/imgs/Mặt bằng căn hộ/mặt bằng tiện ích căn hộ/608aaa3f08b282ecdba311.jpg",
+        "assets/imgs/Mặt bằng căn hộ/mặt bằng tiện ích căn hộ/d83686b42439ae67f72812.jpg",
+        "assets/imgs/Mặt bằng căn hộ/mặt bằng tiện ích căn hộ/fe574cd4ee5964073d4810.jpg"
       ]
     }
   ],
-  "flatFiles": [
-    "assets/imgs/Mặt bằng căn hộ/A01 và A02.jpg",
-    "assets/imgs/Mặt bằng căn hộ/A05 và A06.jpg",
-    "assets/imgs/Mặt bằng căn hộ/A07 và A08.jpg",
-    "assets/imgs/Mặt bằng căn hộ/A09 và A10.jpg",
-    "assets/imgs/Mặt bằng căn hộ/A11 và A11A.jpg",
-    "assets/imgs/Mặt bằng căn hộ/A12 và A15.jpg",
-    "assets/imgs/Mặt bằng căn hộ/B01 và B02.jpg",
-    "assets/imgs/Mặt bằng căn hộ/B03 và B04.jpg",
-    "assets/imgs/Mặt bằng căn hộ/B05 và B06.jpg",
-    "assets/imgs/Mặt bằng căn hộ/B07 và B08.jpg",
-    "assets/imgs/Mặt bằng căn hộ/B09 và B10.jpg",
-    "assets/imgs/Mặt bằng căn hộ/B11 và B11A.jpg"
-  ]
+  "flatFiles": []
 }

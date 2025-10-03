@@ -6,14 +6,29 @@
   <meta name="description" content="A&T Saigon Riverside - Dự án căn hộ cao cấp ven sông Sài Gòn, mang đến không gian sống xanh mát, tiện nghi hiện đại và phong cách sống đẳng cấp. Tận hưởng cuộc sống thượng lưu với tiện ích đa dạng và vị trí đắc địa tại trung tâm TP.HCM.">
   <meta name="keywords" content="A&T Saigon Riverside, căn hộ cao cấp, ven sông Sài Gòn, dự án bất động sản, tiện ích hiện đại, không gian sống xanh, phong cách sống đẳng cấp, TP.HCM, căn hộ sang trọng">
   <meta name="author" content="A&T Saigon Riverside">
+  <meta name="robots" content="index,follow">
   <meta property="og:title" content="A&T Saigon Riverside">
+  <meta property="og:url" content="https://atsaigonriver-side.com/">
+  <meta property="og:description" content="A&T Saigon Riverside – Khu căn hộ ven sông Sài Gòn tại cửa ngõ TP.HCM: vị trí đắc địa, tiện ích đẳng cấp, thiết kế hiện đại, không gian xanh và tiềm năng đầu tư.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://atsaigonriver-side.com/assets/imgs/z7003389707041_a501076caa35abe3077d72d00e52ae55.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A&T Saigon Riverside">
+  <meta name="twitter:description" content="A&T Saigon Riverside – Khu căn hộ ven sông Sài Gòn tại cửa ngõ TP.HCM: vị trí đắc địa, tiện ích đẳng cấp, thiết kế hiện đại, không gian xanh và tiềm năng đầu tư.">
+  <meta name="twitter:image" content="https://atsaigonriver-side.com/assets/imgs/z7003389707041_a501076caa35abe3077d72d00e52ae55.jpg">
   <link rel="canonical" href="https://atsaigonriver-side.com">
+  <link rel="alternate" hreflang="vi-VN" href="https://atsaigonriver-side.com/">
+  <link rel="alternate" hreflang="vi" href="https://atsaigonriver-side.com/">
+  <link rel="alternate" hreflang="x-default" href="https://atsaigonriver-side.com/">
   <link rel="alternate" type="application/rss+xml" title="A&T Saigon Riverside - Tin tức" href="/feed.xml">
   <title>A&T Saigon Riverside</title>
 
   <!-- Preconnects for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
 
   <!-- Critical CSS (header/hero baseline) -->
   <style>
@@ -57,7 +72,7 @@
     section.section { position: relative; padding: var(--space-2xl) 0; }
 
   .hero { min-height: 100svh; position: relative; display:grid; place-items:center; overflow:hidden; }
-    .hero .bg { position:absolute; inset:0; background-size: cover; background-position:center; }
+    .hero .bg { position:absolute; inset:0; width:100%; height:100%; object-fit: cover; object-position: center; display:block; }
     .hero .overlay { position:absolute; inset:0; background: var(--grad-hero-overlay); }
     .hero .content { position: relative; z-index:2; text-align:center; padding: 0 1rem; }
   .hero h1 { font-size: clamp(30px, 6.2vw, 60px); line-height: 1.05; margin: 0 0 10px; letter-spacing: -0.01em; }
@@ -77,8 +92,12 @@
   </style>
 
   <!-- Main stylesheet (non-critical) -->
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="icon" href="assets/imgs/logo.png">
+  <link rel="preload" as="style" href="assets/css/style.css?v=20251003">
+  <link rel="stylesheet" href="assets/css/style.css?v=20251003" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="assets/css/style.css?v=20251003"></noscript>
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/imgs/logo.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/imgs/logo.png">
+  <link rel="apple-touch-icon" href="assets/imgs/logo.png">
 </head>
 <body>
   <a href="#main" class="skip-link">Bỏ qua và đến nội dung chính</a>
@@ -104,6 +123,6 @@
   <button id="floating-cta" class="btn btn-primary" aria-label="Đăng ký tư vấn" hidden>Đăng ký tư vấn</button>
   <button id="back-to-top" class="btn" aria-label="Lên đầu trang" hidden>↑</button>
 
-  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/app.js?v=20251003"></script>
 </body>
 </html>

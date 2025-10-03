@@ -59,7 +59,7 @@
       } catch (_) {}
     }
   }
-  function hidePreloaderAfterMin(minMs = 2000, maxMs = 3000) {
+  function hidePreloaderAfterMin(minMs = 0, maxMs = 1200) {
     const hide = () => {
       if (__preloaderHidden) return;
       __preloaderHidden = true;
@@ -113,9 +113,8 @@
           history.replaceState(null, "", cleaned);
         }
       } catch (_) {}
-      // Show preloader immediately and schedule hide window
       showPreloader("assets/imgs/logo.png");
-      hidePreloaderAfterMin(2000, 3000);
+      hidePreloaderAfterMin(0, 1200);
       const cfg = await fetchConfig("assets/config/config.json");
       state.config = cfg;
       if (Array.isArray(cfg.sections) && cfg.sections.length) {
@@ -147,8 +146,10 @@
         })();
         document.head.appendChild(p);
       } catch (e) {}
-      buildHeader(cfg);
-      await renderSections(cfg);
+  buildHeader(cfg);
+  await renderSections(cfg);
+  // Ensure preloader is gone as soon as critical sections render
+  hidePreloaderAfterMin(0, 800);
       buildFooter(cfg);
 
       initSmoothScrollAndAnimations();
@@ -197,6 +198,17 @@
     try {
       return new URL(a, location.href).href;
     } catch {
+      return a;
+    }
+  }
+  // Encode path segments safely for Unicode/spaces in file paths
+  function safeAsset(u) {
+    const a = asset(u);
+    try {
+      // encode only if it's not an absolute http url
+      if (/^https?:/i.test(a)) return a;
+      return encodeURI(a);
+    } catch (_) {
       return a;
     }
   }
@@ -311,9 +323,18 @@
     }
     // CSS
     (libs.css || []).forEach((href) => {
+      const preload = document.createElement("link");
+      preload.rel = "preload";
+      preload.as = "style";
+      preload.href = href;
+      document.head.appendChild(preload);
       const l = document.createElement("link");
       l.rel = "stylesheet";
       l.href = href;
+      l.media = "print";
+      l.onload = function () {
+        this.media = "all";
+      };
       document.head.appendChild(l);
     });
     // JS sequential to preserve deps
@@ -555,7 +576,8 @@
       else if (key === "key-metrics") renderMetrics(body, cfg);
       else if (key === "projects") renderProjectsSlider(body, cfg);
       else if (key === "apartments") renderApartments(body, cfg);
-      else if (key === "gallery") renderGallery(body, cfg);
+  else if (key === "gallery") renderGallery(body, cfg);
+  else if (key === "floor-areas") renderFloorAreas(body, cfg);
       else if (key === "news") renderNews(body, cfg);
       else if (key === "contact") renderContact(body, cfg);
       else if (key === "legal") renderLegal(body, cfg);
@@ -590,10 +612,14 @@
 
   function renderHero(body, cfg) {
     body.parentElement.classList.add("hero");
-    const img = asset(chooseHeroImage(cfg));
-    const bg = document.createElement("div");
+    const imgUrl = asset(chooseHeroImage(cfg));
+    const bg = document.createElement("img");
     bg.className = "bg";
-    bg.style.backgroundImage = `url('${img}')`;
+    bg.alt = "";
+    bg.loading = "eager";
+    try { bg.fetchPriority = "high"; } catch(_) {}
+    bg.decoding = "async";
+    bg.src = imgUrl;
     const overlay = document.createElement("div");
     overlay.className = "overlay";
     const content = document.createElement("div");
@@ -602,7 +628,8 @@
     h1.textContent = cfg.site?.title || "Dự án";
     const p = document.createElement("p");
     p.className = "subhead";
-    p.textContent = shorten(cfg.site?.meta?.description, 160);
+  const heroSub = cfg.site?.hero?.subhead || cfg.site?.meta?.description || "";
+  p.textContent = shorten(heroSub, 160);
     const cta = document.createElement("div");
     cta.className = "cta";
     const btn1 = document.createElement("a");
@@ -741,20 +768,30 @@
     wrap.className = "split";
     const text = document.createElement("div");
     text.className = "text";
-    const h3 = document.createElement("h3");
-    h3.textContent = cfg.sections?.find((s) => s.id === key)?.label || "";
+    // Section has an <h2> in the section-head already. Avoid repeating the same title here.
+    const secLabel = cfg.sections?.find((s) => s.id === key)?.label || "";
+    const contentTitle = cfg.content?.[key]?.title || "";
+    const titlesEqual = (a, b) =>
+      normalizeVN(String(a || "")).trim() === normalizeVN(String(b || "")).trim();
+    const shouldShowH3 = contentTitle && !titlesEqual(contentTitle, secLabel);
+    let h3;
+    if (shouldShowH3) {
+      h3 = document.createElement("h3");
+      h3.textContent = contentTitle;
+    }
     const p = document.createElement("p");
     const fallback =
       "Thông tin đang được cập nhật. Đây là đoạn giới thiệu ngắn về mục này.";
     const txt = cfg.content?.[key]?.text || fallback;
-    p.textContent = txt;
-    text.append(h3, p);
+  p.textContent = txt;
+  if (h3) text.append(h3);
+  text.append(p);
     const media = document.createElement("div");
     media.className = "media";
     const img = document.createElement("img");
     img.loading = "lazy";
     img.decoding = "async";
-    img.alt = h3.textContent;
+    img.alt = (contentTitle || secLabel) || "";
     img.src = asset(pickSectionImage(cfg, key));
     img.classList.add("zoomable");
     img.addEventListener("click", () => openLightbox(img.src, img.alt));
@@ -762,6 +799,72 @@
     if (idx % 2 === 1) wrap.classList.add("reverse-on-mobile");
     wrap.append(text, media);
     body.append(wrap);
+
+    // Optional partners block (text-only) appended under the split content
+    try {
+      const partners = cfg.content?.[key]?.partners;
+      if (Array.isArray(partners) && partners.length) {
+        const box = document.createElement("div");
+        box.className = "partners";
+        const title = document.createElement("h4");
+        title.textContent = "Đại du thuyền được kiến tạo bởi:";
+        const grid = document.createElement("div");
+        grid.className = "partners-grid";
+        partners.forEach((pn) => {
+          const item = document.createElement("div");
+          item.className = "partner";
+          const role = document.createElement("div");
+          role.className = "role";
+          role.textContent = pn.role || "";
+          const name = document.createElement("div");
+          name.className = "name";
+          name.textContent = pn.name || "";
+          item.append(role);
+          if (pn.logo) {
+            const img = document.createElement("img");
+            img.className = "logo";
+            img.src = asset(pn.logo);
+            img.alt = pn.name || pn.role || "";
+            img.loading = "lazy";
+            img.decoding = "async";
+            if (pn.whiteOnDark) img.classList.add("white-on-dark");
+            item.append(img);
+          }
+          item.append(name);
+          grid.append(item);
+        });
+        // Credits (if any partner has credit info)
+        const creditsInfo = (partners || []).filter(p => p.credit || p.license);
+        let creditsEl = null;
+        if (creditsInfo.length) {
+          creditsEl = document.createElement("div");
+          creditsEl.className = "credits";
+          const span = document.createElement("small");
+          const parts = creditsInfo.map(p => {
+            const name = p.name || p.role || "Logo";
+            if (p.credit) {
+              const a = document.createElement("a");
+              a.href = p.credit;
+              a.target = "_blank";
+              a.rel = "noopener";
+              a.textContent = name;
+              return { a, lic: p.license };
+            }
+            return { text: name, lic: p.license };
+          });
+          // Build inline list: Name (License), ...
+          parts.forEach((part, i) => {
+            if (i) span.append(document.createTextNode(i === parts.length - 1 ? ", " : ", "));
+            if (part.a) span.append(part.a); else span.append(document.createTextNode(part.text));
+            if (part.lic) span.append(document.createTextNode(` (${part.lic})`));
+          });
+          creditsEl.append(span);
+        }
+        box.append(title, grid);
+        if (creditsEl) box.append(creditsEl);
+        body.append(box);
+      }
+    } catch (_) {}
 
     // Mark for GSAP slide-in animations (alternate left/right by index)
     const leftFirst = idx % 2 === 0; // even index: text from left, image from right; odd: reversed
@@ -847,16 +950,18 @@
       slide.append(card);
       wrapper.append(slide);
     });
-    container.append(wrapper);
-    // nav/pagination
-    const pag = document.createElement("div");
-    pag.className = "swiper-pagination";
+  container.append(wrapper);
+  // nav/pagination (move pagination OUTSIDE of slider container)
+  const pag = document.createElement("div");
+  pag.className = "swiper-pagination";
     const prev = document.createElement("div");
     prev.className = "swiper-button-prev";
     const next = document.createElement("div");
     next.className = "swiper-button-next";
-    container.append(pag, prev, next);
-    body.append(container);
+  container.append(prev, next);
+  body.append(container);
+  // Place pagination as a sibling below the slider
+  body.append(pag);
 
     // init after next tick
     setTimeout(() => {
@@ -871,6 +976,9 @@
           },
           sliderCfg.config || {}
         );
+        // Ensure pagination element points to the external element
+        if (baseCfg.pagination) baseCfg.pagination.el = pag;
+        else baseCfg.pagination = { el: pag, clickable: true };
         let spv = 1;
         if (baseCfg.breakpoints) {
           const w = window.innerWidth || 1024;
@@ -910,7 +1018,15 @@
     tabs.setAttribute("role", "tablist");
     const grid = document.createElement("div");
     grid.className = "grid";
-    wrap.append(tabs, grid);
+    // Load more controls
+    const moreWrap = document.createElement("div");
+    moreWrap.className = "load-more";
+    const moreBtn = document.createElement("button");
+    moreBtn.type = "button";
+    moreBtn.className = "btn btn-secondary";
+    moreBtn.textContent = "Xem thêm";
+    moreWrap.append(moreBtn);
+    wrap.append(tabs, grid, moreWrap);
     body.append(wrap);
 
     const tabDefs = cfg.gallery?.tabs || [
@@ -922,6 +1038,12 @@
     ];
     const items = flattenImagesToGallery(cfg);
     let active = "all";
+    let limit = 8; // show 4x2 initially
+
+    function updateMoreVisibility(total) {
+      const hasMore = total > limit;
+      moreWrap.style.display = hasMore ? "flex" : "none";
+    }
 
     tabDefs.forEach((t, i) => {
       const b = document.createElement("button");
@@ -933,6 +1055,7 @@
       b.setAttribute("tabindex", i === 0 ? "0" : "-1");
       b.addEventListener("click", () => {
         active = t.key;
+        limit = 8; // reset on tab change
         tabs
           .querySelectorAll("button")
           .forEach((x) => x.setAttribute("aria-pressed", "false"));
@@ -960,7 +1083,8 @@
       const firstTime = !grid.dataset.ready;
       const swapIn = () => {
         grid.innerHTML = "";
-        list.forEach((it, idx) => {
+        const view = list.slice(0, limit);
+        view.forEach((it, idx) => {
           const a = document.createElement("a");
           a.href = asset(it.src);
           a.className = "item";
@@ -989,6 +1113,7 @@
           });
         });
         grid.dataset.ready = "1";
+        updateMoreVisibility(list.length);
         if (window.ScrollTrigger) setTimeout(() => ScrollTrigger.refresh(), 50);
       };
       if (firstTime) {
@@ -1008,6 +1133,49 @@
     }
 
     renderGrid();
+
+    moreBtn.addEventListener("click", () => {
+      // reveal 8 more each click
+      limit += 8;
+      renderGrid();
+    });
+  }
+
+  function renderFloorAreas(body, cfg) {
+    const wrap = document.createElement("div");
+    wrap.className = "floor-areas";
+    const grid = document.createElement("div");
+    grid.className = "floor-areas-grid";
+    wrap.append(grid);
+    body.append(wrap);
+
+    // Pull from explicit folder mapping if available, else summary
+    const folderName = "Mặt bằng tầng tiện ích và tầng điển hình";
+    const list = (cfg.images?.folders?.[folderName])
+      || ((cfg.images?.summary?.folders || []).find(f => f.name === folderName)?.files)
+      || [];
+    const items = list.map(src => ({ src, alt: "Mặt bằng diện tích" }));
+
+    items.forEach((it, idx) => {
+      const a = document.createElement("a");
+      a.href = asset(it.src);
+      a.className = "item";
+      const img = document.createElement("img");
+      img.src = asset(it.src);
+      img.alt = it.alt;
+      img.loading = "lazy";
+      img.decoding = "async";
+      a.append(img);
+      grid.append(a);
+      a.addEventListener("click", (e) => { e.preventDefault(); openLightbox(img.src, img.alt); });
+      // simple stagger-in
+      a.style.opacity = "0";
+      a.style.transform = "translateY(8px)";
+      a.style.transition = "opacity .35s ease, transform .35s ease";
+      requestAnimationFrame(() => setTimeout(() => { a.style.opacity = "1"; a.style.transform = "translateY(0)"; }, idx * 25));
+    });
+
+    if (window.ScrollTrigger) setTimeout(() => ScrollTrigger.refresh(), 50);
   }
 
   async function renderApartments(body, cfg) {
@@ -1015,18 +1183,34 @@
     wrap.className = "apartments";
     const filters = document.createElement("div");
     filters.className = "apt-filters";
+    const catBar = document.createElement("div");
+    catBar.className = "cats";
     const blockBar = document.createElement("div");
     blockBar.className = "blocks";
     const typeBar = document.createElement("div");
     typeBar.className = "types";
     const grid = document.createElement("div");
     grid.className = "apartments-grid";
-    filters.append(blockBar, typeBar);
-    wrap.append(filters, grid);
+    // Load more controls
+    const moreWrap = document.createElement("div");
+    moreWrap.className = "load-more";
+    const moreBtn = document.createElement("button");
+    moreBtn.type = "button";
+    moreBtn.className = "btn btn-secondary";
+    moreBtn.textContent = "Xem thêm";
+    moreWrap.append(moreBtn);
+    filters.append(catBar, blockBar, typeBar);
+    wrap.append(filters, grid, moreWrap);
     body.append(wrap);
 
     const manifest = await loadApartmentsManifest();
     const items = buildApartmentItems(cfg, manifest);
+    const catTabs = [
+      { key: "all", label: "Tất cả" },
+      { key: "can-ho", label: "Căn hộ" },
+      { key: "mat-bang-tang", label: "Mặt bằng tầng" },
+      { key: "mat-bang-tien-ich", label: "Tiện ích căn hộ" },
+    ];
     const blockTabs = [
       { key: "all", label: "Tất cả" },
       { key: "A", label: "Block A" },
@@ -1036,15 +1220,86 @@
       { key: "all", label: "Tất cả" },
       { key: "studio", label: "Studio" },
       { key: "1pn", label: "1PN" },
+      { key: "2pn", label: "2PN" },
       { key: "3pn+", label: "3PN+" },
     ];
-    let activeBlock = "all";
+  let activeCategory = "all";
+  let activeBlock = "all";
     let activeType = "all";
+    let limit = 8; // 4x2 initially
+
+    function updateMoreVisibility(total) {
+      const hasMore = total > limit;
+      moreWrap.style.display = hasMore ? "flex" : "none";
+    }
+
+    function computeAvailability() {
+      const isCanHo = activeCategory === "all" || activeCategory === "can-ho";
+      const avail = { blocks: new Set(), types: new Set(), any: false };
+      // Walk through items and mark availability respecting current filters except the dimension being computed
+      items.forEach((it) => {
+        // Category must match selection
+        const catOk =
+          activeCategory === "all" || it.category === activeCategory ||
+          (activeCategory === "can-ho" && it.category === "can-ho");
+        if (!catOk) return;
+        // Only consider block/type for can-ho/all
+        if (!isCanHo) {
+          avail.any = true;
+          return;
+        }
+        // For blocks availability, apply current type filter
+        if (matchesType(it.type, activeType)) {
+          if (it.block) avail.blocks.add(it.block);
+          // If no block, don't add specific one
+        }
+        // For types availability, apply current block filter
+        if (activeBlock === "all" || it.block === activeBlock) {
+          if (it.type) avail.types.add(it.type);
+        }
+        avail.any = true;
+      });
+      return avail;
+    }
 
     function renderTabs() {
+      const isCanHo = activeCategory === "all" || activeCategory === "can-ho";
+      const availability = computeAvailability();
+      catBar.innerHTML = "";
       blockBar.innerHTML = "";
       typeBar.innerHTML = "";
-      blockTabs.forEach((t, i) => {
+      // Category tabs
+      catTabs.forEach((t) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = t.label;
+        b.setAttribute("data-key", t.key);
+        b.setAttribute("aria-pressed", String(t.key === activeCategory));
+        b.addEventListener("click", () => {
+          activeCategory = t.key;
+          limit = 8; // reset on filter change
+          renderTabs();
+          renderGrid();
+        });
+        catBar.append(b);
+      });
+      // Show/hide block/type bars depending on category
+      blockBar.style.display = isCanHo ? "flex" : "none";
+      typeBar.style.display = isCanHo ? "flex" : "none";
+
+      // If not can-ho, nothing to render for block/type
+      if (!isCanHo) return;
+
+      // Ensure active values are valid; if not, reset to 'all'
+      if (activeBlock !== "all" && !availability.blocks.has(activeBlock)) activeBlock = "all";
+      if (activeType !== "all" && !availability.types.has(activeType)) activeType = "all";
+
+      // Build block buttons with availability
+      const hasAnyBlock = availability.blocks.size > 0;
+      blockTabs.forEach((t) => {
+        if (t.key !== "all" && !availability.blocks.has(t.key)) return; // hide empty block
+        // If no specific blocks exist, only render 'all'
+        if (!hasAnyBlock && t.key !== "all") return;
         const b = document.createElement("button");
         b.type = "button";
         b.textContent = t.label;
@@ -1052,12 +1307,18 @@
         b.setAttribute("aria-pressed", String(t.key === activeBlock));
         b.addEventListener("click", () => {
           activeBlock = t.key;
+          limit = 8;
           renderTabs();
           renderGrid();
         });
         blockBar.append(b);
       });
-      typeTabs.forEach((t, i) => {
+
+      // Build type buttons with availability
+      const hasAnyType = availability.types.size > 0;
+      typeTabs.forEach((t) => {
+        if (t.key !== "all" && !availability.types.has(t.key)) return; // hide empty type
+        if (!hasAnyType && t.key !== "all") return;
         const b = document.createElement("button");
         b.type = "button";
         b.textContent = t.label;
@@ -1065,6 +1326,7 @@
         b.setAttribute("aria-pressed", String(t.key === activeType));
         b.addEventListener("click", () => {
           activeType = t.key;
+          limit = 8;
           renderTabs();
           renderGrid();
         });
@@ -1084,19 +1346,47 @@
       return itemType === filter;
     }
 
+    function categoryWeight(cat) {
+      // Prioritize floor plans first, then amenities floor plans, then unit (room) images
+      if (cat === 'mat-bang-tang') return 0; // floors on top
+      if (cat === 'mat-bang-tien-ich') return 1;
+      if (cat === 'can-ho') return 2; // unit/room images later
+      return 3;
+    }
+
     function renderGrid() {
-      const filtered = items.filter(
-        (it) =>
-          (activeBlock === "all" || it.block === activeBlock) &&
-          matchesType(it.type, activeType)
-      );
+      const filtered = items.filter((it) => {
+        // Category filter first
+        const catOk =
+          activeCategory === "all" || it.category === activeCategory ||
+          (activeCategory === "can-ho" && it.category === "can-ho");
+        if (!catOk) return false;
+        // Only apply block/type when selecting Căn hộ or All
+        const applyBT = activeCategory === "all" || activeCategory === "can-ho";
+        const blockOk = !applyBT || activeBlock === "all" || it.block === activeBlock;
+        const typeOk = !applyBT || matchesType(it.type, activeType);
+        return blockOk && typeOk;
+      });
+      // When viewing all categories, sort to show floors first, then others; otherwise keep logical ordering
+      const ordered = filtered.slice();
+      if (activeCategory === 'all') {
+        ordered.sort((a, b) => {
+          const cw = categoryWeight(a.category) - categoryWeight(b.category);
+          if (cw !== 0) return cw;
+          return aptComparator(a, b);
+        });
+      } else {
+        ordered.sort(aptComparator);
+      }
       grid.innerHTML = "";
-      filtered.forEach((it) => {
+      const view = ordered.slice(0, limit);
+      view.forEach((it) => {
         const a = document.createElement("a");
         a.href = asset(it.src);
         a.className = "apt-item";
         a.setAttribute("data-block", it.block || "");
         a.setAttribute("data-type", it.type || "");
+        a.setAttribute("data-category", it.category || "");
         const img = document.createElement("img");
         img.src = asset(it.src);
         img.alt = it.alt || "Mặt bằng căn hộ";
@@ -1109,11 +1399,18 @@
           openLightbox(img.src, img.alt);
         });
       });
+      updateMoreVisibility(filtered.length);
       if (window.ScrollTrigger) setTimeout(() => ScrollTrigger.refresh(), 50);
     }
 
     renderTabs();
     renderGrid();
+
+    moreBtn.addEventListener("click", () => {
+      // reveal 8 more per click
+      limit += 8;
+      renderGrid();
+    });
   }
 
   function viSort(arr) {
@@ -1140,39 +1437,38 @@
 
   function buildApartmentItems(cfg, manifest) {
     const out = [];
-    let list = [];
+    let files = [];
     if (manifest && (manifest.groups?.length || manifest.flatFiles?.length)) {
-      // Use scanned/sorted manifest
-      const grouped = (manifest.groups || [])
-        .slice()
-        .sort((a, b) =>
-          String(a.name).localeCompare(String(b.name), "vi", {
-            numeric: true,
-            sensitivity: "base",
-          })
-        );
-      grouped.forEach((g) => viSort(g.files).forEach((f) => list.push(f)));
-      viSort(manifest.flatFiles || []).forEach((f) => list.push(f));
+      // Gather from manifest groups and flat files
+      (manifest.groups || []).forEach((g) => {
+        (g.files || []).forEach((f) => files.push(f));
+      });
+      (manifest.flatFiles || []).forEach((f) => files.push(f));
     } else {
-      // Fallback to config; sort by Vietnamese collation
+      // Fallback to config
       const configList =
         cfg.images?.folders?.["Mặt bằng căn hộ"] ||
         (cfg.images?.summary?.folders || []).find(
           (f) => f.name === "Mặt bằng căn hộ"
         )?.files ||
         [];
-      list = viSort(configList);
+      files = configList.slice();
     }
-    list.forEach((src) => {
-      const meta = {
-        src,
+    // Build metas
+    const metas = files.map((src) => {
+      const m = {
+        src: safeAsset(src),
         block: guessBlock(src),
         type: normalizeAptType(guessType(src)),
         alt: "Mặt bằng căn hộ",
+        name: String(src).split("/").pop() || String(src),
+        category: guessCategory(src),
       };
-      out.push(meta);
+      return m;
     });
-    return out;
+    // Sort using custom comparator
+    metas.sort(aptComparator);
+    return metas;
   }
 
   function normalizeVN(s) {
@@ -1182,29 +1478,76 @@
       .replace(/[\u0300-\u036f]/g, "");
   }
   function guessBlock(path) {
-    const name =
-      String(path || "")
-        .split("/")
-        .pop() || "";
+    const p = String(path || "");
+    const s = normalizeVN(p);
+    // Detect folder-based naming like "Block A" / "Block B"
+    if (/block\s*a\b/.test(s)) return "A";
+    if (/block\s*b\b/.test(s)) return "B";
+    const name = p.split("/").pop() || "";
     const base = name.replace(/\.[^.]+$/, "");
     const first = base.trim().charAt(0).toUpperCase();
-    if (first === "A" || /(^|\/)a\d/i.test(path)) return "A";
-    if (first === "B" || /(^|\/)b\d/i.test(path)) return "B";
+    if (first === "A" || /(^|\/)a\d/i.test(p)) return "A";
+    if (first === "B" || /(^|\/)b\d/i.test(p)) return "B";
     return "";
   }
   function guessType(path) {
     const s = normalizeVN(path);
     if (/studio/.test(s)) return "studio";
-    if (/(^|\b|\/)1\s*pn\b/.test(s)) return "1pn";
-    if (/(^|\b|\/)2\s*pn\b/.test(s)) return "2pn";
-    if (/(^|\b|\/)3\s*pn\b/.test(s)) return "3pn";
-    if (/(^|\b|\/)4\s*pn\b/.test(s)) return "4pn";
+    // support both abbreviations (pn) and full words (phong ngu)
+    const pn = (n) => new RegExp(`(^|\\b|\\/)${n}\\s*(pn|phong\\s*ngu)\\b`);
+    if (pn(1).test(s)) return "1pn";
+    if (pn(2).test(s)) return "2pn";
+    if (pn(3).test(s)) return "3pn";
+    if (pn(4).test(s)) return "4pn";
     return "";
   }
   function normalizeAptType(t) {
     if (!t) return "";
     if (t === "4pn") return "3pn+";
     return t;
+  }
+  function guessCategory(path){
+    const s = normalizeVN(String(path || ""));
+    if (/mat bang tien ich/.test(s)) return 'mat-bang-tien-ich';
+    if (/mat bang tang/.test(s)) return 'mat-bang-tang';
+    // default as apartment unit
+    return 'can-ho';
+  }
+  function extractNumbers(str) {
+    const base = String(str || "").replace(/\.[^.]+$/, "");
+    const matches = base.match(/\d+/g) || [];
+    return matches.map((n) => parseInt(n, 10)).filter((n) => !isNaN(n));
+  }
+  function typeWeight(t) {
+    const map = { studio: 0, "1pn": 1, "2pn": 2, "3pn": 3, "3pn+": 3 };
+    return map[t] ?? 9;
+  }
+  function blockWeight(b) {
+    if (b === "A") return 0;
+    if (b === "B") return 1;
+    return 2;
+  }
+  function aptComparator(a, b) {
+    // 1) Block A < B < none
+    const bw = blockWeight(a.block) - blockWeight(b.block);
+    if (bw !== 0) return bw;
+    // 2) Compare first numbers lexicographically
+    const an = extractNumbers(a.name);
+    const bn = extractNumbers(b.name);
+    const len = Math.max(an.length, bn.length);
+    for (let i = 0; i < len; i++) {
+      const ai = an[i] ?? Infinity;
+      const bi = bn[i] ?? Infinity;
+      if (ai !== bi) return ai - bi;
+    }
+    // 3) Type weight
+    const tw = typeWeight(a.type) - typeWeight(b.type);
+    if (tw !== 0) return tw;
+    // 4) Vietnamese collation as stable fallback
+    return String(a.name).localeCompare(String(b.name), "vi", {
+      numeric: true,
+      sensitivity: "base",
+    });
   }
 
   function renderLegal(body, cfg) {
@@ -1287,6 +1630,35 @@
         out.push({ src, category: cat, alt: `${f.name}` })
       );
     });
+    (function appendAptFromManifest(){
+      const root = asset("assets/apartments/index.json");
+      try {
+        fetch(root, { cache: 'no-cache' })
+          .then(r => (r.ok ? r.json() : null))
+          .then(man => {
+            if (!man) return;
+            const files = [];
+            (man.groups || []).forEach(g => (g.files || []).forEach(f => files.push(f)));
+            (man.flatFiles || []).forEach(f => files.push(f));
+            const units = files.filter(src => guessCategory(src) === 'can-ho');
+            const existing = new Set(out.filter(it => it.category==='apartments').map(it => asset(it.src)));
+            const add = units.filter(u => !existing.has(asset(u)));
+            if (!add.length) return;
+            add.forEach(src => out.push({ src, category: 'apartments', alt: 'Mặt bằng căn hộ' }));
+            try {
+              const gallerySec = document.getElementById('gallery');
+              if (!gallerySec) return;
+              const tabs = gallerySec.querySelector('.gallery .tabs');
+              const activeBtn = tabs && Array.from(tabs.querySelectorAll('button')).find(b => b.getAttribute('aria-pressed')==='true');
+              const activeKey = activeBtn && activeBtn.getAttribute('data-key');
+              if (activeKey === 'apartments' || activeKey === 'all') {
+                activeBtn.click();
+              }
+            } catch(_){ }
+          })
+          .catch(()=>{});
+      } catch(_){ }
+    })();
     return out;
   }
 
@@ -1758,8 +2130,24 @@
         const iframe = ensureIframe(iframeName);
         submit.disabled = true;
         postToGoogle(form.action, formData, iframeName)
-          .then(() => showToast("Gửi thông tin thành công!"))
-          .catch(() => showToast("Gửi thông tin thất bại.", true))
+          .then(() => {
+            openModal({
+              title: "Đăng ký thành công",
+              message: "Cảm ơn bạn đã đăng ký. Chúng tôi sẽ liên hệ sớm nhất!",
+              success: true,
+              primary: { label: "Gọi hotline", href: extractHotlineTel() || "#contact" },
+              secondary: { label: "Đóng" }
+            });
+          })
+          .catch(() => {
+            openModal({
+              title: "Gửi không thành công",
+              message: "Rất tiếc! Vui lòng thử lại sau hoặc liên hệ hotline giúp mình nhé.",
+              success: false,
+              primary: { label: "Thử lại", action: () => form.requestSubmit() },
+              secondary: { label: "Đóng" }
+            });
+          })
           .finally(() => (submit.disabled = false));
       } else {
         // fallback submit
@@ -1825,6 +2213,100 @@
     setTimeout(() => {
       el.remove();
     }, 4000);
+  }
+
+  // Simple modal for success/error confirmations
+  function extractHotlineTel() {
+    try {
+      const s = (state.config?.site?.contacts || []).find((x) => /hotline|\b0\d{8,}/i.test(String(x || "")));
+      if (!s) return "";
+      const num = (String(s).match(/\d[\d\s\.\-]{7,}/) || [])[0] || "";
+      return num ? `tel:${num.replace(/[^\d+]/g, "")}` : "";
+    } catch (_) { return ""; }
+  }
+  function openModal(opts) {
+    const {
+      title = "Thông báo",
+      message = "",
+      success = true,
+      primary = null, // { label, href, action }
+      secondary = null, // { label, action }
+    } = opts || {};
+    let root = document.getElementById("modal");
+    if (!root) {
+      root = document.createElement("div");
+      root.id = "modal";
+      document.body.append(root);
+    }
+    root.innerHTML = "";
+    root.hidden = false;
+    root.setAttribute("role", "dialog");
+    root.setAttribute("aria-modal", "true");
+  const overlay = document.createElement("div");
+  overlay.className = "modal-overlay";
+  // Fallback inline styles to guarantee full-screen overlay even if CSS cache is stale
+  overlay.style.position = "fixed";
+  overlay.style.inset = "0";
+  overlay.style.zIndex = "2600";
+  overlay.style.display = "grid";
+  overlay.style.placeItems = "center";
+  overlay.style.background = "rgba(0,0,0,0.65)";
+  const box = document.createElement("div");
+  box.className = "modal-box" + (success ? " ok" : " error");
+  // Minimal fallback sizing
+  box.style.maxWidth = "94vw";
+  box.style.width = "min(680px, 94vw)";
+  box.style.background = "rgba(255,255,255,0.06)";
+  box.style.border = "1px solid rgba(255,255,255,0.12)";
+  box.style.borderRadius = "16px";
+  box.style.padding = "22px";
+  box.style.textAlign = "center";
+    const h = document.createElement("h3");
+    h.textContent = title;
+    const p = document.createElement("p");
+    p.textContent = message;
+    const actions = document.createElement("div");
+    actions.className = "modal-actions";
+    const closeBtn = document.createElement("button");
+    closeBtn.type = "button";
+    closeBtn.className = "btn";
+    closeBtn.textContent = secondary?.label || "Đóng";
+    closeBtn.addEventListener("click", closeModal);
+    if (primary && (primary.href || primary.action)) {
+      let pri;
+      if (primary.href) {
+        pri = document.createElement("a");
+        pri.href = primary.href;
+        pri.className = "btn btn-primary";
+        pri.textContent = primary.label || "Thực hiện";
+      } else {
+        pri = document.createElement("button");
+        pri.type = "button";
+        pri.className = "btn btn-primary";
+        pri.textContent = primary.label || "Thực hiện";
+        pri.addEventListener("click", () => { try { primary.action(); } catch(_){} closeModal(); });
+      }
+      actions.append(pri);
+    }
+    actions.append(closeBtn);
+    box.append(h, p, actions);
+    overlay.append(box);
+    root.append(overlay);
+    const onKey = (e) => { if (e.key === "Escape") closeModal(); };
+    document.addEventListener("keydown", onKey, { once: true });
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) closeModal(); });
+    // Focus first action
+    setTimeout(() => {
+      try { (actions.querySelector('.btn.btn-primary') || closeBtn).focus(); } catch(_){ }
+    }, 0);
+    try { document.body.classList.add("modal-open"); } catch(_){}
+  }
+  function closeModal() {
+    const root = document.getElementById("modal");
+    if (!root) return;
+    root.hidden = true;
+    root.innerHTML = "";
+    try { document.body.classList.remove("modal-open"); } catch(_){}
   }
 
   function initNavActiveObserver() {

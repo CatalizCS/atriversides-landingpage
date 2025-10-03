@@ -70,6 +70,7 @@
       "next": [
         { "label": "Tiện ích", "href": "#projects" },
         { "label": "Mặt bằng", "href": "#apartments" },
+        { "label": "Mặt bằng diện tích", "href": "#floor-areas" },
         { "label": "Pháp lý", "href": "#legal" },
         { "label": "VL bàn giao", "href": "#materials" },
         { "label": "Nhà mẫu & Bộ sưu tập", "href": "#gallery" },
@@ -89,6 +90,7 @@
     { "id": "legal", "label": "Pháp lý" },
     { "id": "location", "label": "Vị trí & Kết nối" },
     { "id": "apartments", "label": "Mặt bằng căn hộ" },
+    { "id": "floor-areas", "label": "Mặt bằng diện tích" },
     { "id": "projects", "label": "Tiện ích nội khu" },
     { "id": "materials", "label": "Vật liệu bàn giao" },
     { "id": "gallery", "label": "Nhà mẫu & Bộ sưu tập" },
@@ -225,6 +227,14 @@
           "/assets/imgs/Mặt bằng căn hộ/B09 và B10.jpg",
           "/assets/imgs/Mặt bằng căn hộ/B11 và B11A.jpg",
           "/assets/imgs/Mặt bằng căn hộ/Căn 1pn/z7013198911869_b495d22b380a7da9f6365052b4de8a22.jpg"
+        ]},
+        { "name": "Mặt bằng tầng tiện ích và tầng điển hình", "files": [
+          "/assets/imgs/Mặt bằng tầng tiện ích và tầng điển hình/z7003389625497_1bbf1da506d4890154ce4ffd880f4e98.jpg",
+          "/assets/imgs/Mặt bằng tầng tiện ích và tầng điển hình/z7003389625501_6667dbbe8f34fd5591f89a402321b0fb.jpg",
+          "/assets/imgs/Mặt bằng tầng tiện ích và tầng điển hình/z7003389625509_8a95e977c6fb218b4c6757902dc52bc4.jpg",
+          "/assets/imgs/Mặt bằng tầng tiện ích và tầng điển hình/z7003389625512_6f14845a5ba359fab86a85700c799570.jpg",
+          "/assets/imgs/Mặt bằng tầng tiện ích và tầng điển hình/z7003389625514_11724a38f3e39e93d9d8cec24c81e80e.jpg",
+          "/assets/imgs/Mặt bằng tầng tiện ích và tầng điển hình/z7003389625518_433d75113fae0c2a4c7d85f03bcad587.jpg"
         ]}
       ]
     },
