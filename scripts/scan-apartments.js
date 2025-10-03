@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = process.cwd();
-const IMG_DIR = path.join(ROOT, 'assets', 'imgs', 'Mặt bằng căn hộ');
+const IMG_DIR = path.join(ROOT, 'assets', 'imgs', 'mặt bằng căn hộ');
 const OUT_DIR = path.join(ROOT, 'assets', 'apartments');
 const OUT_FILE = path.join(OUT_DIR, 'index.json');
 
@@ -27,12 +27,12 @@ function scan(){
       const files = scanDirRecursive(dir);
       files.sort(viCompare);
       const relFiles = files.map(f=> toPosix(path.relative(ROOT, f)).replace(/^/, ''))
-        .map(p => toPosix(path.join('assets','imgs','Mặt bằng căn hộ', path.relative(IMG_DIR, path.join(IMG_DIR, p)).split(path.sep).join('/'))));
+        .map(p => toPosix(path.join('assets','imgs','mặt bằng căn hộ', path.relative(IMG_DIR, path.join(IMG_DIR, p)).split(path.sep).join('/'))));
       // Simpler: build relative from IMG_DIR directly
-      const relFromImgDir = files.map(f => toPosix(path.join('assets','imgs','Mặt bằng căn hộ', path.relative(IMG_DIR, f))));
+  const relFromImgDir = files.map(f => toPosix(path.join('assets','imgs','mặt bằng căn hộ', path.relative(IMG_DIR, f))));
       groups.push({ name: ent.name, files: relFromImgDir });
     } else if (ent.isFile() && /\.(png|jpe?g|webp|gif)$/i.test(ent.name)){
-      flatFiles.push(toPosix(path.join('assets','imgs','Mặt bằng căn hộ', ent.name)));
+  flatFiles.push(toPosix(path.join('assets','imgs','mặt bằng căn hộ', ent.name)));
     }
   }
   groups.sort((a,b)=> viCompare(a.name, b.name));
