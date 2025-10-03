@@ -1255,7 +1255,7 @@
         }
         // For types availability, apply current block filter
         if (activeBlock === "all" || it.block === activeBlock) {
-          if (it.type) avail.types.add(it.type);
+          if (it.type) avail.types.add(typeFilterKey(it.type));
         }
         avail.any = true;
       });
@@ -1344,6 +1344,13 @@
           itemType === "3pn+"
         );
       return itemType === filter;
+    }
+
+    // Normalize raw unit type to a filter key used in the UI
+    function typeFilterKey(t) {
+      if (!t) return t;
+      if (t === "3pn" || t === "4pn" || t === "5pn" || t === "3pn+") return "3pn+";
+      return t;
     }
 
     function categoryWeight(cat) {
