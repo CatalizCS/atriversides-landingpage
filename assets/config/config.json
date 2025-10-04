@@ -15,8 +15,8 @@
       "clarityId": ""
     },
     "contacts": [
-      "Hotline: 0981 467 967",
-      "Email: atsaigonriverside@gmail.com",
+      "Hotline: 0914 453 841",
+      "Email:  atrealtorsale@gmail.com",
       "Địa chỉ: 105, Quốc Lộ 13, P.Hiệp Bình Chánh, Hồ Chí Minh"
     ]
   },
@@ -133,9 +133,9 @@
         }
       },
       "slides": [
-        { "title": "Hồ bơi", "desc": "Không gian xanh mát", "image": "/assets/imgs/Tiện ích nội và Ngoại khu/z7021116935709_ff8f227f39d4ed8b6abd110f82b4b8b0.jpg" },
-        { "title": "Phòng Gym", "desc": "Phòng tập hiện đại", "image": "/assets/imgs/Tiện ích nội và Ngoại khu/z7021116917183_784a9921304268df518af8dbfa57cc65.jpg" },
-        { "title": "Không gian chung", "desc": "Sang trọng, quý phái, đầy đủ tiện nghi", "image": "/assets/imgs/Tiện ích nội và Ngoại khu/z7021116906295_f0c253e4b3da94783650f8d90434794e.jpg" }
+        { "title": "Hồ bơi", "desc": "Không gian xanh mát", "image": "/assets/imgs/Tiện ích nội và Ngoại khu/z7021116935709_ff8f227f39d4ed8b6abd110f82b4b8b0.jpg", "content": "Hồ bơi tràn bờ được bao phủ bởi mảng xanh và khoảng thở tự nhiên, là nơi thư giãn – tái tạo năng lượng mỗi ngày cho cư dân." },
+        { "title": "Phòng Gym", "desc": "Phòng tập hiện đại", "image": "/assets/imgs/Tiện ích nội và Ngoại khu/z7021116917183_784a9921304268df518af8dbfa57cc65.jpg", "content": "Không gian Gym & Yoga trang bị máy tập tiêu chuẩn cùng khu vực stretching – giúp duy trì lối sống khỏe và cân bằng." },
+        { "title": "Không gian chung", "desc": "Sang trọng, quý phái, đầy đủ tiện nghi", "image": "/assets/imgs/Tiện ích nội và Ngoại khu/z7021116906295_f0c253e4b3da94783650f8d90434794e.jpg", "content": "Khu lounge & sinh hoạt cộng đồng thiết kế mở, sang trọng – là điểm kết nối cư dân, tổ chức sự kiện nhỏ hay đón tiếp bạn bè." }
       ]
     }
   ],
@@ -153,8 +153,9 @@
     "project-info": {
       "text": "A&T Saigon Riverside do A&T Group phát triển, định hướng chuẩn sống nghỉ dưỡng ven sông. Kiến trúc tinh gọn tối ưu ánh sáng và gió tự nhiên; chuỗi tiện ích nội khu gồm hồ bơi tràn bờ, sky bar, vườn trên mái và khu thể thao đa năng; mỗi căn hộ thiết kế thông minh, sang trọng và riêng tư."
     },
-    "location": {
-      "text": "Vị trí mặt tiền đường Ven Sông (Bình Hòa, TP.HCM) mang lợi thế 'cận thị – cận giang – cận lộ': kết nối nhanh các trục QL13, Phạm Văn Đồng về trung tâm; đồng thời tận hưởng không gian xanh mát của sông Sài Gòn và hệ tiện ích đô thị hiện hữu."
+    "projects": {
+      "title": "Tiện ích nội khu",
+      "text": "Hệ tiện ích nội khu của A&T Saigon Riverside được quy hoạch đồng bộ xoay quanh trục cảnh quan ven sông: hồ bơi tràn bờ, khu lounge thư giãn, vườn nhiệt đới, phòng gym – yoga hiện đại, đường dạo bộ và không gian sinh hoạt cộng đồng đa năng. Mỗi điểm chạm đều tối ưu trải nghiệm nghỉ dưỡng – mang lại sự cân bằng giữa thư thái, vận động và kết nối cư dân."
     }
   },
   "forms": {

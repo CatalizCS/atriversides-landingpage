@@ -65,9 +65,7 @@
       __preloaderHidden = true;
       const el = __preloaderEl;
       if (!el) return;
-      // Start overlay fade-out
       el.classList.add("hide");
-      // Trigger page fade-in on next frame to ensure transition applies
       try {
         requestAnimationFrame(() => {
           document.body.classList.remove("preload-active");
@@ -77,7 +75,6 @@
           document.body.classList.remove("preload-active");
         } catch (__) {}
       }
-      // Remove preloader after transition end (with fallback)
       const cleanup = () => {
         try {
           el.remove();
@@ -92,18 +89,9 @@
     setTimeout(hide, remain);
     setTimeout(hide, maxMs);
   }
-
   async function init() {
     try {
       // Apply animation override via URL/localStorage (bypass prefers-reduced-motion)
-      try {
-        const p = new URLSearchParams(location.search);
-        const forceOn =
-          p.get("anim") === "on" || localStorage.getItem("anim") === "on";
-        if (forceOn) {
-          document.documentElement.classList.add("anim-override");
-        }
-      } catch (_) {}
       try {
         const usp = new URLSearchParams(location.search);
         if (usp.has("redirect")) {
@@ -146,10 +134,10 @@
         })();
         document.head.appendChild(p);
       } catch (e) {}
-  buildHeader(cfg);
-  await renderSections(cfg);
-  // Ensure preloader is gone as soon as critical sections render
-  hidePreloaderAfterMin(0, 800);
+      buildHeader(cfg);
+      await renderSections(cfg);
+      // Ensure preloader is gone as soon as critical sections render
+      hidePreloaderAfterMin(0, 800);
       buildFooter(cfg);
 
       initSmoothScrollAndAnimations();
@@ -165,6 +153,9 @@
           document.body.classList.remove("preload-active");
         } catch (_) {}
       }, 1200);
+      // Initialize delayed lead popup (after load)
+      initLeadPopup();
+      initContactFab();
       if (isDebug()) {
         console.info("[Libs]", {
           hasLenis: !!window.Lenis,
@@ -576,8 +567,8 @@
       else if (key === "key-metrics") renderMetrics(body, cfg);
       else if (key === "projects") renderProjectsSlider(body, cfg);
       else if (key === "apartments") renderApartments(body, cfg);
-  else if (key === "gallery") renderGallery(body, cfg);
-  else if (key === "floor-areas") renderFloorAreas(body, cfg);
+      else if (key === "gallery") renderGallery(body, cfg);
+      else if (key === "floor-areas") renderFloorAreas(body, cfg);
       else if (key === "news") renderNews(body, cfg);
       else if (key === "contact") renderContact(body, cfg);
       else if (key === "legal") renderLegal(body, cfg);
@@ -617,7 +608,9 @@
     bg.className = "bg";
     bg.alt = "";
     bg.loading = "eager";
-    try { bg.fetchPriority = "high"; } catch(_) {}
+    try {
+      bg.fetchPriority = "high";
+    } catch (_) {}
     bg.decoding = "async";
     bg.src = imgUrl;
     const overlay = document.createElement("div");
@@ -628,8 +621,9 @@
     h1.textContent = cfg.site?.title || "Dự án";
     const p = document.createElement("p");
     p.className = "subhead";
-  const heroSub = cfg.site?.hero?.subhead || cfg.site?.meta?.description || "";
-  p.textContent = shorten(heroSub, 160);
+    const heroSub =
+      cfg.site?.hero?.subhead || cfg.site?.meta?.description || "";
+    p.textContent = shorten(heroSub, 160);
     const cta = document.createElement("div");
     cta.className = "cta";
     const btn1 = document.createElement("a");
@@ -656,8 +650,21 @@
         stagger: 0.07,
         delay: 0.05,
       });
-      if (window.ScrollTrigger && motionEnabled()){
-        gsap.fromTo(bg, { yPercent: 0 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: body.parentElement, start: 'top top', end: 'bottom top', scrub: 0.6 } });
+      if (window.ScrollTrigger && motionEnabled()) {
+        gsap.fromTo(
+          bg,
+          { yPercent: 0 },
+          {
+            yPercent: 8,
+            ease: "none",
+            scrollTrigger: {
+              trigger: body.parentElement,
+              start: "top top",
+              end: "bottom top",
+              scrub: 0.6,
+            },
+          }
+        );
       }
     }
   }
@@ -768,36 +775,47 @@
     wrap.className = "split";
     const text = document.createElement("div");
     text.className = "text";
+    // Special case: location section should only show the image (no text content)
+    const imageOnly = key === "location";
     // Section has an <h2> in the section-head already. Avoid repeating the same title here.
     const secLabel = cfg.sections?.find((s) => s.id === key)?.label || "";
     const contentTitle = cfg.content?.[key]?.title || "";
     const titlesEqual = (a, b) =>
-      normalizeVN(String(a || "")).trim() === normalizeVN(String(b || "")).trim();
+      normalizeVN(String(a || "")).trim() ===
+      normalizeVN(String(b || "")).trim();
     const shouldShowH3 = contentTitle && !titlesEqual(contentTitle, secLabel);
     let h3;
     if (shouldShowH3) {
       h3 = document.createElement("h3");
       h3.textContent = contentTitle;
     }
-    const p = document.createElement("p");
-    const fallback =
-      "Thông tin đang được cập nhật. Đây là đoạn giới thiệu ngắn về mục này.";
-    const txt = cfg.content?.[key]?.text || fallback;
-  p.textContent = txt;
-  if (h3) text.append(h3);
-  text.append(p);
+    if (!imageOnly) {
+      const p = document.createElement("p");
+      const fallback =
+        "Thông tin đang được cập nhật. Đây là đoạn giới thiệu ngắn về mục này.";
+      const txt = cfg.content?.[key]?.text || fallback;
+      p.textContent = txt;
+      if (h3) text.append(h3);
+      text.append(p);
+    }
     const media = document.createElement("div");
     media.className = "media";
     const img = document.createElement("img");
     img.loading = "lazy";
     img.decoding = "async";
-    img.alt = (contentTitle || secLabel) || "";
+    img.alt = contentTitle || secLabel || "";
     img.src = asset(pickSectionImage(cfg, key));
     img.classList.add("zoomable");
     img.addEventListener("click", () => openLightbox(img.src, img.alt));
     media.append(img);
     if (idx % 2 === 1) wrap.classList.add("reverse-on-mobile");
-    wrap.append(text, media);
+    if (imageOnly) {
+      wrap.classList.add("image-only");
+      // don't append text at all
+      wrap.append(media);
+    } else {
+      wrap.append(text, media);
+    }
     body.append(wrap);
 
     // Optional partners block (text-only) appended under the split content
@@ -834,13 +852,15 @@
           grid.append(item);
         });
         // Credits (if any partner has credit info)
-        const creditsInfo = (partners || []).filter(p => p.credit || p.license);
+        const creditsInfo = (partners || []).filter(
+          (p) => p.credit || p.license
+        );
         let creditsEl = null;
         if (creditsInfo.length) {
           creditsEl = document.createElement("div");
           creditsEl.className = "credits";
           const span = document.createElement("small");
-          const parts = creditsInfo.map(p => {
+          const parts = creditsInfo.map((p) => {
             const name = p.name || p.role || "Logo";
             if (p.credit) {
               const a = document.createElement("a");
@@ -854,9 +874,14 @@
           });
           // Build inline list: Name (License), ...
           parts.forEach((part, i) => {
-            if (i) span.append(document.createTextNode(i === parts.length - 1 ? ", " : ", "));
-            if (part.a) span.append(part.a); else span.append(document.createTextNode(part.text));
-            if (part.lic) span.append(document.createTextNode(` (${part.lic})`));
+            if (i)
+              span.append(
+                document.createTextNode(i === parts.length - 1 ? ", " : ", ")
+              );
+            if (part.a) span.append(part.a);
+            else span.append(document.createTextNode(part.text));
+            if (part.lic)
+              span.append(document.createTextNode(` (${part.lic})`));
           });
           creditsEl.append(span);
         }
@@ -867,9 +892,13 @@
     } catch (_) {}
 
     // Mark for GSAP slide-in animations (alternate left/right by index)
-    const leftFirst = idx % 2 === 0; // even index: text from left, image from right; odd: reversed
-    text.setAttribute("data-anim", leftFirst ? "slide-left" : "slide-right");
-    media.setAttribute("data-anim", leftFirst ? "slide-right" : "slide-left");
+    if (!imageOnly) {
+      const leftFirst = idx % 2 === 0; // even index: text from left, image from right; odd: reversed
+      text.setAttribute("data-anim", leftFirst ? "slide-left" : "slide-right");
+      media.setAttribute("data-anim", leftFirst ? "slide-right" : "slide-left");
+    } else {
+      media.setAttribute("data-anim", "fade-in");
+    }
 
     // Parallax background for the section wrapper
     if (window.gsap && window.ScrollTrigger && motionEnabled()) {
@@ -920,6 +949,13 @@
   }
 
   function renderProjectsSlider(body, cfg) {
+    const introText = cfg.content?.projects?.text;
+    if (introText) {
+      const intro = document.createElement("div");
+      intro.className = "projects-intro";
+      intro.textContent = introText;
+      body.appendChild(intro);
+    }
     const container = document.createElement("div");
     container.className = "projects-swiper swiper";
     const wrapper = document.createElement("div");
@@ -945,23 +981,30 @@
       const d = document.createElement("div");
       d.style.opacity = "0.8";
       d.textContent = sl.desc || "";
-      cap.append(t, d);
+      const extra = document.createElement("div");
+      extra.className = "extra";
+      if (sl.content) {
+        extra.textContent = sl.content;
+      } else {
+        extra.style.display = "none";
+      }
+      cap.append(t, d, extra);
       card.append(img, cap);
       slide.append(card);
       wrapper.append(slide);
     });
-  container.append(wrapper);
-  // nav/pagination (move pagination OUTSIDE of slider container)
-  const pag = document.createElement("div");
-  pag.className = "swiper-pagination";
+    container.append(wrapper);
+    // nav/pagination (move pagination OUTSIDE of slider container)
+    const pag = document.createElement("div");
+    pag.className = "swiper-pagination";
     const prev = document.createElement("div");
     prev.className = "swiper-button-prev";
     const next = document.createElement("div");
     next.className = "swiper-button-next";
-  container.append(prev, next);
-  body.append(container);
-  // Place pagination as a sibling below the slider
-  body.append(pag);
+    container.append(prev, next);
+    body.append(container);
+    // Place pagination as a sibling below the slider
+    body.append(pag);
 
     // init after next tick
     setTimeout(() => {
@@ -1151,10 +1194,12 @@
 
     // Pull from explicit folder mapping if available, else summary
     const folderName = "Mặt bằng tầng tiện ích và tầng điển hình";
-    const list = (cfg.images?.folders?.[folderName])
-      || ((cfg.images?.summary?.folders || []).find(f => f.name === folderName)?.files)
-      || [];
-    const items = list.map(src => ({ src, alt: "Mặt bằng diện tích" }));
+    const list =
+      cfg.images?.folders?.[folderName] ||
+      (cfg.images?.summary?.folders || []).find((f) => f.name === folderName)
+        ?.files ||
+      [];
+    const items = list.map((src) => ({ src, alt: "Mặt bằng diện tích" }));
 
     items.forEach((it, idx) => {
       const a = document.createElement("a");
@@ -1167,12 +1212,20 @@
       img.decoding = "async";
       a.append(img);
       grid.append(a);
-      a.addEventListener("click", (e) => { e.preventDefault(); openLightbox(img.src, img.alt); });
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        openLightbox(img.src, img.alt);
+      });
       // simple stagger-in
       a.style.opacity = "0";
       a.style.transform = "translateY(8px)";
       a.style.transition = "opacity .35s ease, transform .35s ease";
-      requestAnimationFrame(() => setTimeout(() => { a.style.opacity = "1"; a.style.transform = "translateY(0)"; }, idx * 25));
+      requestAnimationFrame(() =>
+        setTimeout(() => {
+          a.style.opacity = "1";
+          a.style.transform = "translateY(0)";
+        }, idx * 25)
+      );
     });
 
     if (window.ScrollTrigger) setTimeout(() => ScrollTrigger.refresh(), 50);
@@ -1223,8 +1276,8 @@
       { key: "2pn", label: "2PN" },
       { key: "3pn+", label: "3PN+" },
     ];
-  let activeCategory = "all";
-  let activeBlock = "all";
+    let activeCategory = "all";
+    let activeBlock = "all";
     let activeType = "all";
     let limit = 8; // 4x2 initially
 
@@ -1240,7 +1293,8 @@
       items.forEach((it) => {
         // Category must match selection
         const catOk =
-          activeCategory === "all" || it.category === activeCategory ||
+          activeCategory === "all" ||
+          it.category === activeCategory ||
           (activeCategory === "can-ho" && it.category === "can-ho");
         if (!catOk) return;
         // Only consider block/type for can-ho/all
@@ -1291,8 +1345,10 @@
       if (!isCanHo) return;
 
       // Ensure active values are valid; if not, reset to 'all'
-      if (activeBlock !== "all" && !availability.blocks.has(activeBlock)) activeBlock = "all";
-      if (activeType !== "all" && !availability.types.has(activeType)) activeType = "all";
+      if (activeBlock !== "all" && !availability.blocks.has(activeBlock))
+        activeBlock = "all";
+      if (activeType !== "all" && !availability.types.has(activeType))
+        activeType = "all";
 
       // Build block buttons with availability
       const hasAnyBlock = availability.blocks.size > 0;
@@ -1349,15 +1405,16 @@
     // Normalize raw unit type to a filter key used in the UI
     function typeFilterKey(t) {
       if (!t) return t;
-      if (t === "3pn" || t === "4pn" || t === "5pn" || t === "3pn+") return "3pn+";
+      if (t === "3pn" || t === "4pn" || t === "5pn" || t === "3pn+")
+        return "3pn+";
       return t;
     }
 
     function categoryWeight(cat) {
       // Prioritize floor plans first, then amenities floor plans, then unit (room) images
-      if (cat === 'mat-bang-tang') return 0; // floors on top
-      if (cat === 'mat-bang-tien-ich') return 1;
-      if (cat === 'can-ho') return 2; // unit/room images later
+      if (cat === "mat-bang-tang") return 0; // floors on top
+      if (cat === "mat-bang-tien-ich") return 1;
+      if (cat === "can-ho") return 2; // unit/room images later
       return 3;
     }
 
@@ -1365,18 +1422,20 @@
       const filtered = items.filter((it) => {
         // Category filter first
         const catOk =
-          activeCategory === "all" || it.category === activeCategory ||
+          activeCategory === "all" ||
+          it.category === activeCategory ||
           (activeCategory === "can-ho" && it.category === "can-ho");
         if (!catOk) return false;
         // Only apply block/type when selecting Căn hộ or All
         const applyBT = activeCategory === "all" || activeCategory === "can-ho";
-        const blockOk = !applyBT || activeBlock === "all" || it.block === activeBlock;
+        const blockOk =
+          !applyBT || activeBlock === "all" || it.block === activeBlock;
         const typeOk = !applyBT || matchesType(it.type, activeType);
         return blockOk && typeOk;
       });
       // When viewing all categories, sort to show floors first, then others; otherwise keep logical ordering
       const ordered = filtered.slice();
-      if (activeCategory === 'all') {
+      if (activeCategory === "all") {
         ordered.sort((a, b) => {
           const cw = categoryWeight(a.category) - categoryWeight(b.category);
           if (cw !== 0) return cw;
@@ -1421,14 +1480,12 @@
   }
 
   function viSort(arr) {
-    return (arr || [])
-      .slice()
-      .sort((a, b) =>
-        String(a).localeCompare(String(b), "vi", {
-          numeric: true,
-          sensitivity: "base",
-        })
-      );
+    return (arr || []).slice().sort((a, b) =>
+      String(a).localeCompare(String(b), "vi", {
+        numeric: true,
+        sensitivity: "base",
+      })
+    );
   }
   async function loadApartmentsManifest() {
     try {
@@ -1513,12 +1570,12 @@
     if (t === "4pn") return "3pn+";
     return t;
   }
-  function guessCategory(path){
+  function guessCategory(path) {
     const s = normalizeVN(String(path || ""));
-    if (/mat bang tien ich/.test(s)) return 'mat-bang-tien-ich';
-    if (/mat bang tang/.test(s)) return 'mat-bang-tang';
+    if (/mat bang tien ich/.test(s)) return "mat-bang-tien-ich";
+    if (/mat bang tang/.test(s)) return "mat-bang-tang";
     // default as apartment unit
-    return 'can-ho';
+    return "can-ho";
   }
   function extractNumbers(str) {
     const base = String(str || "").replace(/\.[^.]+$/, "");
@@ -1637,34 +1694,48 @@
         out.push({ src, category: cat, alt: `${f.name}` })
       );
     });
-    (function appendAptFromManifest(){
+    (function appendAptFromManifest() {
       const root = asset("assets/apartments/index.json");
       try {
-        fetch(root, { cache: 'no-cache' })
-          .then(r => (r.ok ? r.json() : null))
-          .then(man => {
+        fetch(root, { cache: "no-cache" })
+          .then((r) => (r.ok ? r.json() : null))
+          .then((man) => {
             if (!man) return;
             const files = [];
-            (man.groups || []).forEach(g => (g.files || []).forEach(f => files.push(f)));
-            (man.flatFiles || []).forEach(f => files.push(f));
-            const units = files.filter(src => guessCategory(src) === 'can-ho');
-            const existing = new Set(out.filter(it => it.category==='apartments').map(it => asset(it.src)));
-            const add = units.filter(u => !existing.has(asset(u)));
+            (man.groups || []).forEach((g) =>
+              (g.files || []).forEach((f) => files.push(f))
+            );
+            (man.flatFiles || []).forEach((f) => files.push(f));
+            const units = files.filter(
+              (src) => guessCategory(src) === "can-ho"
+            );
+            const existing = new Set(
+              out
+                .filter((it) => it.category === "apartments")
+                .map((it) => asset(it.src))
+            );
+            const add = units.filter((u) => !existing.has(asset(u)));
             if (!add.length) return;
-            add.forEach(src => out.push({ src, category: 'apartments', alt: 'Mặt bằng căn hộ' }));
+            add.forEach((src) =>
+              out.push({ src, category: "apartments", alt: "Mặt bằng căn hộ" })
+            );
             try {
-              const gallerySec = document.getElementById('gallery');
+              const gallerySec = document.getElementById("gallery");
               if (!gallerySec) return;
-              const tabs = gallerySec.querySelector('.gallery .tabs');
-              const activeBtn = tabs && Array.from(tabs.querySelectorAll('button')).find(b => b.getAttribute('aria-pressed')==='true');
-              const activeKey = activeBtn && activeBtn.getAttribute('data-key');
-              if (activeKey === 'apartments' || activeKey === 'all') {
+              const tabs = gallerySec.querySelector(".gallery .tabs");
+              const activeBtn =
+                tabs &&
+                Array.from(tabs.querySelectorAll("button")).find(
+                  (b) => b.getAttribute("aria-pressed") === "true"
+                );
+              const activeKey = activeBtn && activeBtn.getAttribute("data-key");
+              if (activeKey === "apartments" || activeKey === "all") {
                 activeBtn.click();
               }
-            } catch(_){ }
+            } catch (_) {}
           })
-          .catch(()=>{});
-      } catch(_){ }
+          .catch(() => {});
+      } catch (_) {}
     })();
     return out;
   }
@@ -1682,7 +1753,7 @@
     btn.addEventListener("click", closeLightbox);
     lb.append(img, btn);
     lb.hidden = false;
-   
+
     const onKey = (e) => {
       if (e.key === "Escape") {
         closeLightbox();
@@ -1857,7 +1928,7 @@
       container.append(p);
       return;
     }
-  const { frontMatter, content } = parseFrontMatter(md);
+    const { frontMatter, content } = parseFrontMatter(md);
     const art = document.createElement("article");
     art.className = "article";
     const back = document.createElement("a");
@@ -1895,31 +1966,36 @@
     copyBtn.type = "button";
     copyBtn.className = "btn";
     copyBtn.textContent = "Sao chép link";
-    const linkHref = (function(){
-      const canon = state.config?.site?.meta?.canonical || location.origin + location.pathname;
+    const linkHref = (function () {
+      const canon =
+        state.config?.site?.meta?.canonical ||
+        location.origin + location.pathname;
       try {
         const url = new URL(canon);
-        url.hash = '#news/' + encodeURIComponent(slug);
+        url.hash = "#news/" + encodeURIComponent(slug);
         return url.toString();
       } catch {
-        return (canon.replace(/\/?$/, '/') + '#news/' + encodeURIComponent(slug));
+        return canon.replace(/\/?$/, "/") + "#news/" + encodeURIComponent(slug);
       }
     })();
-    shareBtn.addEventListener('click', async () => {
+    shareBtn.addEventListener("click", async () => {
       try {
         if (navigator.share) {
-          await navigator.share({ title: frontMatter.title || document.title, url: linkHref });
+          await navigator.share({
+            title: frontMatter.title || document.title,
+            url: linkHref,
+          });
         } else {
           await navigator.clipboard.writeText(linkHref);
-          showToast('Đã sao chép link');
+          showToast("Đã sao chép link");
         }
-      } catch(_) {}
+      } catch (_) {}
     });
-    copyBtn.addEventListener('click', async () => {
+    copyBtn.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(linkHref);
-        showToast('Đã sao chép link');
-      } catch(_) {}
+        showToast("Đã sao chép link");
+      } catch (_) {}
     });
     share.append(shareBtn, copyBtn);
     const src = frontMatter.source || "";
@@ -1941,24 +2017,30 @@
 
     // Inject JSON-LD Article
     try {
-      const prev = document.getElementById('ld-article');
+      const prev = document.getElementById("ld-article");
       if (prev) prev.remove();
       const ld = {
-        '@context': 'https://schema.org',
-        '@type': 'Article',
+        "@context": "https://schema.org",
+        "@type": "Article",
         headline: frontMatter.title || slug,
         datePublished: frontMatter.date || undefined,
         image: frontMatter.cover ? abs(frontMatter.cover) : undefined,
         mainEntityOfPage: state.config?.site?.meta?.canonical || location.href,
-        author: { '@type': 'Organization', name: state.config?.site?.title || 'A&T Saigon Riverside' },
-        publisher: { '@type': 'Organization', name: state.config?.site?.title || 'A&T Saigon Riverside' }
+        author: {
+          "@type": "Organization",
+          name: state.config?.site?.title || "A&T Saigon Riverside",
+        },
+        publisher: {
+          "@type": "Organization",
+          name: state.config?.site?.title || "A&T Saigon Riverside",
+        },
       };
-      const s = document.createElement('script');
-      s.id = 'ld-article';
-      s.type = 'application/ld+json';
+      const s = document.createElement("script");
+      s.id = "ld-article";
+      s.type = "application/ld+json";
       s.textContent = JSON.stringify(ld);
       document.head.appendChild(s);
-    } catch(_) {}
+    } catch (_) {}
   }
 
   function parseFrontMatter(text) {
@@ -2022,14 +2104,54 @@
 
   function renderContact(body, cfg) {
     const wrap = document.createElement("div");
-    wrap.className = "forms";
+    wrap.className = "forms single single-centered"; // center horizontally & vertically
     // Only keep one registration form to avoid duplication
-    const lead = buildForm(cfg.forms?.leadForm, true);
+    const leadCfg = cfg.forms?.leadForm;
+    const lead = buildForm(leadCfg, true);
+    // Marketing intro block (image + copy)
+    const container = document.createElement("div");
+    container.className = "lead-form-wrapper";
+    const intro = document.createElement("div");
+    intro.className = "lead-intro";
+    const imgHolder = document.createElement("div");
+    imgHolder.className = "lead-intro-media";
+    const img = document.createElement("img");
+    img.loading = "lazy";
+    img.decoding = "async";
+    const heroPreview = chooseHeroImage(cfg);
+    const customImg = leadCfg?.image || heroPreview;
+    img.src = asset(customImg);
+    img.alt = cfg.site?.title ? "Dự án " + cfg.site.title : "Dự án";
+    imgHolder.append(img);
+    const textBox = document.createElement("div");
+    textBox.className = "lead-intro-text";
+    const h = document.createElement("h3");
+    h.textContent = leadCfg?.headline || "Nhận thông tin mới nhất";
+    const ul = document.createElement("ul");
+    ul.className = "lead-benefits";
+    const defaultLines = [
+      "Bảng giá & ưu đãi sớm",
+      "Tư vấn loại căn & dòng tiền",
+      "Nhận thông báo tiến độ dự án",
+    ];
+    const msgs =
+      Array.isArray(leadCfg?.messages) && leadCfg.messages.length
+        ? leadCfg.messages
+        : defaultLines;
+    msgs.slice(0, 4).forEach((t) => {
+      const li = document.createElement("li");
+      li.textContent = t;
+      ul.append(li);
+    });
+    textBox.append(h, ul);
+    intro.append(imgHolder, textBox);
+    container.append(intro, lead);
+    wrap.append(container);
     body.append(wrap);
-    wrap.append(lead);
   }
 
-  function buildForm(formCfg, isLead) {
+  function buildForm(formCfg, isLead, options) {
+    const opts = options || {};
     const form = document.createElement("form");
     form.className = "form";
     form.noValidate = true;
@@ -2138,21 +2260,34 @@
         submit.disabled = true;
         postToGoogle(form.action, formData, iframeName)
           .then(() => {
+            try {
+              localStorage.setItem("leadPopupSubmittedAt", String(Date.now()));
+            } catch (_) {}
+            try {
+              if (typeof opts.onSuccess === "function") opts.onSuccess();
+            } catch (_) {}
+            try {
+              document.dispatchEvent(new CustomEvent("leadFormSubmitted"));
+            } catch (_) {}
             openModal({
               title: "Đăng ký thành công",
               message: "Cảm ơn bạn đã đăng ký. Chúng tôi sẽ liên hệ sớm nhất!",
               success: true,
-              primary: { label: "Gọi hotline", href: extractHotlineTel() || "#contact" },
-              secondary: { label: "Đóng" }
+              primary: {
+                label: "Gọi hotline",
+                href: extractHotlineTel() || "#contact",
+              },
+              secondary: { label: "Đóng" },
             });
           })
           .catch(() => {
             openModal({
               title: "Gửi không thành công",
-              message: "Rất tiếc! Vui lòng thử lại sau hoặc liên hệ hotline giúp mình nhé.",
+              message:
+                "Rất tiếc! Vui lòng thử lại sau hoặc liên hệ hotline giúp mình nhé.",
               success: false,
               primary: { label: "Thử lại", action: () => form.requestSubmit() },
-              secondary: { label: "Đóng" }
+              secondary: { label: "Đóng" },
             });
           })
           .finally(() => (submit.disabled = false));
@@ -2225,11 +2360,15 @@
   // Simple modal for success/error confirmations
   function extractHotlineTel() {
     try {
-      const s = (state.config?.site?.contacts || []).find((x) => /hotline|\b0\d{8,}/i.test(String(x || "")));
+      const s = (state.config?.site?.contacts || []).find((x) =>
+        /hotline|\b0\d{8,}/i.test(String(x || ""))
+      );
       if (!s) return "";
       const num = (String(s).match(/\d[\d\s\.\-]{7,}/) || [])[0] || "";
       return num ? `tel:${num.replace(/[^\d+]/g, "")}` : "";
-    } catch (_) { return ""; }
+    } catch (_) {
+      return "";
+    }
   }
   function openModal(opts) {
     const {
@@ -2249,25 +2388,25 @@
     root.hidden = false;
     root.setAttribute("role", "dialog");
     root.setAttribute("aria-modal", "true");
-  const overlay = document.createElement("div");
-  overlay.className = "modal-overlay";
-  // Fallback inline styles to guarantee full-screen overlay even if CSS cache is stale
-  overlay.style.position = "fixed";
-  overlay.style.inset = "0";
-  overlay.style.zIndex = "2600";
-  overlay.style.display = "grid";
-  overlay.style.placeItems = "center";
-  overlay.style.background = "rgba(0,0,0,0.65)";
-  const box = document.createElement("div");
-  box.className = "modal-box" + (success ? " ok" : " error");
-  // Minimal fallback sizing
-  box.style.maxWidth = "94vw";
-  box.style.width = "min(680px, 94vw)";
-  box.style.background = "rgba(255,255,255,0.06)";
-  box.style.border = "1px solid rgba(255,255,255,0.12)";
-  box.style.borderRadius = "16px";
-  box.style.padding = "22px";
-  box.style.textAlign = "center";
+    const overlay = document.createElement("div");
+    overlay.className = "modal-overlay";
+    // Fallback inline styles to guarantee full-screen overlay even if CSS cache is stale
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.zIndex = "2600";
+    overlay.style.display = "grid";
+    overlay.style.placeItems = "center";
+    overlay.style.background = "rgba(0,0,0,0.65)";
+    const box = document.createElement("div");
+    box.className = "modal-box" + (success ? " ok" : " error");
+    // Minimal fallback sizing
+    box.style.maxWidth = "94vw";
+    box.style.width = "min(680px, 94vw)";
+    box.style.background = "rgba(255,255,255,0.06)";
+    box.style.border = "1px solid rgba(255,255,255,0.12)";
+    box.style.borderRadius = "16px";
+    box.style.padding = "22px";
+    box.style.textAlign = "center";
     const h = document.createElement("h3");
     h.textContent = title;
     const p = document.createElement("p");
@@ -2291,7 +2430,12 @@
         pri.type = "button";
         pri.className = "btn btn-primary";
         pri.textContent = primary.label || "Thực hiện";
-        pri.addEventListener("click", () => { try { primary.action(); } catch(_){} closeModal(); });
+        pri.addEventListener("click", () => {
+          try {
+            primary.action();
+          } catch (_) {}
+          closeModal();
+        });
       }
       actions.append(pri);
     }
@@ -2299,21 +2443,31 @@
     box.append(h, p, actions);
     overlay.append(box);
     root.append(overlay);
-    const onKey = (e) => { if (e.key === "Escape") closeModal(); };
+    const onKey = (e) => {
+      if (e.key === "Escape") closeModal();
+    };
     document.addEventListener("keydown", onKey, { once: true });
-    overlay.addEventListener("click", (e) => { if (e.target === overlay) closeModal(); });
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeModal();
+    });
     // Focus first action
     setTimeout(() => {
-      try { (actions.querySelector('.btn.btn-primary') || closeBtn).focus(); } catch(_){ }
+      try {
+        (actions.querySelector(".btn.btn-primary") || closeBtn).focus();
+      } catch (_) {}
     }, 0);
-    try { document.body.classList.add("modal-open"); } catch(_){}
+    try {
+      document.body.classList.add("modal-open");
+    } catch (_) {}
   }
   function closeModal() {
     const root = document.getElementById("modal");
     if (!root) return;
     root.hidden = true;
     root.innerHTML = "";
-    try { document.body.classList.remove("modal-open"); } catch(_){}
+    try {
+      document.body.classList.remove("modal-open");
+    } catch (_) {}
   }
 
   function initNavActiveObserver() {
@@ -2981,6 +3135,211 @@
     container.append(top, divider, bottom);
     inner.append(container);
   }
+
+  function initLeadPopup() {
+    const cfg = state.config;
+    const leadCfg = cfg?.forms?.leadForm;
+    if (!leadCfg) return;
+    // Conditions: do not show if already submitted or dismissed in last 24h
+    const now = Date.now();
+    const DAY = 24 * 60 * 60 * 1000;
+    try {
+      const submitted = parseInt(
+        localStorage.getItem("leadPopupSubmittedAt") || "0",
+        10
+      );
+      if (submitted && now - submitted < DAY) return; // already submitted within 24h
+      const dismissed = parseInt(
+        localStorage.getItem("leadPopupDismissedAt") || "0",
+        10
+      );
+      if (dismissed && now - dismissed < 6 * 60 * 60 * 1000) return; // dismissed within 6h
+    } catch (_) {}
+    function createPopup() {
+      if (document.getElementById("lead-popup"))
+        return document.getElementById("lead-popup");
+      const root = document.createElement("div");
+      root.id = "lead-popup";
+      root.setAttribute("role", "dialog");
+      root.setAttribute("aria-modal", "true");
+      root.hidden = true;
+      const overlay = document.createElement("div");
+      overlay.className = "lead-popup-overlay";
+      const box = document.createElement("div");
+      box.className = "lead-popup-box";
+      // Close button
+      const close = document.createElement("button");
+      close.type = "button";
+      close.className = "lead-popup-close";
+      close.setAttribute("aria-label", "Đóng");
+      close.innerHTML = "×";
+      box.append(close);
+      const popupFormCfg = Object.assign({}, leadCfg, {
+        title: leadCfg.title || "Đăng ký tư vấn",
+      });
+      const form = buildForm(popupFormCfg, true, {
+        onSuccess: () => {
+          try {
+            localStorage.setItem("leadPopupSubmittedAt", String(Date.now()));
+          } catch (_) {}
+          hidePopup();
+        },
+      });
+      form.classList.add("compact");
+      box.append(form);
+      overlay.append(box);
+      root.append(overlay);
+      document.body.append(root);
+      // Focus trap
+      function trap(e) {
+        if (e.key !== "Tab") return;
+        const focusables = root.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const list = Array.from(focusables).filter(
+          (el) => !el.disabled && el.offsetParent !== null
+        );
+        if (!list.length) return;
+        const first = list[0];
+        const last = list[list.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+      function onKey(e) {
+        if (e.key === "Escape") {
+          dismiss();
+        }
+      }
+      root.addEventListener("keydown", trap);
+      document.addEventListener("keydown", onKey, { once: false });
+      function dismiss() {
+        try {
+          localStorage.setItem("leadPopupDismissedAt", String(Date.now()));
+        } catch (_) {}
+        hidePopup();
+      }
+      close.addEventListener("click", dismiss);
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) dismiss();
+      });
+      function showPopup() {
+        root.hidden = false;
+        document.body.classList.add("modal-open");
+        // Animate
+        try {
+          if (window.gsap && motionEnabled()) {
+            gsap.fromTo(
+              box,
+              { y: 40, autoAlpha: 0 },
+              { y: 0, autoAlpha: 1, duration: 0.6, ease: "power2.out" }
+            );
+          }
+        } catch (_) {}
+        setTimeout(() => {
+          const firstInput = form.querySelector(
+            "input, select, textarea, button"
+          );
+          if (firstInput) firstInput.focus();
+        }, 30);
+      }
+      function hidePopup() {
+        if (root.hidden) return;
+        try {
+          if (window.gsap && motionEnabled()) {
+            gsap.to(box, {
+              y: 20,
+              autoAlpha: 0,
+              duration: 0.4,
+              ease: "power2.in",
+              onComplete: () => {
+                root.hidden = true;
+                document.body.classList.remove("modal-open");
+              },
+            });
+          } else {
+            root.hidden = true;
+            document.body.classList.remove("modal-open");
+          }
+        } catch (_) {
+          root.hidden = true;
+          document.body.classList.remove("modal-open");
+        }
+      }
+      root._showPopup = showPopup;
+      root._hidePopup = hidePopup;
+      root._dismiss = dismiss;
+      return root;
+    }
+    const OPEN_DELAY = 5000;
+    const timer = setTimeout(() => {
+      try {
+        const contact = document.getElementById("contact");
+        if (contact) {
+          const rect = contact.getBoundingClientRect();
+          if (rect.top < (window.innerHeight || 0) * 0.75) {
+            return; // visible -> don't show popup
+          }
+        }
+      } catch (_) {}
+      const root = createPopup();
+      if (root && root._showPopup) root._showPopup();
+    }, OPEN_DELAY);
+    document.addEventListener("leadFormSubmitted", () => {
+      try {
+        clearTimeout(timer);
+      } catch (_) {}
+    });
+  }
+
+  // contact FAB -------------------------------------------------
+  function initContactFab() {
+    try {
+      if (document.querySelector(".fab-contact")) return;
+    } catch (_) {}
+    let phoneRaw = "";
+    try {
+      (state.config?.site?.contacts || []).forEach((line) => {
+        if (!phoneRaw && /\d{8,}/.test(line)) {
+          const m = line.match(/\d[\d\s\.\-]{7,}/);
+          if (m) phoneRaw = m[0].replace(/[^\d+]/g, "");
+        }
+      });
+    } catch (_) {}
+    if (!phoneRaw) phoneRaw = "0914453841";
+    const pretty = phoneRaw
+      .replace(/^(\+?84)(\d)/, "0$2")
+      .replace(/(\d{3})(\d{3})(\d+)/, "$1 $2 $3");
+    const wrap = document.createElement("div");
+    wrap.className = "fab-contact";
+    const a = document.createElement("a");
+    a.href = "https://zalo.me/" + phoneRaw;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.setAttribute("aria-label", "Liên hệ Zalo / Gọi " + pretty);
+    a.innerHTML =
+      '<span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.86 19.86 0 0 1-3.07-8.67A2 2 0 0 1 4.17 2h3a2 2 0 0 1 2 1.72c.12.81.37 1.6.72 2.34a2 2 0 0 1-.45 2.18L8.09 9.91a16 16 0 0 0 6 6l1.67-1.31a2 2 0 0 1 2.18-.45c.74.35 1.53.6 2.34.72A2 2 0 0 1 22 16.92Z"/></svg></span><span class="label">' +
+      pretty +
+      "</span>";
+    wrap.append(a);
+    document.body.append(wrap);
+    // enable radar pulse unless user prefers reduced motion
+    try {
+      if (
+        !window.matchMedia ||
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        wrap.classList.add("radar");
+      }
+    } catch (_) {}
+  }
+  try {
+    window.initContactFab = initContactFab;
+  } catch (_) {}
 
   function injectAnalytics(a) {
     if (!a) return;

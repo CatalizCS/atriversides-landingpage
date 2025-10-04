@@ -83,12 +83,16 @@ nav.primary-nav li.more .more-menu li a { display:block; padding: 8px 10px; bord
 .split .text p { color: var(--color-muted); }
 .split .media { position: relative; overflow: hidden; border-radius: var(--radius-lg); border: 1px solid var(--color-border); }
 .split .media img { width: 100%; height: auto; display:block; aspect-ratio: 16/9; object-fit: cover; }
+.split.image-only { grid-template-columns: 1fr; }
+.split.image-only .media img { aspect-ratio: 16/7; object-fit: cover; background: #0f1217; }
 
 /* Projects slider */
 .projects-swiper { position: relative; }
+.projects-intro { max-width: 880px; margin: 0 auto 24px; text-align: center; color: var(--color-muted); line-height: 1.55; font-size: 15px; }
 .projects-swiper .swiper-slide { height: auto; }
 .projects-swiper .card { overflow: hidden; }
 .projects-swiper .card img { aspect-ratio: 16/10; object-fit: cover; }
+.projects-swiper .card .extra { margin-top: 8px; font-size: 13.5px; line-height: 1.5; color: var(--color-muted); }
 /* External pagination below the slider */
 .swiper-pagination { margin-top: 10px; display:flex; justify-content:center; gap:6px; position: static !important; }
 .swiper-pagination-bullet { background: #fff; opacity: .5; }
@@ -104,9 +108,11 @@ nav.primary-nav li.more .more-menu li a { display:block; padding: 8px 10px; bord
 .gallery .item img { aspect-ratio: 4/3; object-fit: cover; }
 
 /* Floor areas */
-.floor-areas-grid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
-.floor-areas-grid .item { position: relative; overflow:hidden; border-radius: var(--radius-md); border: 1px solid var(--color-border); background: rgba(255,255,255,0.03); }
-.floor-areas-grid .item img { width: 100%; height: auto; display:block; aspect-ratio: 4/3; object-fit: contain; background: #0f1217; }
+.floor-areas-grid { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+.floor-areas-grid .item { position: relative; overflow:hidden; border-radius: var(--radius-md); border: 1px solid var(--color-border); background: rgba(255,255,255,0.05); }
+.floor-areas-grid .item img { width: 100%; height: auto; display:block; aspect-ratio: 3/2; object-fit: cover; background: #0f1217; }
+@media (max-width: 1024px){ .floor-areas-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 600px){ .floor-areas-grid { grid-template-columns: 1fr; } }
 
 /* Apartments grid */
 .apartments { display: grid; gap: 12px; }
@@ -135,6 +141,24 @@ nav.primary-nav li.more .more-menu li a { display:block; padding: 8px 10px; bord
 #dblzoom { position: fixed; inset: 0; z-index: 2100; display: block; background: rgba(0,0,0,0); cursor: zoom-out; }
 body.zoom-open { overflow: hidden; }
 body.modal-open { overflow: hidden; }
+
+/* Lead Popup */
+#lead-popup[hidden] { display:none; }
+#lead-popup { position: fixed; inset:0; z-index: 2550; display:grid; place-items:center; padding: 20px; background: rgba(0,0,0,0.55); backdrop-filter: saturate(140%) blur(4px); }
+#lead-popup .lead-popup-overlay { position: absolute; inset:0; }
+#lead-popup .lead-popup-box { position: relative; z-index:1; width: min(520px, 94vw); background: rgba(17,20,26,0.9); border: 1px solid var(--color-border); border-radius: 20px; padding: 24px 22px 26px; box-shadow: 0 30px 60px -10px rgba(0,0,0,0.6); backdrop-filter: saturate(160%) blur(8px); }
+#lead-popup .lead-popup-close { position:absolute; top:8px; right:8px; width:34px; height:34px; border-radius:12px; background: rgba(255,255,255,0.08); border:1px solid var(--color-border); color:#fff; font-size: 20px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+#lead-popup .lead-popup-close:hover { filter: brightness(1.15); }
+#lead-popup .form.compact { background: transparent; box-shadow:none; padding:0; border:0; }
+#lead-popup .form.compact h3 { font-size: 22px; text-align:center; margin-top: 4px; }
+#lead-popup .form.compact .row { grid-template-columns: 1fr; }
+#lead-popup .form.compact .actions { justify-content:center; }
+@media (max-width: 520px) {
+  #lead-popup { padding: 12px; }
+  #lead-popup .lead-popup-box { padding: 20px 18px 22px; border-radius: 18px; }
+  #lead-popup .lead-popup-close { width:32px; height:32px; }
+  #lead-popup .form.compact h3 { font-size: 20px; }
+}
 
 /* Preloader */
 #preloader { position: fixed; inset: 0; z-index: 3000; background: var(--color-bg, #0a0a0b); display: grid; place-items: center; transition: opacity .5s ease, visibility .5s ease; }
@@ -202,6 +226,20 @@ body.preload-active main, body.preload-active header, body.preload-active footer
 
 /* Contact */
 .forms { display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; align-items: start; }
+.forms.single { grid-template-columns: 1fr; justify-items: center; }
+.forms.single .form { width: 100%; max-width: 640px; }
+.forms.single-centered { min-height: min(720px, 70vh); display:grid; align-content: center; }
+/* Lead form marketing intro */
+.lead-form-wrapper { display:grid; gap: 30px; grid-template-columns: 1fr 1fr; align-items: stretch; width: 100%; max-width: 1080px; }
+.lead-form-wrapper .form { max-width: none; }
+.lead-intro { display:grid; gap:18px; background: rgba(255,255,255,0.03); border:1px solid var(--color-border); border-radius: var(--radius-lg); padding: 20px 22px; position:relative; overflow:hidden; }
+.lead-intro-media img { width: 100%; height: auto; display:block; border-radius: var(--radius-md); aspect-ratio: 4/3; object-fit: cover; background:#0f1217; }
+.lead-intro-text h3 { margin:0 0 10px; font-size: 20px; }
+.lead-benefits { list-style:none; padding:0; margin:0; display:grid; gap:8px; }
+.lead-benefits li { position:relative; padding-left:20px; font-size:14.5px; line-height:1.45; color: var(--color-muted); }
+.lead-benefits li::before { content:""; position:absolute; left:0; top:7px; width:10px; height:10px; border-radius:50%; background: linear-gradient(90deg,#F2C265,#D9A441); box-shadow:0 0 0 2px rgba(242,194,101,0.25); }
+@media (max-width: 1000px) { .lead-form-wrapper { grid-template-columns: 1fr; } .lead-intro { order:-1; } }
+@media (max-width: 640px) { .lead-form-wrapper { gap:20px; } .lead-intro { padding:16px 16px 18px; } .lead-intro-text h3 { font-size:18px; } }
 .form { padding: 18px; border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: rgba(255,255,255,0.03); box-shadow: var(--elev-card); backdrop-filter: saturate(1.1) blur(0.5px); word-break: break-word; overflow-wrap: break-word; }
 .form h3 { margin: 0 0 10px; font-size: 18px; }
 .form .row { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -214,6 +252,16 @@ body.preload-active main, body.preload-active header, body.preload-active footer
 @media (max-width: 900px) {
   .form .row { grid-template-columns: 1fr; }
   .form .actions .btn { width: 100%; }
+}
+@media (min-width: 900px) {
+  /* Slight lift & centering visual on large screens */
+  #contact .forms.single .form { padding: 28px 26px 30px; }
+}
+@media (max-width: 480px) {
+  .forms.single .form { padding: 16px 14px 20px; border-radius: 14px; }
+  .forms.single .form h3 { font-size: 17px; }
+  .forms.single .form .row { gap: 10px; }
+  .forms.single .form input, .forms.single .form select, .forms.single .form textarea { font-size: 14px; }
 }
 
 /* High-contrast select styling for dark theme */
@@ -281,8 +329,79 @@ body.preload-active main, body.preload-active header, body.preload-active footer
 /* Floating CTA */
 #floating-cta { position: fixed; right: 16px; bottom: 16px; z-index: 1500; padding: 12px 16px; }
 #floating-cta[hidden] { display:none; }
-#back-to-top { position: fixed; right: 16px; bottom: 72px; z-index: 1500; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--color-border); background: rgba(255,255,255,0.9); }
+#back-to-top { position: fixed; right: 16px; bottom: 110px; z-index: 1500; padding: 8px 12px; border-radius: 12px; border: 1px solid var(--color-border); background: rgba(255,255,255,0.9); }
 #back-to-top[hidden] { display:none; }
+
+/* Contact section collapse when fab closed */
+#contact.fab-collapsed { max-height: 0 !important; padding-top: 0 !important; padding-bottom: 0 !important; overflow: hidden; opacity: 0; pointer-events: none; transition: max-height .5s ease, opacity .4s ease, padding .4s ease; }
+#contact:not(.fab-collapsed) { transition: max-height .5s ease, opacity .4s ease, padding .4s ease; }
+
+/* contact FAB */
+.fab-contact { position:fixed; right:18px; bottom:22px; z-index:1550; font-family:inherit; }
+.fab-contact a { display:inline-flex; align-items:center; gap:10px; text-decoration:none; padding:10px 18px 10px 12px; border-radius:54px; background:linear-gradient(135deg,#008CFF,#0069d5); color:#fff; font-weight:600; font-size:15px; line-height:1; box-shadow:0 6px 20px -8px rgba(0,90,180,.6),0 2px 6px -2px rgba(0,0,0,.3); transition:background .35s ease, transform .45s cubic-bezier(.22,.61,.36,1), filter .3s ease, opacity .45s ease; opacity:1; transform:none; }
+.fab-contact.ready a { opacity:1; transform:translateY(0) scale(1); }
+.fab-contact.hide-on-scroll a { opacity:0; transform:translateY(60px) scale(.9); pointer-events:none; }
+.fab-contact a:focus-visible { outline:none; box-shadow:0 0 0 3px rgba(255,255,255,.7),0 0 0 6px rgba(0,140,255,.7); }
+.fab-contact a:hover { filter:brightness(1.07); transform:translateY(-3px); }
+.fab-contact a:active { transform:translateY(1px); }
+.fab-contact a .ic { width:38px; height:38px; flex:0 0 38px; display:flex; align-items:center; justify-content:center; border-radius:50%; background:#fff; color:#0086f5; box-shadow:0 2px 5px rgba(0,0,0,.25); position:relative; }
+/* ringing animation (periodic) */
+.fab-contact.ringing a .ic::after, .fab-contact.ringing a .ic::before { content:""; position:absolute; inset:0; border-radius:inherit; box-shadow:0 0 0 0 rgba(0,134,245,.55); animation:ringPulse 2.6s ease-in-out infinite; }
+.fab-contact.ringing a .ic::before { animation-delay:.9s; }
+@keyframes ringPulse { 0% { box-shadow:0 0 0 0 rgba(0,134,245,.55); } 60% { box-shadow:0 0 0 18px rgba(0,134,245,0); } 100% { box-shadow:0 0 0 0 rgba(0,134,245,0); } }
+.fab-contact.ringing a .ic svg { animation: handsetSwing 2.6s ease-in-out infinite; transform-origin: 50% 90%; }
+@keyframes handsetSwing { 0%,60%,100% { transform:rotate(0deg); } 10% { transform:rotate(-18deg); } 20% { transform:rotate(16deg); } 30% { transform:rotate(-12deg); } 40% { transform:rotate(9deg); } 50% { transform:rotate(-5deg); } }
+.fab-contact a svg { width:20px; height:20px; display:block; }
+.fab-contact a .label { white-space:nowrap; letter-spacing:.4px; }
+@media (max-width:520px){ .fab-contact { right:14px; bottom:18px; } .fab-contact a { padding:8px 14px 8px 10px; font-size:14px; } .fab-contact a .ic { width:34px; height:34px; } }
+@media (max-width:400px){ .fab-contact a { padding:8px 10px; } .fab-contact a .label { display:none; } }
+@media (prefers-reduced-motion:reduce){ 
+  .fab-contact a { transition:none !important; animation:none !important; }
+  .fab-contact a .ic::after, .fab-contact a .ic::before { display:none !important; }
+  .fab-contact.ringing a .ic svg { animation:none !important; }
+}
+/* Explicitly disable all FAB animations (site owner requested) */
+.fab-contact a,
+.fab-contact a .ic,
+.fab-contact a .ic svg,
+.fab-contact.ringing a .ic::after,
+.fab-contact.ringing a .ic::before {
+  transition: none !important;
+  animation: none !important;
+  box-shadow: none !important;
+}
+.fab-contact a { will-change: auto; }
+/* (Removed old #contact-fab reduced motion rules) */
+
+/* Radar pulse: lightweight 2D pulse around the icon
+   We place this after the global disable block and keep it scoped to .fab-contact.radar
+   so it doesn't re-enable other animations site-wide. */
+/* Radar pulse applied to the full FAB container */
+.fab-contact.radar::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 260%;
+  height: 160%;
+  transform: translate(-50%, -50%) scale(1);
+  border-radius: 28px;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(0,140,255,0.22) 0%, rgba(0,140,255,0.14) 30%, rgba(0,140,255,0.06) 55%, transparent 70%);
+  box-shadow: 0 6px 40px rgba(0,140,255,0.14);
+  animation: radarPulseBox 1.6s ease-out infinite !important;
+  z-index: 0; /* below the FAB content */
+}
+/* ensure the svg/icon sits above the pulse */
+.fab-contact a .ic svg { position: relative; z-index: 3; }
+@keyframes radarPulseBox {
+  0%   { transform: translate(-50%, -50%) scale(.95); opacity: .9; }
+  50%  { transform: translate(-50%, -50%) scale(1.08); opacity: .42; }
+  100% { transform: translate(-50%, -50%) scale(1.18); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce){
+  .fab-contact.radar a .ic::before { display: none !important; animation: none !important; }
+}
 
 /* Responsive */
 /* tablets / medium mobiles */
